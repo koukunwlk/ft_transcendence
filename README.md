@@ -25,7 +25,7 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 
 ## Instalando NodeJS
 ```bash
-nvm use --lts
+nvm install --lts
 nodejs -v // verifica se é a versão lts
 ```
 
