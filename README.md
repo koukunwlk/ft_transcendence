@@ -29,6 +29,16 @@ nvm install --lts
 nodejs -v // verifica se é a versão lts
 ```
 
-## Rodando a aplicação
+## Rodando a Aplicação
 🚧WIP🚧
 
+## Criando um Projeto
+```bash
+npm i -g @nestjs/cli
+nest new project-name
+```
+
+## Instalando o Vite
+```bash
+npm create vite@latest
+```
