@@ -28,17 +28,18 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 nvm install --lts
 nodejs -v // verifica se é a versão lts
 ```
-
-## Rodando a Aplicação
-🚧WIP🚧
-
-## Criando um Projeto
+## Instalando CLI
 ```bash
 npm i -g @nestjs/cli
-nest new project-name
 ```
 
-## Instalando o Vite
+## Rodando a Aplicação
+
+### Backend
 ```bash
-npm create vite@latest
+yarn start:dev
+```
+### Frontend
+```bash
+yarn dev
 ```
