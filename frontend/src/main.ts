@@ -1,7 +1,7 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import App from './App.vue'
-import { Login } from '@/views/Login.vue'
-import { router } from '@/Router/index'
+import { createApp } from 'vue';
+import  Login  from './views/Login.vue';
+import App from './App.vue';
+import router from './Router/index';
 
 
 createApp(App)
