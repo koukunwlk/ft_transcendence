@@ -5,14 +5,7 @@
       type="text"
       name="username"
       id="username"
-      placeholder="UserName"
-    />
-    <br />
-    <input
-      type="password"
-      name="password"
-      id="password"
-      placeholder="password que nao vai precisar"
+      placeholder="username(talvez nao use)"
     />
     <br />
     <input
@@ -21,8 +14,14 @@
       class="button"
       id="done"
     />
+	<br />
+	<button className="login-42-button" onClick={handle42Login}>
+        Login to 42
+    </button>
     <br />
-    <img alt="Login as Guest" />
+    <button className="login-guest-button" onClick={handleGuestLogin}>
+        Login as guest
+    </button>
   </div>
 </template>
 
