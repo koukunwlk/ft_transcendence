@@ -5,8 +5,5 @@ export default {
 </script>
 
 <template>
-  <h1>Hello</h1>
-  <div>
-    <router-link to="/Login">Login</router-link>
-  </div>
+  <RouterView />
 </template>
