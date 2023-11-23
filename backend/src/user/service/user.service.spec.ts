@@ -1,18 +1,24 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
+import { InMemory } from '../repository/inMemory.repository';
 
 describe('UserService', () => {
-  let service: UserService;
+  let userService: UserService
+  let inMemoryDb: InMemory
+  beforeEach(() => {
+    inMemoryDb = new InMemory()
+    userService = new UserService(inMemoryDb)
+  })
+  it("Should be defined", () => {
+    expect(userService).toBeDefined()
+  })
+  it("Should insert a new user", () => {
+    // arrange
+    let nickname: string = "ArnaldoCoelho"
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [UserService],
-    }).compile();
+    // act
+    userService.insertUser(nickname)
 
-    service = module.get<UserService>(UserService);
-  });
-
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
+    // assert
+    expect(inMemoryDb.getSize()).toEqual(1)
+  })
 });
