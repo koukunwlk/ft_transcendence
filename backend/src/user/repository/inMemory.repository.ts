@@ -6,7 +6,9 @@ import { User, UserProps } from "../domain/model/user/user";
 export class InMemory implements UserRepository {
   private users: User[];
 
-  constructor() { }
+  constructor() {
+    this.users = []
+   }
 
   findOne(options: Partial<UserProps>): Promise<User> {
     const user = this.users.find(user => {
@@ -21,5 +23,9 @@ export class InMemory implements UserRepository {
     this.users.push(user);
 
     return Promise.resolve(user.id);
+  }
+
+  getSize(): number {
+    return this.users.length
   }
 }
