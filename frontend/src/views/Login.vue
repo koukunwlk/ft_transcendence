@@ -15,18 +15,27 @@
       id="done"
     />
 	<br />
-	<button className="login-42-button" onClick={handle42Login}>
+	<button class="login-42-button" @click=handle42Login>
         Login to 42
     </button>
     <br />
-    <button className="login-guest-button" onClick={handleGuestLogin}>
+    <button class="login-guest-button" @click=handleGuestLogin>
         Login as guest
     </button>
   </div>
 </template>
 
 <script>
-export default {
-  name: "Login",
+
+	export default {
+		name: "Login",
+
+		methods: {
+		handle42Login() {
+        const backUrl = import.meta.env.VITE_APP_BACKEND_URL;
+		    const loginUrl = `${backUrl}/auth/login`;
+        window.location.href = loginUrl;
+    },
+    }
 };
 </script>
