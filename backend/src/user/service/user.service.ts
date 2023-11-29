@@ -25,4 +25,11 @@ export class UserService {
 		throw new BadRequestException(`nickname: ${nickname} already exists`)
 	}
   }
+
+  async getUser(nickname: string): Promise<any> {
+	const username = nickname.toLowerCase();
+	const user = await this.userRepository.findOne({ nickname });
+	
+	return user;
+  }
 }
