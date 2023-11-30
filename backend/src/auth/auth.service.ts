@@ -6,6 +6,7 @@ export class AuthService {
     async login(username: string): Promise<any>{
         const user = await this.userService.getUser(username);
 
-
+        console.log(user);
+        console.log('user');
     }
 }
