@@ -7,9 +7,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     UserModule,
     TypeOrmModule.forRootAsync({
       useFactory: () => ({
-        type: 'mysql',
+        type: 'postgres',
         host: 'localhost',
-        port: 3306,
+        port: 5432,
         username: 'admin',
         password: 'VtV7OXWubGmFkX9BakVHGNevxM',
         database: 'transcendence',
