@@ -1,11 +1,14 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
-import { UserRepository } from '../repository/user.repository';
+import {
+  USER_REPOSITORY_TOKEN,
+  UserRepository,
+} from '../repository/user.repository';
 import { User } from '../domain/model/user/user';
 
 @Injectable()
 export class UserService {
   constructor(
-    @Inject(UserRepository)
+    @Inject(USER_REPOSITORY_TOKEN)
     private readonly userRepository: UserRepository,
   ) {}
 
