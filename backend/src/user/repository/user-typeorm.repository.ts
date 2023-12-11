@@ -16,7 +16,12 @@ export class UserTypeOrmRepository implements UserRepository {
     const userEntity = await this.userRepository.findOne({
       where: { nickname: options.nickname },
     });
-    return new User(userEntity);
+
+    if (userEntity) {
+      return new User(userEntity);
+    } else {
+      return null;
+    }
   }
 
   async insert(user: User): Promise<string> {

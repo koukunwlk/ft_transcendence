@@ -14,6 +14,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         password: 'VtV7OXWubGmFkX9BakVHGNevxM',
         database: 'transcendence',
         entities: ['dist/**/*.entity.{ts,js}'],
+        synchronize: true,
       }),
     }),
   ],
