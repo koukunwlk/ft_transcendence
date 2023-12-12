@@ -12,6 +12,13 @@ var routes = [
 		name: 'Login',
 		component: () => import('../views/Login.vue')
 	}
+	,	
+	{
+		path: '/game',
+		name: 'Game',
+		component: () => import('../views/Game.vue')
+	}
+
 ];
 
 const router = createRouter({
