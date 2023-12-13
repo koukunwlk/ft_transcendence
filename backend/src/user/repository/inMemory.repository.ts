@@ -1,17 +1,17 @@
-import { Injectable } from "@nestjs/common";
-import { UserRepository } from "./user.repository";
-import { User, UserProps } from "../domain/model/user/user";
+import { Injectable } from '@nestjs/common';
+import { UserRepository } from './user.repository';
+import { User, UserProps } from '../domain/model/user/user';
 
 @Injectable()
 export class InMemory implements UserRepository {
   private users: User[];
 
   constructor() {
-    this.users = []
-   }
+    this.users = [];
+  }
 
   findOne(options: Partial<UserProps>): Promise<User> {
-    const user = this.users.find(user => {
+    const user = this.users.find((user) => {
       if (user.getNickname() === options.nickname) {
         return user;
       }
@@ -26,6 +26,6 @@ export class InMemory implements UserRepository {
   }
 
   getSize(): number {
-    return this.users.length
+    return this.users.length;
   }
 }

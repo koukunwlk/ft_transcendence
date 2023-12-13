@@ -4,31 +4,23 @@ import {
   Injectable,
   Req,
   Res,
+  Inject
 } from '@nestjs/common';
-import { authenticator } from 'otplib';
 import { UserService } from '../user/service/user.service';
 import { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 
-import { UserRepository } from '../user/repository/user.repository';
+import {  USER_REPOSITORY_TOKEN, UserRepository } from '../user/repository/user.repository';
 import { User } from '../user/domain/model/user/user';
 import { generateSecret, verify } from '2fa-util';
-
-const teste = new User({
-  nickname: 'oi',
-  token: null,
-  validCode: false,
-  userId: '',
-  email: '',
-  username: '',
-  tfaSecret: '',
-});
+import { UsingJoinColumnIsNotAllowedError } from 'typeorm';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    @Inject(USER_REPOSITORY_TOKEN)
     private readonly userRepository: UserRepository,
   ) {}
   //   async login(username: string): Promise<any>{
@@ -36,7 +28,6 @@ export class AuthService {
   //   }
   async Auth42Redirect(@Req() req: any, @Res() res: Response): Promise<void> {
     const user = await this.userService.getUser(req.user.username);
-    console.log(req.user.id);
     const accessToken: string = this.generateJwtToken(req.user.id);
     res.cookie('token', accessToken);
     user.props.token = accessToken;
@@ -58,7 +49,8 @@ export class AuthService {
     const user = await this.userService.getUser('acosta-a');
     const mfaSecret = await generateSecret(user.props.userId, 'Pong');
     user.setTfaSecret(mfaSecret.secret);
-    await this.userRepository.insert(user);
+    console.log(user)
+    console.log(mfaSecret)
     return {
       secret: mfaSecret.secret,
       qr_code_url: mfaSecret.qrcode, //não estou utilizando
@@ -67,7 +59,7 @@ export class AuthService {
 
   async verifyTfaSecret(id: string, code: string): Promise<void> {
     const user = await this.userService.getUser('acosta-a');
-    console.log('tfa secret: ', user.props.tfaSecret);
+    console.log('tfa secret: ', user);
     if (!(await verify(code, user.props.tfaSecret))) {
       throw new HttpException('Token is Invalid', HttpStatus.BAD_REQUEST);
     } else console.log('Valid Token');

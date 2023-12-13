@@ -6,39 +6,31 @@ import {
   Inject,
   Injectable,
   HttpException,
-  HttpStatus,
-} from '@nestjs/common';
-import { UserRepository } from '../repository/user.repository';
+  HttpStatus, } from '@nestjs/common';
+import {
+  USER_REPOSITORY_TOKEN,
+  UserRepository,
+} from '../repository/user.repository';
 import { User } from '../domain/model/user/user';
 import { generateSecret, verify } from '2fa-util';
-
-const teste = new User({
-  nickname: 'oi',
-  token: null,
-  validCode: false,
-  userId: '',
-  email: '',
-  username: '',
-  tfaSecret: '',
-});
 
 @Injectable()
 export class UserService {
   constructor(
-    @Inject(UserRepository)
+    @Inject(USER_REPOSITORY_TOKEN)
     private readonly userRepository: UserRepository,
   ) {}
 
-  async insertUser(
+  async insertUser( 
     nickname: string,
     token: string,
     validCode: boolean,
     userId: string,
     email: string,
     username: string,
-    tfaSecret: string,
-  ): Promise<string> {
+    tfaSecret: string,): Promise<string> {
     await this.checkDuplicatedUser(nickname);
+
     const user = new User({
       nickname,
       token,
@@ -47,17 +39,19 @@ export class UserService {
       email,
       username,
       tfaSecret,
-    });
+     });
     const id = await this.userRepository.insert(user);
 
     return id;
   }
+
+  
   private async checkDuplicatedUser(nickname: string) {
     const user = await this.userRepository.findOne({ nickname });
 
-    if (user) {
-      throw new BadRequestException(`nickname: ${nickname} already exists`);
-    }
+     if (user) {
+       throw new BadRequestException(`nickname: ${nickname} already exists`);
+     }
   }
 
   async getUser(nickname: string): Promise<any> {

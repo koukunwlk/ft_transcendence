@@ -42,10 +42,13 @@ export class User extends Model<UserProps> {
   getUsername(): string {
     return this.props.username;
   }
-  setToken(token){
+  getTfaSecret(): string {
+    return this.props.tfaSecret;
+  }
+  setToken(token: string){
     this.props.token = token;
   }
-  setTfaSecret(tfaSecret){
+  setTfaSecret(tfaSecret: string){
     this.props.tfaSecret = tfaSecret;
   }
 }

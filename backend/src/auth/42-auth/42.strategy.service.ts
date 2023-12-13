@@ -4,6 +4,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { AuthService } from '../auth.service';
 import { config } from 'dotenv';
 import { UserService } from '../../user/service/user.service';
+import { generateSecret } from '2fa-util';
 
 config();
 
@@ -20,20 +21,24 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
     });
   }
   async validate(
-    acessToken: string,
+    accessToken: string,
     refreshToken: string,
     profile: any,
     done: any,
   ) {
-    this.userService.insertUser(
+    const mfaSecret = await generateSecret(profile.id, 'Pong');
+    const secret = mfaSecret.secret;
+    console.log(secret)
+    await this.userService.insertUser(
       profile.username,
       profile.token,
       false,
       profile.id,
       profile.email,
       profile.username,
-      '',
+      secret
     );
+    console.log(this.userService.getUser('acosta-a'))
     done(null, profile);
   }
 }

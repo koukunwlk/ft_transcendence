@@ -8,6 +8,9 @@ import { UserRepositoryProvider } from '@/user/repository/user.repository.provid
 import { JwtStrategy } from './jwt-auth/jwt-strategy';
 import { JwtService } from '@nestjs/jwt';
 import { JwtModule } from '@nestjs/jwt';
+import { UserRepository } from '@/user/repository/user.repository';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserEntity } from '../user/entities/user.entity';
 
 @Module({
   imports: [
@@ -16,13 +19,15 @@ import { JwtModule } from '@nestjs/jwt';
       signOptions: { expiresIn: '7d' },
     }),
     UserModule,
+    TypeOrmModule.forFeature([UserEntity])
   ],
   providers: [
     AuthService,
     FortyTwoStrategy,
     JwtService,
     UserService,
-    UserRepositoryProvider,
+    UserRepositoryProvider
+    
   ],
   controllers: [AuthController],
   exports: [AuthService],
