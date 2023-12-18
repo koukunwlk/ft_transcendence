@@ -30,7 +30,7 @@ body, html{
 .image-animation {
 	display: flex;
 	width: 200%;
-	animation: moveImages 300s infinite linear;
+	animation: moveImages 200s infinite linear;
 }
 
 .background {
@@ -49,8 +49,10 @@ body, html{
 	transform: translate(-50%, -50%);
 	height: 500px;
 	width: 350px;
+	max-width: 80vw;
+	max-height: 90vh;
 	background-color: rgba(210, 210, 210, 0.05);
-	backdrop-filter: blur(6px);
+	backdrop-filter: blur(4px);
 	border-radius: 24px;
 	border: 1px solid rgba(255, 255, 255, 0.2);
 }
