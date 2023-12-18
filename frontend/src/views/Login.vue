@@ -11,6 +11,9 @@ export default {
 			<img class="background" src="../Assets/Images/kai-pilger.jpg" alt="background">
 		</div>
 		<div class="login-box">
+			<h1 class="login-txt">Login</h1>
+			<button>Continue With 42INTRA</button>
+			<button>Continue As Guest</button>
 		</div>
 	</div>
 </template>
@@ -55,6 +58,12 @@ body, html{
 	backdrop-filter: blur(4px);
 	border-radius: 24px;
 	border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.login-txt {
+	color: white;
+	font-weight: 300;
+	text-align: center;
 }
 
 @keyframes moveImages {
