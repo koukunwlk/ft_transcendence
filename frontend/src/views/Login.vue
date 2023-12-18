@@ -12,11 +12,12 @@ export default {
 		</div>
 		<div class="login-box">
 			<h1 class="login-txt">Login</h1>
+			<hr class="underline">
 			<div class="box-buttons">
-				<button class="login-buttons button-margin">Continue With 42 INTRA</button>
+				<button class="login-buttons button-margin">Continue with 42 intra</button>
 			</div>
 			<div class="box-buttons">
-				<button class="login-buttons">Continue As Guest</button>
+				<button class="login-buttons">Continue as guest</button>
 			</div>
 		</div>
 	</div>
@@ -69,8 +70,15 @@ body, html{
 	font-family:'Courier New', Courier, monospace;
 	font-weight: 300;
 	text-align: center;
-	margin-bottom: 30%;
 	margin-top: 15%;
+}
+
+.underline {
+	border: none;
+	border-top: 0.5px solid white;
+	width: 80%;
+	margin-top: 5%;
+	margin-bottom: 25%;
 }
 
 .box-buttons {
