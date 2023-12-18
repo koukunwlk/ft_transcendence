@@ -12,8 +12,12 @@ export default {
 		</div>
 		<div class="login-box">
 			<h1 class="login-txt">Login</h1>
-			<button>Continue With 42INTRA</button>
-			<button>Continue As Guest</button>
+			<div class="box-buttons">
+				<button class="login-buttons button-margin">Continue With 42 INTRA</button>
+			</div>
+			<div class="box-buttons">
+				<button class="login-buttons">Continue As Guest</button>
+			</div>
 		</div>
 	</div>
 </template>
@@ -64,6 +68,30 @@ body, html{
 	color: white;
 	font-weight: 300;
 	text-align: center;
+	margin-bottom: 30%;
+	margin-top: 15%;
+}
+
+.box-buttons {
+	display: flex;
+	justify-content: center;
+    align-items: center;
+}
+
+.button-margin {
+	margin-bottom: 10%;
+}
+
+.login-buttons {
+	width: 70%;
+	color: rgb(255, 255, 255);
+	font-size: medium;
+	font-weight: 400;
+	padding-top: 18px;
+	padding-bottom: 18px;
+	border-radius: 6vw;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	background-color: rgba(0, 0, 0, 0.3);
 }
 
 @keyframes moveImages {
