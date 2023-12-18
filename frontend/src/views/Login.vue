@@ -75,8 +75,8 @@ body, html{
 
 .underline {
 	border: none;
-	border-top: 0.5px solid white;
-	width: 80%;
+	border-top: 1px solid rgba(255, 255, 255, 0.2);
+	width: 70%;
 	margin-top: 5%;
 	margin-bottom: 25%;
 }
