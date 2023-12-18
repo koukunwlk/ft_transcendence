@@ -66,6 +66,7 @@ body, html{
 
 .login-txt {
 	color: white;
+	font-family:'Courier New', Courier, monospace;
 	font-weight: 300;
 	text-align: center;
 	margin-bottom: 30%;
@@ -85,6 +86,7 @@ body, html{
 .login-buttons {
 	width: 70%;
 	color: rgb(255, 255, 255);
+	font-family: monospace;
 	font-size: medium;
 	font-weight: 400;
 	padding-top: 18px;
