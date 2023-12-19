@@ -5,6 +5,7 @@ import { AuthService } from '../auth.service';
 import { config } from 'dotenv';
 import { UserService } from '../../user/service/user.service';
 import { generateSecret } from '2fa-util';
+import { User } from '@/user/domain/model/user/user';
 
 config();
 
@@ -28,15 +29,17 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
   ) {
     const mfaSecret = await generateSecret(profile.id, 'Pong');
     const secret = mfaSecret.secret;
-    console.log(secret)
+    const tfaIsActive = false;
+    const user = new User({
+      nickname: profile.username,
+      token: profile.token,
+      validCode: tfaIsActive,
+      userId: profile.id,
+      email: profile.email,
+      username: profile.username,
+      tfaSecret: secret})
     await this.userService.insertUser(
-      profile.username,
-      profile.token,
-      false,
-      profile.id,
-      profile.email,
-      profile.username,
-      secret
+      user
     );
     console.log(this.userService.getUser('acosta-a'))
     done(null, profile);

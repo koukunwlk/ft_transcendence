@@ -22,24 +22,10 @@ export class UserService {
   ) {}
 
   async insertUser( 
-    nickname: string,
-    token: string,
-    validCode: boolean,
-    userId: string,
-    email: string,
-    username: string,
-    tfaSecret: string,): Promise<string> {
-    await this.checkDuplicatedUser(nickname);
+    user: User
+    ): Promise<string> {
+    await this.checkDuplicatedUser(user.getNickname());
 
-    const user = new User({
-      nickname,
-      token,
-      validCode,
-      userId,
-      email,
-      username,
-      tfaSecret,
-     });
     const id = await this.userRepository.insert(user);
 
     return id;
