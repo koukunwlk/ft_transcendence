@@ -29,6 +29,8 @@ export default {
 					@mouseup="pressedMouse1 = false"
 					@mouseover="hoveredButton1 = true"
 					@mouseleave="hoveredButton1 = false"
+					@touchstart="pressedMouse1 = true"
+					@touchend="pressedMouse1 = false"
 					class="login-button"
 					:class="{ 'hovered': hoveredButton1, 'pressed': pressedMouse1 }"
 				>
