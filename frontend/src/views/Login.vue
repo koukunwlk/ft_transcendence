@@ -1,6 +1,14 @@
 <script>
 export default {
 	name: "Login",
+	data() {
+		return {
+			hoveredButton1: false,
+			hoveredButton2: false,
+			pressedMouse1: false,
+			pressedMouse2: false
+		};
+	}
 };
 </script>
 
@@ -14,11 +22,29 @@ export default {
 			<h1 class="login-txt">Login</h1>
 			<hr class="underline">
 			<div class="box-buttons">
-				<button class="login-buttons">Continue with 42 intra</button>
+				<button
+					@mousedown="pressedMouse1 = true"
+					@mouseup="pressedMouse1 = false"
+					@mouseover="hoveredButton1 = true"
+					@mouseleave="hoveredButton1 = false"
+					class="login-button"
+					:class="{ 'hovered': hoveredButton1, 'pressed': pressedMouse1 }"
+				>
+					Continue with 42 intra
+				</button>
 			</div>
 			<h3 class="or-txt">or</h3>
 			<div class="box-buttons">
-				<button class="login-buttons">Continue as guest</button>
+				<button
+					@mousedown="pressedMouse2 = true"
+					@mouseup="pressedMouse2 = false"
+					@mouseover="hoveredButton2 = true"
+					@mouseleave="hoveredButton2 = false"
+					class="login-button"
+					:class="{ 'hovered': hoveredButton2, 'pressed': pressedMouse2 }"
+				>
+					Continue as guest
+				</button>
 			</div>
 		</div>
 	</div>
@@ -96,9 +122,9 @@ body, html{
     align-items: center;
 }
 
-.login-buttons {
+.login-button {
 	width: 70%;
-	color: rgb(255, 255, 255);
+	color: white;
 	font-family: monospace;
 	font-size: medium;
 	font-weight: 400;
@@ -107,6 +133,16 @@ body, html{
 	border-radius: 6vw;
 	border: 1px solid rgba(255, 255, 255, 0.2);
 	background-color: rgba(0, 0, 0, 0.3);
+}
+
+.login-button.hovered {
+	color: white;
+	background-color: rgba(86, 86, 86, 0.3);
+}
+
+.login-button.pressed {
+	color: rgb(32, 32, 32);
+	background-color: rgb(193, 193, 193);
 }
 
 @keyframes moveImages {
