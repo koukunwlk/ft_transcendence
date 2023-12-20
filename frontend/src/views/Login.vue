@@ -14,8 +14,9 @@ export default {
 			<h1 class="login-txt">Login</h1>
 			<hr class="underline">
 			<div class="box-buttons">
-				<button class="login-buttons button-margin">Continue with 42 intra</button>
+				<button class="login-buttons">Continue with 42 intra</button>
 			</div>
+			<h3 class="or-txt">or</h3>
 			<div class="box-buttons">
 				<button class="login-buttons">Continue as guest</button>
 			</div>
@@ -73,6 +74,14 @@ body, html{
 	margin-top: 15%;
 }
 
+.or-txt {
+	color: white;
+	font-family:'Courier New', Courier, monospace;
+	font-weight: 300;
+	text-align: center;
+	margin: 8%;
+}
+
 .underline {
 	border: none;
 	border-top: 1px solid rgba(255, 255, 255, 0.2);
@@ -85,10 +94,6 @@ body, html{
 	display: flex;
 	justify-content: center;
     align-items: center;
-}
-
-.button-margin {
-	margin-bottom: 10%;
 }
 
 .login-buttons {
