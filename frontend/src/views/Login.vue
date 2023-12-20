@@ -19,7 +19,9 @@ export default {
 			<img class="background" src="../Assets/Images/kai-pilger.jpg" alt="background">
 		</div>
 		<div class="login-box">
-			<h1 class="login-txt">Login</h1>
+			<h1 class="login-txt">
+				Login
+			</h1>
 			<hr class="underline">
 			<div class="box-buttons">
 				<button
@@ -33,7 +35,9 @@ export default {
 					Continue with 42 intra
 				</button>
 			</div>
-			<h3 class="or-txt">or</h3>
+			<h3 class="or-txt">
+				or
+			</h3>
 			<div class="box-buttons">
 				<button
 					@mousedown="pressedMouse2 = true"
