@@ -145,7 +145,7 @@ body, html{
 }
 
 .login-button.pressed {
-	color: rgb(32, 32, 32);
+	color: rgb(50, 50, 50);
 	background-color: rgb(193, 193, 193);
 }
 
