@@ -25,12 +25,12 @@ export default {
 			<hr class="underline">
 			<div class="box-buttons">
 				<button
+					@touchstart="pressedMouse1 = true"
+					@touchend="pressedMouse1 = false"
 					@mousedown="pressedMouse1 = true"
 					@mouseup="pressedMouse1 = false"
 					@mouseover="hoveredButton1 = true"
 					@mouseleave="hoveredButton1 = false"
-					@touchstart="pressedMouse1 = true"
-					@touchend="pressedMouse1 = false"
 					class="login-button"
 					:class="{ 'hovered': hoveredButton1, 'pressed': pressedMouse1 }"
 				>
@@ -42,6 +42,8 @@ export default {
 			</h3>
 			<div class="box-buttons">
 				<button
+					@touchstart="pressedMouse2 = true"
+					@touchend="pressedMouse2 = false"
 					@mousedown="pressedMouse2 = true"
 					@mouseup="pressedMouse2 = false"
 					@mouseover="hoveredButton2 = true"
