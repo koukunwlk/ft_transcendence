@@ -5,5 +5,7 @@ export default {
 </script>
 
 <template>
-  <RouterView />
+  <div class="bg-[url('./src/assets/dark-starry-sky.jpg')] bg-cover">
+    <RouterView />
+  </div>
 </template>
