@@ -1,6 +1,6 @@
 <template>
 	<Navbar />
-	<div class="grid grid-cols-2 w-screen h-screen justify-center content-center bg-blac">
+	<div class="grid grid-cols-2 w-screen h-screen justify-center content-center">
 		<div class="grid sm:h-96">
 			<div class="grid content-center justify-end">
 				<button
