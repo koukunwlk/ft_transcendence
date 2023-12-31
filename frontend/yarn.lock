@@ -1090,6 +1090,11 @@ vue-tsc@^1.8.22:
     "@vue/language-core" "1.8.22"
     semver "^7.5.4"
 
+vue3-avatar@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/vue3-avatar/-/vue3-avatar-3.0.0.tgz#77277b0498f4e2e35a21a273864c799eaec45b2b"
+  integrity sha512-d7sdb/8w008g32b61zbT0VmbSriPQz4FZa3Q2Z8xbwOAn7lQgWYJFyX7FbmXF8vFQVWSN4NBO22UZneZCOKMuw==
+
 vue@^3.3.8:
   version "3.3.8"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.3.8.tgz#532ff071af24f6a69e5ecc53a66858a9ee874ffc"
