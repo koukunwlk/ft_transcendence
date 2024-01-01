@@ -1,9 +1,9 @@
 <script>
 export default {
-	name: "Login",
+  name: "Login",
 };
 </script>
 
 <template>
-	<h1>Login Page</h1>
+  <h1>Login Page</h1>
 </template>

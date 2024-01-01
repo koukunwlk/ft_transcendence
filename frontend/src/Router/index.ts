@@ -18,6 +18,18 @@ var routes = [
 		name: 'Game',
 		component: () => import('../views/Game.vue')
 	}
+	,
+	{
+		path: '/lobby',
+		name: 'Lobby',
+		component: () => import('../views/Lobby.vue')
+	}
+	,
+	{
+		path: '/pong',
+		name: 'Pong',
+		component: () => import('../views/Pong.vue')
+	}
 
 ];
 
