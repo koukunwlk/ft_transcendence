@@ -72,5 +72,4 @@ export default {
   height: 10px;
   background-color: #12f6f9;
 }
-
 </style>

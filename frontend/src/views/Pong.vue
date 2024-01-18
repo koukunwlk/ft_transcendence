@@ -1,26 +1,31 @@
 <template>
-  <div class="Background">
-    <JoinRoom v-if="!gameOn" />
-    <div class="Container">
-      <canvas
-        id="pong"
-        ref="canvasRef"
-        tabindex="0"
-        v-on:keydown="movePlayer"
-        width="1280"
-        height="720"
-      ></canvas>
-      <div class="p1-score">Player 1 : {{ this.p1_points }}</div>
-      <div class="p2-score">Player 2 : {{ this.p2_points }}</div>
+  <div>
+    <button @click="changeBackground">Change Background</button>
+    <div class="Background" :style="{ backgroundImage: `url('${backgroundImage}')` }">
+      <JoinRoom v-if="!gameOn" />
+      <div class="Container">
+        <canvas
+          id="pong"
+          ref="canvasRef"
+          tabindex="0"
+          v-on:keydown="movePlayer"
+          width="1280"
+          height="720"
+        ></canvas>
+        <div class="p1-score">Player 1 : {{ p1_points }}</div>
+        <div class="p2-score">Player 2 : {{ p2_points }}</div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { ref, onMounted, reactive, render } from "vue";
+import { ref, onMounted, reactive } from "vue";
+import { useRouter } from "vue-router";
 import { io, Socket } from "socket.io-client";
-import JoinRoom from "./JoinRoom.vue"; // Import your JoinRoom component
+import JoinRoom from "./JoinRoom.vue";
 import paddle from "./paddle";
+
 export const socket = io("0.0.0.0:3000", {
   query: {
     userLogin: "acosta-a",
@@ -28,9 +33,7 @@ export const socket = io("0.0.0.0:3000", {
 });
 
 export default {
-  components: {
-    JoinRoom,
-  },
+  components: { JoinRoom },
   name: "Pong",
   data() {
     return {
@@ -43,24 +46,23 @@ export default {
       keypress: false,
       p1_points: 0,
       p2_points: 0,
+      backgroundImage: "background.jpeg",
     };
   },
   methods: {
-    renderPaddle(canvasRef, leftPaddle, rightPaddle) {
-      const paddleC = canvasRef;
-      const ctx = paddleC?.getContext("2d"); 
+    renderPaddle() {
+      const paddleC = this.canvasRef;
+      const ctx = paddleC?.getContext("2d");
       paddle(ctx, paddleC, this.leftPaddle);
       paddle(ctx, paddleC, this.rightPaddle);
-
     },
-    initBall(canvasRef) {
+    initBall() {
       if (this.gameOn) {
-        console.log("balll");
         socket.off("ball_update").on("ball_update", (data) => {
-          const ballC = canvasRef;
+          const ballC = this.canvasRef;
           const ctx = ballC?.getContext("2d");
-          ctx.clearRect(0, 0, canvasRef.width, canvasRef.height);
-          this.renderPaddle(this.canvasRef, this.leftPaddle, this.rightPaddle);         
+          ctx.clearRect(0, 0, this.canvasRef.width, this.canvasRef.height);
+          this.renderPaddle();
           ctx?.beginPath();
           ctx?.arc(data.x, data.y, data.rad, 0, Math.PI * 2, false);
           ctx.fillStyle = "#ffffff";
@@ -71,19 +73,25 @@ export default {
         });
       }
     },
+    changeBackground() {
+      this.backgroundImage = "earth.jpg";
+      console.log("changed");
+    },
+    renderGame() {
+      this.renderPaddle();
+      if (1) {
+        this.initBall();
+      }
+      requestAnimationFrame(() => this.renderGame());
+    },
     movePlayer(event) {
+      event.preventDefault();
       if (event.keyCode === 38) {
         socket.emit("arrow_keyUp");
         this.keypress = true;
-        console.log("up arrow pressed");
       } else if (event.keyCode === 40) {
         socket.emit("arrow_keyDown");
         this.keypress = true;
-        console.log("down arrow pressed");
-      }
-      this.renderPaddle(this.canvasRef, this.leftPaddle, this.rightPaddle);
-      if (1) {
-        this.initBall(this.canvasRef);
       }
       socket.on("player_moved", (data) => {
         if (data.side === "left") {
@@ -93,52 +101,89 @@ export default {
         }
       });
     },
+    startGame() {
+      this.newPlayer = true;
+      this.gameOn = true;
+      console.log("game started");
+    },
+    handlePlayerUpdate(data) {
+      this.leftPaddle = data;
+      console.log("this.leftPaddle");
+    },
+    handlePlayer2Update(data) {
+      this.rightPaddle = data;
+      console.log("left id", this.leftPaddle.id);
+      console.log("this.newPlayer");
+    },
+    handlePlayerDisconnected(data) {
+      this.gameOn = false;
+      console.log("opponent player out");
+      if (data == this.leftPaddle) {
+        this.leftPaddle = null;
+      } else {
+        this.rightPaddle = null;
+      }
+
+      setTimeout(() => {
+        socket.emit("handle_reconnect", data);
+        socket.off("PlayerReconnected").on("PlayerReconnected", () => {
+          console.log("Opponent reconnected during the pause.");
+        });
+        console.log("Opponent did not return. Leaving the room.");
+        this.$router.push("/");
+      }, 4000);
+    },
+    handlePlayer1Scored(data) {
+      this.p1_points = data;
+      console.log("1 scored ", data);
+    },
+    handlePlayer2Scored(data) {
+      this.p2_points = data;
+      console.log("2 scored ", data);
+    },
+    handlePlayer1Won() {
+      this.showResultMessage("Player 1 won!");
+    },
+    handlePlayer2Won() {
+      this.showResultMessage("Player 2 won!");
+    },
+    showResultMessage(message) {
+      var vm = this;
+      var div = document.createElement("div");
+      div.style.position = "fixed";
+      div.style.top = "50%";
+      div.style.left = "50%";
+      div.style.transform = "translate(-50%, -50%)";
+      div.style.fontSize = "24px";
+      div.style.fontWeight = "bold";
+      div.style.textAlign = "center";
+      div.style.backgroundColor = "#c5f56b";
+      div.style.color = "white";
+      div.style.padding = "10px";
+      div.style.borderRadius = "5px";
+      div.appendChild(document.createTextNode(message));
+      document.body.appendChild(div);
+      setTimeout(function () {
+        document.body.removeChild(div);
+        vm.$router.push("lobby");
+        this.gameOn = false;
+      }, 4000);
+    },
   },
   mounted() {
     try {
-      socket.off("START_GAME").on("START_GAME", () => {
-        this.newPlayer = true;
-        this.gameOn = true;
-        console.log("game started");
-      });
-      socket.off("player1_update").on("player1_update", (data) => {
-        this.leftPaddle = data;
-        console.log("this.leftPaddle");
-      });
-      socket.off("player2_update").on("player2_update", (data) => {
-        this.rightPaddle = data;
-        console.log("left id", this.leftPaddle.id);
-        console.log("this.newPlayer");
-      });
-      socket.off("PlayerDisconnected").on("PlayerDisconnected", (data) => {
-        this.gameOn = false;
-        console.log("opponent player out");
-        if (data == this.leftPaddle) {
-          this.leftPaddle = null;
-        } else {
-          this.rightPaddle = null;
-        }
-        
-        setTimeout(() => {
-          socket.emit("handle_reconnect", data);
-          socket.off("PlayerReconnected").on("PlayerReconnected", () => {
-            console.log("Opponent reconnected during the pause.");
-          });
-          console.log("Opponent did not return. Leaving the room.");
-          this.$router.push("/");
-        }, 4000);
-      });
-      socket.off("player1_scored").on("player1_scored", (data) => {
-        this.p1_points = data;
-        console.log("1 scored ", data);
-      });
-      socket.off("player2_scored").on("player2_scored", (data) => {
-        this.p2_points = data;
-        console.log("2 scored ", data);
-      });
-
       this.canvasRef = this.$refs.canvasRef;
+
       window.addEventListener("keydown", this.movePlayer);
+      socket.off("START_GAME").on("START_GAME", this.startGame);
+      socket.off("player1_update").on("player1_update", this.handlePlayerUpdate);
+      socket.off("player2_update").on("player2_update", this.handlePlayer2Update);
+      socket.off("PlayerDisconnected").on("PlayerDisconnected", this.handlePlayerDisconnected);
+      socket.off("player1_scored").on("player1_scored", this.handlePlayer1Scored);
+      socket.off("player2_scored").on("player2_scored", this.handlePlayer2Scored);
+      socket.on("player1_won", this.handlePlayer1Won);
+      socket.on("player2_won", this.handlePlayer2Won);
+      this.renderGame();
     } catch (error) {
       console.error("Error in mounted hook:", error);
     }
@@ -148,6 +193,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 .p1-score {
@@ -208,7 +254,7 @@ export default {
 }
 
 .Background {
-  background-image: url('earth.jpg');
+  /* background-image: url("earth.jpg"); */
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;

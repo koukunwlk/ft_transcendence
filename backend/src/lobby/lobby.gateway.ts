@@ -37,7 +37,7 @@ class BALL {
   dx = 7;
   dy = 7;
   rad = 9;
-  speed = 12;
+  speed = 4;
 }
 
 const listOfPlayers: Map<number, any> = new Map();
@@ -82,25 +82,39 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
     let id: number;
     for (id of listOfPlayers.keys()) {
       if (listOfPlayers.get(id).id === client.id) {
+        this.server.emit('PlayerReconnected', client.id);
         break;
       } else {
         continue;
       }
     }
-    this.server.emit('PlayerReconnected', client.id);
-    listOfPlayers.delete(id);
-    i--;
-    //    console.clear();
-    clearInterval(intervalid);
-    intervalid = null;
   }
 
   @SubscribeMessage('join_game')
   handleJoinGame(client: Socket) {
-    i++;
-    listOfPlayers.set(i, new P1());
-    listOfPlayers.get(i).id = client.id;
-    queue[i] = listOfPlayers.get(i).id;
+    let player = null;
+
+    for (let [key, value] of listOfPlayers.entries()) {
+      if (value.id === client.id) {
+        player = value;
+        console.log('it exists');
+        break;
+      }
+    }
+    if (!player) {
+      i++;
+      if (i % 2 !== 0) {
+        listOfPlayers.set(i, new P1());
+      } else {
+        listOfPlayers.set(i, new P2());
+      }
+      listOfPlayers.get(i).id = client.id;
+      queue[i] = listOfPlayers.get(i).id;
+    }
+    // i++;
+    // listOfPlayers.set(i, new P1());
+    //  listOfPlayers.get(i).id = client.id;
+    // queue[i] = listOfPlayers.get(i).id;
 
     if (i % 2 !== 0) {
       const roomId = (queue[i] + '+' + 'gameRoom').toString();
@@ -108,8 +122,19 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
       client.join(roomId);
     } else if (i % 2 === 0) {
       const roomId = (queue[i - 1] + '+' + 'gameRoom').toString();
-      listOfPlayers.set(i, new P2());
-      listOfPlayers.get(i).id = client.id;
+      // player = null;
+      // for (let [key, value] of listOfPlayers.entries()) {
+      //   if (value.id === client.id) {
+      //     player = value;
+      //     console.log('it exists');
+      //     break;
+      //   }
+      // }
+      // if (!player) {
+      //   i++;
+      //   listOfPlayers.set(i, new P2());
+      // }
+      // listOfPlayers.get(i).id = client.id;
 
       // Set the player's room and join the room
       listOfPlayers.get(i).room = roomId;
@@ -123,6 +148,9 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
       this.server.to(roomId).emit('START_GAME');
 
       // Create a new ball object and set its ID
+      console.log(ballOfRoom);
+      console.log(listOfPlayers);
+
       ballOfRoom.set(roomId, new BALL());
       ballOfRoom.get(roomId).id = roomId;
 
@@ -160,7 +188,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
         continue;
       }
     }
-    if (listOfPlayers.get(id).y > 0) {
+    if (listOfPlayers.get(id).y && listOfPlayers.get(id).y > 0) {
       listOfPlayers.get(id).y -= 40;
       this.server
         .to(listOfPlayers.get(id).room)
@@ -185,8 +213,11 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
         .emit('player_moved', listOfPlayers.get(id));
     }
   }
-
-  handleBallMovement(player1: any, player2: any, ball_ins: any) {
+  handleBallMovement(
+    player1: any,
+    player2: any,
+    ball_ins: any,
+  ) {
     if (!player1 || !player2) {
       console.log('player2 not connected');
       return false;
@@ -215,6 +246,31 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
             if (player2.points === 10) {
               this.server.to(player2.room).emit('player2_won');
               player2.points = 0;
+              let id: number;
+              let room = player1.room;
+              for (id of listOfPlayers.keys()) {
+                if (
+                  listOfPlayers.get(id).id === player1.id ||
+                  listOfPlayers.get(id).id === player2.id
+                ) {
+                  console.log(listOfPlayers.get(id).id);
+                  listOfPlayers.get(id).id = null;
+                  listOfPlayers.get(id).room = null;
+                  listOfPlayers.delete(id);
+                  console.log('deletou');
+                  i--;
+                } else {
+                  continue;
+                }
+              }
+              // let ball: string;
+              // for (ball of ballOfRoom.keys()) {
+              //   console.log(ball);
+              //   if (ballOfRoom.get(room)) {
+              //     console.log('delete: ', room);
+              //     ballOfRoom.delete(room);
+              //   }
+              // }
             }
           }
           ball_ins.x = 640;
@@ -228,6 +284,31 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
             if (player1.points === 10) {
               this.server.to(player1.room).emit('player1_won');
               player1.points = 0;
+              let id: number;
+              let room = player1.room;
+              for (id of listOfPlayers.keys()) {
+                if (
+                  listOfPlayers.get(id).id === player1.id ||
+                  listOfPlayers.get(id).id === player2.id
+                ) {
+                  console.log(listOfPlayers.get(id).id);
+                  listOfPlayers.get(id).id = null;
+                  listOfPlayers.get(id).room = null;
+                  listOfPlayers.delete(id);
+                  console.log('deletou');
+                  i--;
+                } else {
+                  continue;
+                }
+              }
+              // let ball: string;
+              // for (ball of ballOfRoom.keys()) {
+              //   console.log(ball);
+              //   if (ballOfRoom.get(room)) {
+              //     console.log('delete: ', room);
+              //     ballOfRoom.delete(room);
+              //   }
+              // }
             }
           }
           ball_ins.x = 640;
