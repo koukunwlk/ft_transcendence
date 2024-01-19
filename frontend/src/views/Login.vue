@@ -22,7 +22,7 @@ export default {
 			<h1 class="login-txt">
 				Login
 			</h1>
-			<hr class="underline">
+			<hr>
 			<div class="box-buttons">
 				<button
 					@touchstart="pressedMouse1 = true"
@@ -116,7 +116,8 @@ body, html{
 	margin: 8%;
 }
 
-.underline {
+hr {
+	margin: auto;
 	border: none;
 	border-top: 1px solid rgba(255, 255, 255, 0.2);
 	width: 70%;
