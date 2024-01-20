@@ -27,6 +27,13 @@ export class UserTypeOrmRepository implements UserRepository {
   async insert(user: User): Promise<string> {
     const newUser = this.userRepository.create({
       nickname: user.getNickname(),
+      token: user.getToken(),
+      validCode: user.getValidation(),
+      userId: user.getUserId(),
+      email: user.getEmail(),
+      username: user.getUsername(),
+      tfaSecret: user.getTfaSecret(),
+
     });
     const createdUser = await this.userRepository.save(newUser);
     return createdUser.nickname;
