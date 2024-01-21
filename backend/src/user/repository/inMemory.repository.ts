@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from './user.repository';
-import { FriendList, User, UserProps } from '../domain/model/user/user';
+import { FriendList, User, UserProps } from '../domain/model/user.model';
 
 @Injectable()
 export class InMemory implements UserRepository {
@@ -37,10 +37,6 @@ export class InMemory implements UserRepository {
     );
 
     return Promise.resolve(populatedFriendList);
-  }
-
-  insertFriend(ownerId: string, friendId: string) {
-    this.friendList.push({ ownerId, friendId });
   }
 
   getSize(): number {

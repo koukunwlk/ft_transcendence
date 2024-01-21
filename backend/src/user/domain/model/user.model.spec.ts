@@ -1,4 +1,4 @@
-import { User, UserStatusEnum } from './user';
+import { User, UserStatusEnum } from './user.model';
 import { v4 as uuidV4 } from 'uuid';
 
 describe('User', () => {

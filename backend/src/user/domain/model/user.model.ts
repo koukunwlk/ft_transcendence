@@ -11,19 +11,18 @@ export enum UserStatusEnum {
 }
 
 export type UserProps = {
+  id?: string;
   nickname: string;
   status?: UserStatusEnum;
-  friendList?: User[];
 };
 
 export class User extends Model<UserProps> {
   protected props = {} as UserProps;
 
-  constructor({ nickname, status, friendList }: UserProps, id?: string) {
+  constructor({ nickname, status }: UserProps, id?: string) {
     super(id);
     this.props.nickname = nickname;
     this.props.status = status || UserStatusEnum.OFFLINE;
-    this.props.friendList = friendList;
   }
 
   getNickname(): string {
@@ -32,9 +31,5 @@ export class User extends Model<UserProps> {
 
   getStatus(): UserStatusEnum {
     return this.props.status;
-  }
-
-  getFriendList(): User[] {
-    return this.props.friendList;
   }
 }

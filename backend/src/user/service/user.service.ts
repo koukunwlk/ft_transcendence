@@ -3,7 +3,7 @@ import {
   USER_REPOSITORY_TOKEN,
   UserRepository,
 } from '../repository/user.repository';
-import { FriendList, User } from '../domain/model/user/user';
+import { User } from '../domain/model/user.model';
 import { CreateUserDTO } from '../dto/create-user.dto';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class UserService {
   constructor(
     @Inject(USER_REPOSITORY_TOKEN)
     private readonly userRepository: UserRepository,
-  ) {}
+  ) { }
 
   async insertUser(createUser: CreateUserDTO): Promise<string> {
     await this.checkDuplicatedUser(createUser.nickname);
@@ -26,33 +26,16 @@ export class UserService {
     return await this.userRepository.findAll();
   }
 
-  async getUser(id: string): Promise<User> {
-    return await this.userRepository.findOne({ nickname: id });
+  async getUserByNickname(nickname: string): Promise<User> {
+    return await this.userRepository.findOne({ nickname });
   }
 
-  async getFriendList(ownerId: string): Promise<FriendList[]> {
-    return await this.userRepository.getFriendList(ownerId);
+  async getUserById(id: string): Promise<User> {
+    return await this.userRepository.findOne({ id });
   }
 
-  async addFriend(ownerNickname: string, friendName: string): Promise<void> {
-    const friendUser = await this.getUser(friendName);
-    const ownerUser = await this.getUser(ownerNickname);
-
-    const isFriend = await this.checkIfFriendIsInFriendList(ownerUser.id, friendUser);
-
-    if (isFriend) {
-      return;
-    }
-
-    return await this.userRepository.insertFriend(ownerUser.id, friendUser.id);
-  }
-
-  private async checkIfFriendIsInFriendList(ownerId: string, friendUser: User) {
-    const friendList = await this.getFriendList(ownerId);
-    if (friendList.includes(friendUser)) {
-      return true;
-    }
-    return false;
+  async getUsersByIds(ids: string[]): Promise<User[]> {
+    return await this.userRepository.findAllByIds(ids);
   }
 
   private async checkDuplicatedUser(nickname: string) {
