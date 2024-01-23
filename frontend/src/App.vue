@@ -5,5 +5,13 @@ export default {
 </script>
 
 <template>
-  <RouterView />
+  <RouterView/>
 </template>
+
+<style>
+
+html, body{
+  height: 100vh;
+}
+
+</style>
