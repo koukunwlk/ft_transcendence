@@ -31,4 +31,17 @@ export class UserTypeOrmRepository implements UserRepository {
     const createdUser = await this.userRepository.save(newUser);
     return createdUser.nickname;
   }
+
+  async findAll(): Promise<User[]> {
+    const userEntityList = await this.userRepository.find();
+    let userModelList = [];
+
+    if (userEntityList) {
+      userEntityList.forEach((user) => {
+        userModelList.push(new User(user));
+      });
+    }
+
+    return userModelList;
+  }
 }
