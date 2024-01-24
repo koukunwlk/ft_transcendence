@@ -14,4 +14,8 @@ html, body{
   height: 100vh;
 }
 
+#app {
+  height: 100vh;
+}
+
 </style>
