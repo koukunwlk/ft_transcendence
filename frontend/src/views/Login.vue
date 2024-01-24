@@ -6,7 +6,7 @@ export default {
 
 <template>
 	<div class="h-full flex justify-center items-center">
-		<div class="bg-zinc-700 h-72 w-72 flex flex-col justify-center items-center ">
+		<div class="aspect-square h-72 w-72 flex flex-col justify-center items-center ">
 			<div>
 				<h1 class="text-2xl mb-3">42 Project</h1>
 			</div>
