@@ -1,6 +1,6 @@
 <template>
-	<div class="flex h-full justify-end">
-		<div class="sm:h-20 sm:w-28 grid justify-center">
+	<div class="flex fixed w-full justify-end">
+		<div class="h-20 w-20 mt-1 mr-1 grid justify-center">
 			<Avatar name="G" size="80" status="online" borderColor="black" @click="onClick()" class="cursor-pointer" ></Avatar>
 		</div>
 	</div>
