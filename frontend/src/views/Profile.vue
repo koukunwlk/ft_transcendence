@@ -1,41 +1,33 @@
 <template>
-	<div class="grid w-screen h-screen justify-center content-center">
-		<div class="grid grid-rows-2 h-[450px] w-[370px] sm:h-[450px] sm:w-[600px]  bg-gray-600 bg-opacity-40 rounded-lg border border-zinc-600">
-			<div class="grid">
-				<div class="grid justify-center content-end">
-					<div class="justify-center">
-						<Avatar name="Gstv" size="120" borderColor="black" @click="onClick()" ></Avatar>
-						<div class="grid justify-center content-center">
-							<span class="text-2xl text-white">
-								mrtns
-							</span>
-						</div>
+	<Navbar />
+	<div class="flex h-full md:h-5/6 justify-center items-center">
+		<div class="h-3/5 w-3/5 bg-blue-50">
+			<div class="flex flex-col justify-center items-center bg-red-200 h-2/6">
+				<div class="flex justify-center items-center">
+					<Avatar name="Gstv" size="80" borderColor="black" @click="onClick()"></Avatar>
+				</div>
+				<div class="flex justify-center items-center">
+					<a>Gustavo Martins</a>
+				</div>
+			</div>
+			<div class="flex flex-col md:flex-row justify-center items-center bg-blue-200 h-full">
+				<div class="flex flex-col md:flex-col justify-center items-center bg-red-100 w-full h-full">
+					<div class="bg-yellow-200 h-1/2 w-full">
+						<p>Vitórias e Derrotas</p>
+					</div>
+					<div class="bg-green-200 h-1/2 w-full">
+						<p>Histórico</p>
+					</div>
+				</div>
+				<div class="flex flex-col md:flex-col justify-center items-center bg-red-500 w-full h-full">
+					<div class="bg-yellow-200 h-1/2 w-full">
+						<p>Ranking</p>
+					</div>
+					<div class="bg-green-200 h-1/2 w-full">
+						<p>Conquistas</p>
 					</div>
 				</div>
 			</div>
-			<div class="grid grid-cols-2">
-				<div class="grid grid-rows-2">
-					<div class="text-white rounded-lg border border-zinc-600 m-2 bg-zinc-700">
-						<span>
-							5 win | 0 lose
-						</span>
-					</div>
-					<div class="text-white rounded-lg border border-zinc-600 m-2 bg-zinc-700">
-						<span>
-							Histórico:
-							<p>
-								gstv [5] - [2] 42
-							</p>
-						</span>
-					</div>
-				</div>
-				<div class=" grid justify-center content-center">
-					<div class="grid justify-center content-center sm:h-52 sm:w-72 bg-zinc-700 rounded-lg border border-zinc-600 text-white">
-						Conquistas
-					</div>
-				</div>
-			</div>
-
 		</div>
 	</div>
 </template>
