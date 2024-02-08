@@ -1,29 +1,35 @@
 <template>
-	<Navbar />
-	<div class="flex h-full md:h-5/6 justify-center items-center">
-		<div class="h-3/5 w-3/5 bg-blue-50">
-			<div class="flex flex-col justify-center items-center bg-red-200 h-2/6">
+	<div class=" text-white fixed end-0">
+		<button
+			class="h-10 w-16 mt-2 mb-6 md:mb-0 mr-2 bg-gray-600 bg-opacity-30 hover:bg-zinc-500 text-zinc-400  font-semibold hover:text-white text-sm focus:outline-none rounded-lg border border-zinc-600 hover:border-transparent focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700"
+			@click="onClick()">
+			Home
+		</button>
+	</div>
+	<div class="flex h-full md:h-6/6 justify-center items-center">
+		<div class="h-4/5 w-4/5 md:w-3/5 bg-opacity-30 rounded-lg border border-zinc-600 text-white">
+			<div class="flex flex-col justify-center items-center h-2/6">
 				<div class="flex justify-center items-center">
-					<Avatar name="Gstv" size="80" borderColor="black" @click="onClick()"></Avatar>
+					<Avatar name="Gstv" size="80" borderColor="black"></Avatar>
 				</div>
 				<div class="flex justify-center items-center">
 					<a>Gustavo Martins</a>
 				</div>
 			</div>
-			<div class="flex flex-col md:flex-row justify-center items-center bg-blue-200 h-full">
-				<div class="flex flex-col md:flex-col justify-center items-center bg-red-100 w-full h-full">
-					<div class="bg-yellow-200 h-1/2 w-full">
+			<div class="h-4/6 flex flex-col md:flex-row justify-center items-center">
+				<div class="flex flex-col md:flex-col justify-center items-center w-full h-full">
+					<div class="h-1/2 w-full rounded-lg border border-zinc-600">
 						<p>Vitórias e Derrotas</p>
 					</div>
-					<div class="bg-green-200 h-1/2 w-full">
+					<div class="h-1/2 w-full rounded-lg border border-zinc-600">
 						<p>Histórico</p>
 					</div>
 				</div>
-				<div class="flex flex-col md:flex-col justify-center items-center bg-red-500 w-full h-full">
-					<div class="bg-yellow-200 h-1/2 w-full">
+				<div class="flex flex-col md:flex-col justify-center items-center  w-full h-full">
+					<div class="h-1/2 w-full rounded-lg border border-zinc-600">
 						<p>Ranking</p>
 					</div>
-					<div class="bg-green-200 h-1/2 w-full">
+					<div class="h-1/2 w-full rounded-lg border border-zinc-600">
 						<p>Conquistas</p>
 					</div>
 				</div>
@@ -35,7 +41,10 @@
 <script setup>
 import Navbar from "../components/Navbar.vue";
 import Avatar from "vue3-avatar";
+import router from '../Router/index.ts'
 
-
+function onClick() {
+	router.push('/')
+}
 
 </script>
