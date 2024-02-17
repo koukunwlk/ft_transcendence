@@ -16,6 +16,11 @@ var routes = [
 		path: '/profile',
 		name: 'Profile',
 		component: () => import('../views/Profile.vue')
+	},
+	{
+		path: '/community',
+		name: 'Community',
+		component: () => import('../views/Community.vue')
 	}
 ];
 
