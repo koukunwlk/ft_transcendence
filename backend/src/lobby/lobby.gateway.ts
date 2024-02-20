@@ -17,6 +17,7 @@ class P1 {
   side = 'left';
   points = 0;
   room = '';
+  //playing = false;
 }
 
 class P2 {
@@ -29,6 +30,7 @@ class P2 {
   side = 'right';
   points = 0;
   room = '';
+  //playing = false;
 }
 class BALL {
   id = 0;
@@ -43,10 +45,12 @@ class BALL {
 const listOfPlayers: Map<number, any> = new Map();
 let intervalid;
 let i = 0;
+//let position = 1;
+let lastRoom = 'empty';
 
 const ballOfRoom: Map<string, any> = new Map();
-const queue = Array<string>;
-
+let queue = Array<string>();
+//let newq = Array<string>();
 @WebSocketGateway({ cors: true })
 export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
@@ -111,49 +115,35 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
       listOfPlayers.get(i).id = client.id;
       queue[i] = listOfPlayers.get(i).id;
     }
-    // i++;
-    // listOfPlayers.set(i, new P1());
-    //  listOfPlayers.get(i).id = client.id;
-    // queue[i] = listOfPlayers.get(i).id;
-
     if (i % 2 !== 0) {
       const roomId = (queue[i] + '+' + 'gameRoom').toString();
+      lastRoom = roomId;
       listOfPlayers.get(i).room = roomId;
       client.join(roomId);
+      //      const newArray = queue.filter((item, index) => index !== i);
+      //     queue = newArray;
     } else if (i % 2 === 0) {
-      const roomId = (queue[i - 1] + '+' + 'gameRoom').toString();
-      // player = null;
-      // for (let [key, value] of listOfPlayers.entries()) {
-      //   if (value.id === client.id) {
-      //     player = value;
-      //     console.log('it exists');
-      //     break;
-      //   }
-      // }
-      // if (!player) {
-      //   i++;
-      //   listOfPlayers.set(i, new P2());
-      // }
-      // listOfPlayers.get(i).id = client.id;
-
+      const roomId = lastRoom;
       // Set the player's room and join the room
       listOfPlayers.get(i).room = roomId;
       client.join(roomId);
-
+      //     const newArray = queue.filter((item, index) => index !== i);
+      //    queue = newArray;
+      console.log(queue);
       // Emit player updates
       this.server.to(roomId).emit('player1_update', listOfPlayers.get(i - 1));
       this.server.to(roomId).emit('player2_update', listOfPlayers.get(i));
 
       // Emit game start event
       this.server.to(roomId).emit('START_GAME');
-
-      // Create a new ball object and set its ID
-      console.log(ballOfRoom);
-      console.log(listOfPlayers);
+ //     listOfPlayers.get(i - 1).playing = true;
+ //     listOfPlayers.get(i).playing = true;
 
       ballOfRoom.set(roomId, new BALL());
       ballOfRoom.get(roomId).id = roomId;
 
+      console.log('teste: ', listOfPlayers.get(i - 1));
+      console.log('teste: ', listOfPlayers.get(i));
       // Handle ball movement
       this.handleBallMovement(
         listOfPlayers.get(i - 1),
@@ -173,8 +163,17 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
         continue;
       }
     }
+    let room = listOfPlayers.get(id).roomId;
+    let ball: string;
+    for (ball of ballOfRoom.keys()) {
+      console.log(ball);
+      if (ballOfRoom.get(room)) {
+        console.log('delete: ', room);
+        ballOfRoom.delete(room);
+      }
+    }
     listOfPlayers.delete(id);
-    i--;
+ //   i--;
   }
 
   @SubscribeMessage('arrow_keyUp')
@@ -188,7 +187,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
         continue;
       }
     }
-    if (listOfPlayers.get(id).y && listOfPlayers.get(id).y > 0) {
+    if (listOfPlayers.get(id)?.y && listOfPlayers.get(id).y > 0) {
       listOfPlayers.get(id).y -= 40;
       this.server
         .to(listOfPlayers.get(id).room)
@@ -206,18 +205,14 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
         continue;
       }
     }
-    if (listOfPlayers.get(id).y < 620) {
+    if (listOfPlayers.get(id)?.y < 620) {
       listOfPlayers.get(id).y += 40;
       this.server
         .to(listOfPlayers.get(id).room)
         .emit('player_moved', listOfPlayers.get(id));
     }
   }
-  handleBallMovement(
-    player1: any,
-    player2: any,
-    ball_ins: any,
-  ) {
+  handleBallMovement(player1: any, player2: any, ball_ins: any) {
     if (!player1 || !player2) {
       console.log('player2 not connected');
       return false;
@@ -253,24 +248,27 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
                   listOfPlayers.get(id).id === player1.id ||
                   listOfPlayers.get(id).id === player2.id
                 ) {
-                  console.log(listOfPlayers.get(id).id);
+                  //     newq = queue.filter(item => item !== listOfPlayers.get(id).id);
+                  //     queue= newq;
                   listOfPlayers.get(id).id = null;
                   listOfPlayers.get(id).room = null;
                   listOfPlayers.delete(id);
                   console.log('deletou');
-                  i--;
                 } else {
                   continue;
                 }
               }
-              // let ball: string;
-              // for (ball of ballOfRoom.keys()) {
-              //   console.log(ball);
-              //   if (ballOfRoom.get(room)) {
-              //     console.log('delete: ', room);
-              //     ballOfRoom.delete(room);
-              //   }
-              // }
+              let ball: string;
+              for (ball of ballOfRoom.keys()) {
+                console.log(ball);
+                if (ballOfRoom.get(room)) {
+                  console.log('delete: ', room);
+                  ballOfRoom.delete(room);
+                }
+              }
+              console.log(ballOfRoom);
+              console.log(listOfPlayers);
+              console.log(i);
             }
           }
           ball_ins.x = 640;
@@ -291,24 +289,31 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
                   listOfPlayers.get(id).id === player1.id ||
                   listOfPlayers.get(id).id === player2.id
                 ) {
-                  console.log(listOfPlayers.get(id).id);
+                  // if (ballOfRoom.get(listOfPlayers.get(id).id)) {
+                  //   ballOfRoom.delete(listOfPlayers.get(id).id);
+                  // }
+                  //                 newq = queue.filter(item => item !== listOfPlayers.get(id).id);
+                  //                queue=newq;
                   listOfPlayers.get(id).id = null;
                   listOfPlayers.get(id).room = null;
                   listOfPlayers.delete(id);
+
                   console.log('deletou');
-                  i--;
                 } else {
                   continue;
                 }
               }
-              // let ball: string;
-              // for (ball of ballOfRoom.keys()) {
-              //   console.log(ball);
-              //   if (ballOfRoom.get(room)) {
-              //     console.log('delete: ', room);
-              //     ballOfRoom.delete(room);
-              //   }
-              // }
+              let ball: string;
+              for (ball of ballOfRoom.keys()) {
+                console.log(ball);
+                if (ballOfRoom.get(room)) {
+                  console.log('delete: ', room);
+                  ballOfRoom.delete(room);
+                }
+              }
+              console.log(ballOfRoom);
+              console.log(listOfPlayers);
+              console.log(i);
             }
           }
           ball_ins.x = 640;

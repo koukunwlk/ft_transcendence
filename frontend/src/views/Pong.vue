@@ -1,7 +1,12 @@
 <template>
   <div>
-    <button @click="changeBackground">Change Background</button>
-    <div class="Background" :style="{ backgroundImage: `url('${backgroundImage}')` }">
+    <button id="my-button" class="my-button" @click="changeBackground">
+      Change Background
+    </button>
+    <div
+      class="Background"
+      :style="{ backgroundImage: `url('${backgroundImage}')` }"
+    >
       <JoinRoom v-if="!gameOn" />
       <div class="Container">
         <canvas
@@ -26,7 +31,7 @@ import { io, Socket } from "socket.io-client";
 import JoinRoom from "./JoinRoom.vue";
 import paddle from "./paddle";
 
-export const socket = io("0.0.0.0:3000", {
+export const socket = io("192.168.0.5:3000", {
   query: {
     userLogin: "acosta-a",
   },
@@ -75,13 +80,12 @@ export default {
     },
     changeBackground() {
       this.backgroundImage = "earth.jpg";
+      document.getElementById("my-button").style.display = "none";
       console.log("changed");
     },
     renderGame() {
       this.renderPaddle();
-      if (1) {
-        this.initBall();
-      }
+      this.initBall();
       requestAnimationFrame(() => this.renderGame());
     },
     movePlayer(event) {
@@ -112,8 +116,6 @@ export default {
     },
     handlePlayer2Update(data) {
       this.rightPaddle = data;
-      console.log("left id", this.leftPaddle.id);
-      console.log("this.newPlayer");
     },
     handlePlayerDisconnected(data) {
       this.gameOn = false;
@@ -174,28 +176,57 @@ export default {
     try {
       this.canvasRef = this.$refs.canvasRef;
 
-      window.addEventListener("keydown", this.movePlayer);
+      document.addEventListener("keydown", this.movePlayer);
       socket.off("START_GAME").on("START_GAME", this.startGame);
-      socket.off("player1_update").on("player1_update", this.handlePlayerUpdate);
-      socket.off("player2_update").on("player2_update", this.handlePlayer2Update);
-      socket.off("PlayerDisconnected").on("PlayerDisconnected", this.handlePlayerDisconnected);
-      socket.off("player1_scored").on("player1_scored", this.handlePlayer1Scored);
-      socket.off("player2_scored").on("player2_scored", this.handlePlayer2Scored);
+      socket
+        .off("player1_update")
+        .on("player1_update", this.handlePlayerUpdate);
+      socket
+        .off("player2_update")
+        .on("player2_update", this.handlePlayer2Update);
+      socket
+        .off("PlayerDisconnected")
+        .on("PlayerDisconnected", this.handlePlayerDisconnected);
+      socket
+        .off("player1_scored")
+        .on("player1_scored", this.handlePlayer1Scored);
+      socket
+        .off("player2_scored")
+        .on("player2_scored", this.handlePlayer2Scored);
       socket.on("player1_won", this.handlePlayer1Won);
       socket.on("player2_won", this.handlePlayer2Won);
       this.renderGame();
     } catch (error) {
       console.error("Error in mounted hook:", error);
     }
+    document.addEventListener("keyup", function(event) {
+      this.keypress = false;
+    });
   },
-  beforeUnmount() {
-    window.removeEventListener("keydown", this.movePlayer);
-  },
+  
+  // beforeUnmount() {
+  //   window.removeEventListener("keydown", this.movePlayer);
+  // },
 };
 </script>
 
-
 <style scoped>
+.my-button {
+  background-color: grey;
+  border: 2px;
+  color: white;
+  padding: 7.5px 16px;
+  text-align: center;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
+  position: fixed;
+  left: 50%;
+  bottom: 7px;
+  transform: translate(-50%, 50%);
+}
+
 .p1-score {
   position: absolute;
   top: 20px;

@@ -10,7 +10,7 @@
 import { io, Socket } from "socket.io-client";
 export default {
   mounted() {
-    const socket = io("http://localhost:3000");
+    const socket = io("192.168.0.5:3000");
     // Global Variables
     var DIRECTION = {
       IDLE: 0,
