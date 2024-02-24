@@ -25,6 +25,10 @@ export class InMemory implements UserRepository {
     return Promise.resolve(this.users);
   }
 
+  findAllByIds(ids: string[]): Promise<User[]> {
+    return Promise.resolve(this.users.filter((user) => ids.includes(user.id)));
+  }
+
   insert(user: User): Promise<string> {
     this.users.push(user);
 

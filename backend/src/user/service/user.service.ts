@@ -22,6 +22,14 @@ export class UserService {
     return id;
   }
 
+  async addFriend(ownerId: string, friendId: string): Promise<void> {
+  }
+
+
+  async getUser(nickname: string): Promise<User> {
+    return await this.userRepository.findOne({ nickname });
+  }
+
   async getUserList(): Promise<User[]> {
     return await this.userRepository.findAll();
   }

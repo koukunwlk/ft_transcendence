@@ -26,4 +26,6 @@ export class UserController {
     console.log(nickname, friendName);
     return await this.userService.addFriend(nickname, friendName);
   }
+
+  
 }

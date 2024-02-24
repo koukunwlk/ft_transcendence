@@ -1,26 +1,36 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
+import { Message } from './entities/message.entity';
 
 @Injectable()
 export class MessagesService {
-  create(createMessageDto: CreateMessageDto) {
-    return 'This action adds a new message';
+  messages: Message[] = [{ name: 'gstv', text: 'oie' }];
+  clientToUser = {};
+
+  identify(name: string, clientId: string) {
+    this.clientToUser[clientId] = name;
+    return Object.values(this.clientToUser);
   }
 
+  getClientName(clientId: string) {
+    return this.clientToUser[clientId];
+  }
+
+  // here we will receive the new message to store
+  create(createMessageDto: CreateMessageDto, clientId: string) {
+    const message = { name: this.clientToUser[clientId],
+      text: createMessageDto.text
+     };
+    this.messages.push(message);
+
+    return message
+  }
+
+  // put the query db to return the messages here
   findAll() {
-    return `This action returns all messages`;
+    return this.messages;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} message`;
-  }
 
-  update(id: number, updateMessageDto: UpdateMessageDto) {
-    return `This action updates a #${id} message`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} message`;
-  }
 }
