@@ -27,7 +27,7 @@ export class AuthController {
   @UseGuards(FortyTwoAuthGuard)
   async fortyTwoRedirect(@Req() req: any, @Res() res: Response): Promise<void> {
     await this.authService.Auth42Redirect(req, res);
-    return res.redirect(`${'www.intra.42.fr'}/`);
+    return res.redirect(`${'https://signin.intra.42.fr/users/sign_out'}/`);
   }
 
   @Get('logout')

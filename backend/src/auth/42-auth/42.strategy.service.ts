@@ -5,7 +5,7 @@ import { AuthService } from '../auth.service';
 import { config } from 'dotenv';
 import { UserService } from '../../user/service/user.service';
 import { generateSecret } from '2fa-util';
-import { User } from '@/user/domain/model/user/user';
+import { User } from '@/user/domain/model/user.model';
 
 config();
 
@@ -21,6 +21,7 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
       callbackURL: process.env.NEST_API_CLIENT_URL,
     });
   }
+
   async validate(
     accessToken: string,
     refreshToken: string,
@@ -30,18 +31,29 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
     const mfaSecret = await generateSecret(profile.id, 'Pong');
     const secret = mfaSecret.secret;
     const tfaIsActive = false;
-    const user = new User({
-      nickname: profile.username,
-      token: profile.token,
-      validCode: tfaIsActive,
-      userId: profile.id,
-      email: profile.email,
-      username: profile.username,
-      tfaSecret: secret})
-    await this.userService.insertUser(
-      user
-    );
-    console.log(this.userService.getUser('acosta-a'))
+
+    // const user = new User({
+    //   nickname: profile.username,
+    //   // token: profile.token,
+    //   // validCode: tfaIsActive,
+    //   id: profile.id,
+    //   email: profile.email,
+    //   username: profile.username,
+    //   // tfaSecret: secret,
+    // });
+
+    // await this.userService.insertUser({
+    //   nickname: profile.username,
+    //   // token: profile.token,
+    //   // validCode: tfaIsActive,
+    //   id: profile.id,
+    //   email: profile.email,
+    //   username: profile.username,
+    //   // tfaSecret: secret,
+    // });
+
+    // console.log(this.userService.getUser('acosta-a'));
+    // console.log(await this.userService.loginUser(profile.id));
     done(null, profile);
   }
 }
