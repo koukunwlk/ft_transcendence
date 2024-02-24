@@ -1,10 +1,10 @@
 <template>
 	<h1>Home Page</h1>
+	<ChatVue />
 	<RouterView />
 </template>
 
-<script>
-export default {
-	name: "Home",
-};
+<script setup>
+import ChatVue from "../components/CommunityChat.vue";
+
 </script>
