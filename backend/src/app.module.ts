@@ -8,8 +8,8 @@ import { AuthModule } from './auth/auth.module'
   imports: [
     UserModule,
     FriendListModule,
-    TypeOrmModule.forRoot(typeOrmConfig)
     AuthModule,
+    TypeOrmModule.forRoot(typeOrmConfig)
   ],
   controllers: [],
   providers: [],

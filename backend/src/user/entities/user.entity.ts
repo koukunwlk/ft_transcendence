@@ -1,4 +1,5 @@
 import { Column, PrimaryGeneratedColumn, Entity } from 'typeorm';
+import { UserStatusEnum } from '../domain/model/user.model';
 
 @Entity("user")
 export class UserEntity {
@@ -14,6 +15,9 @@ export class UserEntity {
 
   @Column({ nullable: true })
   token: string;
+
+  @Column({ nullable: true, enum: UserStatusEnum })
+  status: UserStatusEnum;
 
   @Column({ nullable: true })
   validCode: boolean;

@@ -20,6 +20,10 @@ export class UserTypeOrmRepository implements UserRepository {
     if (userEntity) {
       return new User({
         nickname: userEntity.nickname,
+        username: userEntity.username,
+        email: userEntity.email,
+        status: userEntity.status,
+        id: userEntity.id,
       });
     } else {
       return null;
@@ -42,6 +46,10 @@ export class UserTypeOrmRepository implements UserRepository {
       userEntityList.forEach((user) => {
         userModelList.push(new User({
           nickname: user.nickname,
+          username: user.username,
+          email: user.email,
+          status: user.status,
+          id: user.id,
         }));
       });
     }
@@ -68,6 +76,10 @@ export class UserTypeOrmRepository implements UserRepository {
     if (userEntity) {
       return new User({
         nickname: userEntity.nickname,
+        username: userEntity.username,
+        email: userEntity.email,
+        status: userEntity.status,
+        id: userEntity.id,
       });
     } else {
       return null;
@@ -82,6 +94,10 @@ export class UserTypeOrmRepository implements UserRepository {
     if (userEntity) {
       return new User({
         nickname: userEntity.nickname,
+        username: userEntity.username,
+        email: userEntity.email,
+        status: userEntity.status,
+        id: userEntity.id,
       });
     } else {
       return null;
@@ -95,9 +111,13 @@ export class UserTypeOrmRepository implements UserRepository {
 
     if (userEntityList) {
       userEntityList.forEach((user) => {
-        userModelList.push(new User({
+        return new User({
           nickname: user.nickname,
-        }));
+          username: user.username,
+          email: user.email,
+          status: user.status,
+          id: user.id,
+        });
       });
     }
 
