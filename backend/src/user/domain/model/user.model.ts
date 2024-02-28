@@ -16,20 +16,25 @@ export type UserProps = {
   nickname?: string;
   email: string;
   status?: UserStatusEnum;
+  token?: string;
 };
 
 export class User extends Model<UserProps> {
   protected props = {} as UserProps;
 
-  constructor({ username, nickname, email, status }: UserProps, id?: string) {
+  constructor(
+    { username, nickname, email, status, token }: UserProps,
+    id?: string,
+  ) {
     super(id);
     this.props.username = username;
     this.props.nickname = nickname;
     this.props.email = email;
     this.props.status = status || UserStatusEnum.OFFLINE;
+    this.props.token = token;
   }
 
-  getusername(): string {
+  getUsername(): string {
     return this.props.username;
   }
 
@@ -43,5 +48,13 @@ export class User extends Model<UserProps> {
 
   getStatus(): UserStatusEnum {
     return this.props.status;
+  }
+
+  getToken(): string {
+    return this.props.token;
+  }
+
+  setToken(token: string) {
+    this.props.token = token;
   }
 }

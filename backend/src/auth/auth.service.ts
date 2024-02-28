@@ -21,30 +21,15 @@ export class AuthService {
   ) {}
 
   async Auth42Redirect(@Req() req: any, @Res() res: Response): Promise<void> {
-    console.log({
-      username: req.user.username,
-      email: req.user._json.email,
-    });
     const user = await this.userService.loginUser({
       username: req.user.username,
       email: req.user._json.email,
     });
-    console.log(user);
 
     const accessToken = this.generateJwtToken(req.user.id);
     res.cookie('token', accessToken);
 
-    // user.props.token = accessToken;
-
-    // const user = await this.userService.loginUser({
-    //     nickname: profile.username,
-    //     // token: profile.token,
-    //     // validCode: tfaIsActive,
-    //     id: profile.id,
-    //     email: profile.email,
-    //     username: profile.username,
-    //     // tfaSecret: secret,
-    //   });
+    await this.userService.updateUserToken(user.getUsername(), accessToken);
 
     if (req.user.mfa) {
       res.redirect(process.env.FRONTEND_MFA);
@@ -71,6 +56,5 @@ export class AuthService {
     }
 
     const isCodeValid = user.getValidation();
-    //    await this.userService.insertUser(user);
   }
 }

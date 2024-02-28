@@ -10,21 +10,24 @@ export class UserTypeOrmRepository implements UserRepository {
   constructor(
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
-  ) { }
+  ) {}
 
   async findOne(options: Partial<UserProps>): Promise<User> {
-    const userEntity = await this.userRepository.findOne({
-      where: { nickname: options.nickname },
+    const user = await this.userRepository.findOne({
+      where: { username: options.username },
     });
 
-    if (userEntity) {
-      return new User({
-        nickname: userEntity.nickname,
-        username: userEntity.username,
-        email: userEntity.email,
-        status: userEntity.status,
-        id: userEntity.id,
-      });
+    if (user) {
+      return new User(
+        {
+          username: user.username,
+          email: user.email,
+          nickname: user.nickname,
+          token: user.token,
+          status: user.status,
+        },
+        user.id,
+      );
     } else {
       return null;
     }
@@ -32,10 +35,15 @@ export class UserTypeOrmRepository implements UserRepository {
 
   async insert(user: User): Promise<string> {
     const newUser = this.userRepository.create({
-      nickname: user.getNickname(),
+      username: user.getUsername(),
+      email: user.getEmail(),
+      nickname: user.getNickname() ?? null,
+      status: user.getStatus() ?? null,
     });
+
     const createdUser = await this.userRepository.save(newUser);
-    return createdUser.nickname;
+
+    return createdUser.id;
   }
 
   async findAll(): Promise<User[]> {
@@ -44,13 +52,17 @@ export class UserTypeOrmRepository implements UserRepository {
 
     if (userEntityList) {
       userEntityList.forEach((user) => {
-        userModelList.push(new User({
-          nickname: user.nickname,
-          username: user.username,
-          email: user.email,
-          status: user.status,
-          id: user.id,
-        }));
+        userModelList.push(
+          new User(
+            {
+              nickname: user.nickname,
+              username: user.username,
+              email: user.email,
+              status: user.status,
+            },
+            user.id,
+          ),
+        );
       });
     }
 
@@ -58,51 +70,62 @@ export class UserTypeOrmRepository implements UserRepository {
   }
 
   async remove(user: User): Promise<void> {
-    await this.userRepository.delete({ nickname: user.getNickname() });
+    await this.userRepository.delete({ username: user.getUsername() });
   }
 
   async update(user: User): Promise<void> {
-    await this.userRepository.update(
-      { nickname: user.getNickname() },
-      { nickname: user.getNickname() },
-    );
+    const updateUser: UserProps = {
+      username: user.getUsername(),
+      email: user.getEmail(),
+      nickname: user.getNickname(),
+      token: user.getToken(),
+    };
+
+    await this.userRepository.update(user.id, updateUser);
   }
 
   async findById(id: string): Promise<User> {
-    const userEntity = await this.userRepository.findOne({
+    const user = await this.userRepository.findOne({
       where: { id: id },
     });
 
-    if (userEntity) {
-      return new User({
-        nickname: userEntity.nickname,
-        username: userEntity.username,
-        email: userEntity.email,
-        status: userEntity.status,
-        id: userEntity.id,
-      });
+    if (user) {
+      return new User(
+        {
+          username: user.username,
+          email: user.email,
+          nickname: user.nickname,
+          token: user.token,
+          status: user.status,
+        },
+        user.id,
+      );
     } else {
       return null;
     }
   }
 
   async findByNickname(nickname: string): Promise<User> {
-    const userEntity = await this.userRepository.findOne({
+    const user = await this.userRepository.findOne({
       where: { nickname: nickname },
     });
 
-    if (userEntity) {
-      return new User({
-        nickname: userEntity.nickname,
-        username: userEntity.username,
-        email: userEntity.email,
-        status: userEntity.status,
-        id: userEntity.id,
-      });
+    if (user) {
+      return new User(
+        {
+          username: user.username,
+          email: user.email,
+          nickname: user.nickname,
+          token: user.token,
+          status: user.status,
+        },
+        user.id,
+      );
     } else {
       return null;
     }
   }
+
   async findAllByIds(ids: string[]): Promise<User[]> {
     const userEntityList = await this.userRepository.find({
       where: { id: In(ids) },
@@ -111,17 +134,19 @@ export class UserTypeOrmRepository implements UserRepository {
 
     if (userEntityList) {
       userEntityList.forEach((user) => {
-        return new User({
-          nickname: user.nickname,
-          username: user.username,
-          email: user.email,
-          status: user.status,
-          id: user.id,
-        });
+        return new User(
+          {
+            username: user.username,
+            email: user.email,
+            nickname: user.nickname,
+            token: user.token,
+            status: user.status,
+          },
+          user.id,
+        );
       });
     }
 
     return userModelList;
   }
-
 }

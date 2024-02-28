@@ -14,12 +14,13 @@ export class CreateUserDTO {
   @IsString()
   email: string;
 
-  @IsEnum(UserStatusEnum)
   @IsOptional()
+  @IsEnum(UserStatusEnum)
   status?: UserStatusEnum;
 
-  // @IsString()
-  // token: string;
+  @IsOptional()
+  @IsString()
+  token?: string;
 
   // @IsBoolean()
   // validCode: boolean;
