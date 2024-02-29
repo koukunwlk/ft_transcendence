@@ -7,7 +7,7 @@ import { UserService } from '../../user/service/user.service';
 import { generateSecret } from '2fa-util';
 import { User } from '@/user/domain/model/user.model';
 
-config();
+config({ path: '../.env' });
 
 @Injectable()
 export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
@@ -32,28 +32,6 @@ export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
     const secret = mfaSecret.secret;
     const tfaIsActive = false;
 
-    // const user = new User({
-    //   nickname: profile.username,
-    //   // token: profile.token,
-    //   // validCode: tfaIsActive,
-    //   id: profile.id,
-    //   email: profile.email,
-    //   username: profile.username,
-    //   // tfaSecret: secret,
-    // });
-
-    // await this.userService.insertUser({
-    //   nickname: profile.username,
-    //   // token: profile.token,
-    //   // validCode: tfaIsActive,
-    //   id: profile.id,
-    //   email: profile.email,
-    //   username: profile.username,
-    //   // tfaSecret: secret,
-    // });
-
-    // console.log(this.userService.getUser('acosta-a'));
-    // console.log(await this.userService.loginUser(profile.id));
     done(null, profile);
   }
 }
