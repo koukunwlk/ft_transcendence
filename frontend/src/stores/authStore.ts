@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 
+const   STORE_KEY = "user";
+
 interface User {
     nickname: string;
     token: null;
@@ -14,16 +16,22 @@ interface AuthState {
     user: User | null;
 }
 
+const getUserLocalStorage = () => {
+    const user = localStorage.getItem(STORE_KEY);
+    return user ? JSON.parse(user) : null;
+}
+
 export const useAuthStore = defineStore('auth', {
     // state (propriedades reativas)
     state: (): AuthState => ({
-        user: null
+        user: getUserLocalStorage()
     }),
 
     // actions (métodos)
     actions: {
         setUser(user: AuthState['user']) {
             this.user = user;
+            localStorage.setItem(STORE_KEY, JSON.stringify(this.user));
         }
     },
 
@@ -33,4 +41,4 @@ export const useAuthStore = defineStore('auth', {
             return this.user;
         }
     }
-})
+});
