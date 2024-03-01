@@ -4,7 +4,7 @@ import { CreateUserDTO } from './dto/create-user.dto';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Post()
   async create(@Body() createUser: CreateUserDTO) {
@@ -18,12 +18,6 @@ export class UserController {
 
   @Get(':nickname')
   async getUser(@Param('nickname') nickname: string) {
-    return await this.userService.getUser(nickname);
-  }
-
-  @Post(':nickname')
-  async addFriend(@Param('nickname') nickname: string, @Body() friendName: string) {
-    console.log(nickname, friendName);
-    return await this.userService.addFriend(nickname, friendName);
+    return await this.userService.getUserByNickname(nickname);
   }
 }

@@ -5,5 +5,5 @@ export abstract class UserRepository {
   abstract findAll(): Promise<User[]>;
   abstract findAllByIds(ids: string[]): Promise<User[]>;
   abstract insert(user: User): Promise<string>;
+  abstract update(user: User): Promise<void>;
 }
-export const USER_REPOSITORY_TOKEN = Symbol('USER_REPOSITORY_TOKEN');
