@@ -1,8 +1,22 @@
 <template>
-	<div class="flex bg-blue" style="height: 200px;">
+	<div class="grid grid-cols-4 bg-blue" style="height: 200px;">
+		<!-- chat messages and input -->
+		<div class="col-span-3">
+			<div class="" v-show = "bool" >
+				{{ user.listaDeamigos[friendListIndex].name }}
+			</div>
+
+			<div class=""
+				v-show = "bool"
+				v-for = "mensagens in user.listaDeamigos[friendListIndex].mensagens"
+			>
+			<!-- concatenar mensagem com o nome do usuario -->
+				{{ mensagens }}
+			</div>
+		</div>
+
 		<!-- chat sidebar -->
-		<div class="float-right bg-yellow w-25 h-100">
-			<div class="bg-red flex justify-center">
+		<div class="col-span-1 bg-blue-300 flex justify-cent er">
 				<ul>
 					<li	v-for="(friends, index) in user.listaDeamigos"
 						>
@@ -14,19 +28,8 @@
 						</button>
 					</li>
 				</ul>
-			</div>
 		</div>
 
-		<!-- chat messages and input -->
-		<div class="float-left h-100 w-75 bg-green">
-			<div class="" v-show = "bool" >
-				{{ user.listaDeamigos[friendListIndex].name }}
-			</div>
-
-			<div class="" v-show = "bool" >
-				{{ user.listaDeamigos[friendListIndex].mensagens }}
-			</div>
-		</div>
 	</div>
 
 <!-- provavelmente vai receber isso por props ou no pinia, mas qual a necessidade real disso? -->
@@ -93,9 +96,9 @@ listadeGrupos: {
 }
 
 const friendIndexHandler = (index) => {
-bool = true;
-friendListIndex.value = index;
-console.log(friendListIndex.value, bool);
+	bool = true;
+	friendListIndex.value = index;
+	console.log(friendListIndex.value, bool);
 }
 
 // //////////////////////////////////////////////////////////////// CHAT CODE
