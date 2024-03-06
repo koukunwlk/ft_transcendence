@@ -10,6 +10,7 @@ import { UserService } from '../user/service/user.service';
 import { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { verify } from '2fa-util';
+import { User } from '@/user/domain/model/user.model';
 
 @Injectable()
 export class AuthService {
@@ -26,7 +27,7 @@ export class AuthService {
       email: req.user._json.email,
     });
 
-    const accessToken = this.generateJwtToken(req.user.id);
+    const accessToken = this.generateJwtToken(user);
     res.cookie('token', accessToken);
 
     await this.userService.updateUserToken(user.getUsername(), accessToken);
@@ -38,10 +39,13 @@ export class AuthService {
     return;
   }
 
-  private generateJwtToken(UserId: any): string {
-    console.log(UserId, `${process.env.NEST_API_JWT_SECRET}`);
+  private generateJwtToken(user: User): string {
+    console.log(user, `${process.env.NEST_API_JWT_SECRET}`);
     return this.jwtService.sign(
-      { req: UserId },
+      {
+        id: user.id,
+        UserName: user.getUsername(),
+      },
       { secret: `${process.env.NEST_API_JWT_SECRET}` },
     );
   }

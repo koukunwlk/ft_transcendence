@@ -1,29 +1,3 @@
-<script>
-import data from "../data/data.json";
-import { useAuthStore } from "../stores/authStore";
-import authService from "../services/AuthService";
-
-const name = "Login";
-const user = useAuthStore();
-
-
-export default {
-  name: "Login Page",
-  setup() {
-  },
-  methods: {
-    async login() {
-      try {
-        await authService.login();
-        // user.setUser(data);
-      } catch (error) {
-        console.log(error);
-      }
-    },
-  },
-};
-</script>
-
 <template>
   <div class="h-full flex justify-center items-center">
     <div
@@ -51,3 +25,27 @@ export default {
     </div>
   </div>
 </template>
+
+<script>
+import data from "../data/data.json";
+import { useAuthStore } from "../stores/authStore";
+import authService from "../services/AuthService";
+
+const name = "Login";
+const user = useAuthStore();
+
+export default {
+  name: "Login Page",
+  setup() {
+  },
+  methods: {
+    async login() {
+      try {
+        await authService.login();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  },
+};
+</script>

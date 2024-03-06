@@ -29,7 +29,6 @@ export class AuthController {
   @UseGuards(FortyTwoAuthGuard)
   async fortyTwoRedirect(@Req() req: any, @Res() res: Response): Promise<void> {
     await this.authService.Auth42Redirect(req, res);
-    console.log(res.getHeaders());
     return res.redirect(`${process.env.HOST_FRONT}`);
   }
 

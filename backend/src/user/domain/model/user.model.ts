@@ -34,6 +34,16 @@ export class User extends Model<UserProps> {
     this.props.token = token;
   }
 
+  toJson(): string {
+    return JSON.stringify({
+      id: this.id,
+      username: this.props.username,
+      nickname: this.props.nickname,
+      email: this.props.email,
+      status: this.props.status,
+    });
+  }
+
   getUsername(): string {
     return this.props.username;
   }
