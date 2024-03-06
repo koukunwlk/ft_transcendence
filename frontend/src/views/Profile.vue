@@ -1,3 +1,17 @@
+<script setup>
+import Navbar from "../components/Navbar.vue";
+import Avatar from "vue3-avatar";
+import router from '../Router/index.ts';
+import { useAuthStore } from "../stores/authStore.ts";
+
+const user = useAuthStore();
+const userNickname = user.getUser.nickname;
+
+function onClick() {
+	router.push('/')
+}
+</script>
+
 <template>
 	<div class=" text-white fixed end-0">
 		<button
@@ -10,10 +24,10 @@
 		<div class="h-4/5 w-4/5 md:w-3/5 bg-opacity-30 rounded-lg border border-zinc-600 text-white">
 			<div class="flex flex-col justify-center items-center h-2/6">
 				<div class="flex justify-center items-center">
-					<Avatar name="Gstv" size="80" borderColor="black"></Avatar>
+					<Avatar :name=userNickname :size=80 borderColor="black"></Avatar>
 				</div>
 				<div class="flex justify-center items-center">
-					<a>Gustavo Martins</a>
+					<p>{{ userNickname }}</p>
 				</div>
 			</div>
 			<div class="h-4/6 flex flex-col md:flex-row justify-center items-center">
@@ -37,14 +51,3 @@
 		</div>
 	</div>
 </template>
-
-<script setup>
-import Navbar from "../components/Navbar.vue";
-import Avatar from "vue3-avatar";
-import router from '../Router/index.ts'
-
-function onClick() {
-	router.push('/')
-}
-
-</script>
