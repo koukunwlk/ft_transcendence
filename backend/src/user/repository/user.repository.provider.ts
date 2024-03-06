@@ -1,8 +1,8 @@
 import { ClassProvider } from '@nestjs/common';
 import { USER_REPOSITORY_TOKEN } from './user.repository';
-import { UserTypeOrmRepository } from './user-typeorm.repository';
+import { InMemory } from './inMemory.repository';
 
 export const UserRepositoryProvider: ClassProvider = {
   provide: USER_REPOSITORY_TOKEN,
-  useClass: UserTypeOrmRepository,
+  useClass: InMemory,
 };

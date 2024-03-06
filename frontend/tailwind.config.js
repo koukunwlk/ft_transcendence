@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       backgroundImage: {
-        'dark-starry-sky': "url('/assets/dark-starry-sky.jpg')",
+        'dark-starry-sky': "url('/Assets/Images/kai-pilger.jpg')",
       }
     },
   },
