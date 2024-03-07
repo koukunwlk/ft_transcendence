@@ -13,11 +13,6 @@ var routes = [
 		component: () => import('../views/Login.vue')
 	}
 	,	
-	{
-		path: '/game',
-		name: 'Game',
-		component: () => import('../views/Game.vue')
-	}
 	,
 	{
 		path: '/lobby',

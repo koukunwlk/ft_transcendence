@@ -5,6 +5,7 @@ import {
   OnGatewayDisconnect,
   WebSocketServer,
 } from '@nestjs/websockets';
+import { lstat } from 'fs';
 import { Socket, Server } from 'socket.io';
 
 class P1 {
@@ -39,18 +40,26 @@ class BALL {
   dx = 7;
   dy = 7;
   rad = 9;
+  speed = 2;
+}
+class BALL2 {
+  id = 0;
+  x = 640;
+  y = 350;
+  dx = 7;
+  dy = 7;
+  rad = 9;
   speed = 4;
 }
 
 const listOfPlayers: Map<number, any> = new Map();
 let intervalid;
 let i = 0;
-//let position = 1;
 let lastRoom = 'empty';
+let fastSpeed;
 
 const ballOfRoom: Map<string, any> = new Map();
 let queue = Array<string>();
-//let newq = Array<string>();
 @WebSocketGateway({ cors: true })
 export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
@@ -120,15 +129,12 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
       lastRoom = roomId;
       listOfPlayers.get(i).room = roomId;
       client.join(roomId);
-      //      const newArray = queue.filter((item, index) => index !== i);
-      //     queue = newArray;
     } else if (i % 2 === 0) {
       const roomId = lastRoom;
       // Set the player's room and join the room
       listOfPlayers.get(i).room = roomId;
       client.join(roomId);
-      //     const newArray = queue.filter((item, index) => index !== i);
-      //    queue = newArray;
+
       console.log(queue);
       // Emit player updates
       this.server.to(roomId).emit('player1_update', listOfPlayers.get(i - 1));
@@ -136,14 +142,10 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
       // Emit game start event
       this.server.to(roomId).emit('START_GAME');
- //     listOfPlayers.get(i - 1).playing = true;
- //     listOfPlayers.get(i).playing = true;
-
-      ballOfRoom.set(roomId, new BALL());
+      if (fastSpeed === true) ballOfRoom.set(roomId, new BALL2());
+      else ballOfRoom.set(roomId, new BALL());
       ballOfRoom.get(roomId).id = roomId;
-
-      console.log('teste: ', listOfPlayers.get(i - 1));
-      console.log('teste: ', listOfPlayers.get(i));
+      fastSpeed = false;
       // Handle ball movement
       this.handleBallMovement(
         listOfPlayers.get(i - 1),
@@ -163,19 +165,39 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
         continue;
       }
     }
-    let room = listOfPlayers.get(id).roomId;
     let ball: string;
     for (ball of ballOfRoom.keys()) {
-      console.log(ball);
-      if (ballOfRoom.get(room)) {
-        console.log('delete: ', room);
-        ballOfRoom.delete(room);
+      if (
+        listOfPlayers.get(id).roomId &&
+        ballOfRoom.get(listOfPlayers.get(id).roomId)
+      ) {
+        ballOfRoom.delete(listOfPlayers.get(id).roomId);
       }
     }
     listOfPlayers.delete(id);
- //   i--;
+    i--;
   }
+  @SubscribeMessage('increase_speed')
+  handleSpeed(client: Socket) {
+    fastSpeed = true;
+    let id: number;
 
+    for (id of listOfPlayers.keys()) {
+      if (listOfPlayers.get(id).id === client.id) {
+        break;
+      } else {
+        continue;
+      }
+    }
+    console.log(listOfPlayers);
+    console.log(ballOfRoom);
+    if (
+      listOfPlayers.get(id).room &&
+      ballOfRoom.get(listOfPlayers.get(id).room)
+    ) {
+      ballOfRoom.get(listOfPlayers.get(id).room).speed = 10;
+    }
+  }
   @SubscribeMessage('arrow_keyUp')
   handleKeyUp(client: Socket) {
     let id: number;
@@ -229,118 +251,114 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
         return false;
       }
     }
-    intervalid = setInterval(() => {
-      if (player1.room === ball_ins.id) {
-        if (ball_ins.y < 0 || ball_ins.y + ball_ins.rad > 720) {
-          ball_ins.dy = -ball_ins.dy;
-        }
-        if (ball_ins.x < 0) {
-          if (player2.side === 'right') {
-            player2.points = player2.points + 1;
-            this.server.to(player2.room).emit('player2_scored', player2.points);
-            if (player2.points === 10) {
-              this.server.to(player2.room).emit('player2_won');
-              player2.points = 0;
-              let id: number;
-              let room = player1.room;
-              for (id of listOfPlayers.keys()) {
-                if (
-                  listOfPlayers.get(id).id === player1.id ||
-                  listOfPlayers.get(id).id === player2.id
-                ) {
-                  //     newq = queue.filter(item => item !== listOfPlayers.get(id).id);
-                  //     queue= newq;
-                  listOfPlayers.get(id).id = null;
-                  listOfPlayers.get(id).room = null;
-                  listOfPlayers.delete(id);
-                  console.log('deletou');
-                } else {
-                  continue;
-                }
-              }
-              let ball: string;
-              for (ball of ballOfRoom.keys()) {
-                console.log(ball);
-                if (ballOfRoom.get(room)) {
-                  console.log('delete: ', room);
-                  ballOfRoom.delete(room);
-                }
-              }
-              console.log(ballOfRoom);
-              console.log(listOfPlayers);
-              console.log(i);
-            }
+    intervalid = setInterval(
+      () => {
+        if (player1.room === ball_ins.id) {
+          if (ball_ins.y < 0 || ball_ins.y + ball_ins.rad > 720) {
+            ball_ins.dy = -ball_ins.dy;
           }
-          ball_ins.x = 640;
-          ball_ins.y = 350;
-          ball_ins.dx = -7;
-          ball_ins.dy = -7;
-        } else if (ball_ins.x + ball_ins.rad > 1280) {
-          if (player1.side === 'left') {
-            player1.points = player1.points + 1;
-            this.server.to(player1.room).emit('player1_scored', player1.points);
-            if (player1.points === 10) {
-              this.server.to(player1.room).emit('player1_won');
-              player1.points = 0;
-              let id: number;
-              let room = player1.room;
-              for (id of listOfPlayers.keys()) {
-                if (
-                  listOfPlayers.get(id).id === player1.id ||
-                  listOfPlayers.get(id).id === player2.id
-                ) {
-                  // if (ballOfRoom.get(listOfPlayers.get(id).id)) {
-                  //   ballOfRoom.delete(listOfPlayers.get(id).id);
-                  // }
-                  //                 newq = queue.filter(item => item !== listOfPlayers.get(id).id);
-                  //                queue=newq;
-                  listOfPlayers.get(id).id = null;
-                  listOfPlayers.get(id).room = null;
-                  listOfPlayers.delete(id);
-
-                  console.log('deletou');
-                } else {
-                  continue;
+          if (ball_ins.x < 0) {
+            if (player2.side === 'right') {
+              player2.points = player2.points + 1;
+              this.server
+                .to(player2.room)
+                .emit('player2_scored', player2.points);
+              if (player2.points === 10) {
+                this.server.to(player2.room).emit('player2_won');
+                player2.points = 0;
+                let id: number;
+                let room = player1.room;
+                for (id of listOfPlayers.keys()) {
+                  if (
+                    listOfPlayers.get(id).id === player1.id ||
+                    listOfPlayers.get(id).id === player2.id
+                  ) {
+                    console.log('deletou: ', id);
+                    listOfPlayers.get(id).id = null;
+                    listOfPlayers.get(id).room = null;
+                    listOfPlayers.delete(id);
+                  } else {
+                    continue;
+                  }
                 }
-              }
-              let ball: string;
-              for (ball of ballOfRoom.keys()) {
-                console.log(ball);
-                if (ballOfRoom.get(room)) {
-                  console.log('delete: ', room);
-                  ballOfRoom.delete(room);
+                let ball: string;
+                for (ball of ballOfRoom.keys()) {
+                  if (ballOfRoom.get(room)) {
+                    console.log('delete: ', room);
+                    ballOfRoom.delete(room);
+                  }
                 }
+                console.log(ballOfRoom);
+                console.log(listOfPlayers);
               }
-              console.log(ballOfRoom);
-              console.log(listOfPlayers);
-              console.log(i);
             }
+            ball_ins.x = 640;
+            ball_ins.y = 350;
+            ball_ins.dx = -7;
+            ball_ins.dy = -7;
+          } else if (ball_ins.x + ball_ins.rad > 1280) {
+            if (player1.side === 'left') {
+              player1.points = player1.points + 1;
+              this.server
+                .to(player1.room)
+                .emit('player1_scored', player1.points);
+              if (player1.points === 10) {
+                this.server.to(player1.room).emit('player1_won');
+                player1.points = 0;
+                let id: number;
+                let room = player1.room;
+                for (id of listOfPlayers.keys()) {
+                  if (
+                    listOfPlayers.get(id).id === player1.id ||
+                    listOfPlayers.get(id).id === player2.id
+                  ) {
+                    console.log('deletou: ', id);
+                    listOfPlayers.get(id).id = null;
+                    listOfPlayers.get(id).room = null;
+                    listOfPlayers.delete(id);
+                  } else {
+                    continue;
+                  }
+                }
+                let ball: string;
+                for (ball of ballOfRoom.keys()) {
+                  console.log(ball);
+                  if (ballOfRoom.get(room)) {
+                    console.log('delete: ', room);
+                    ballOfRoom.delete(room);
+                  }
+                }
+                console.log(ballOfRoom);
+                console.log(listOfPlayers);
+              }
+            }
+            ball_ins.x = 640;
+            ball_ins.y = 350;
+            ball_ins.dx = 7;
+            ball_ins.dy = 7;
           }
-          ball_ins.x = 640;
-          ball_ins.y = 350;
-          ball_ins.dx = 7;
-          ball_ins.dy = 7;
-        }
-        if (
-          collision(player1, ball_ins) &&
-          ball_ins.dx < 0 &&
-          player1.side == 'left'
-        ) {
-          ball_ins.dx = -ball_ins.dx;
-        }
+          if (
+            collision(player1, ball_ins) &&
+            ball_ins.dx < 0 &&
+            player1.side == 'left'
+          ) {
+            ball_ins.dx = -ball_ins.dx;
+          }
 
-        if (
-          collision(player2, ball_ins) &&
-          ball_ins.dx > 0 &&
-          player2.side == 'right'
-        ) {
-          ball_ins.dx = -ball_ins.dx;
-        }
+          if (
+            collision(player2, ball_ins) &&
+            ball_ins.dx > 0 &&
+            player2.side == 'right'
+          ) {
+            ball_ins.dx = -ball_ins.dx;
+          }
 
-        ball_ins.x += ball_ins.dx;
-        ball_ins.y += ball_ins.dy;
-        this.server.sockets.to(player1.room).emit('ball_update', ball_ins);
-      }
-    }, 1000 / 60);
+          ball_ins.x += ball_ins.dx;
+          ball_ins.y += ball_ins.dy;
+          this.server.sockets.to(player1.room).emit('ball_update', ball_ins);
+        }
+      },
+      1000 / (30 * ball_ins.speed),
+    );
   }
 }

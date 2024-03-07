@@ -4,6 +4,9 @@
     <form class="form">
       <div class="JoinRoomButton" @click="startGame">START</div>
     </form>
+    <button id="my-button2" class="my-button2" @click="increaseSpeed">
+      Increase Speed
+    </button>
   </div>
 </template>
 
@@ -17,6 +20,10 @@ export default {
       this.$router.push("/pong");
       socket.emit("join_game");
       console.log("join game");
+    },
+    increaseSpeed() {
+      document.getElementById("my-button2").style.display = "none";
+      socket.emit("increase_speed");
     },
   },
 };

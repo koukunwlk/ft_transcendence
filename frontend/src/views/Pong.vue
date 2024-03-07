@@ -31,11 +31,7 @@ import { io, Socket } from "socket.io-client";
 import JoinRoom from "./JoinRoom.vue";
 import paddle from "./paddle";
 
-export const socket = io("192.168.0.5:3000", {
-  query: {
-    userLogin: "acosta-a",
-  },
-});
+export const socket = io("http://192.168.15.16:3000");
 
 export default {
   components: { JoinRoom },
@@ -84,6 +80,13 @@ export default {
       console.log("changed");
     },
     renderGame() {
+      socket.off("player_moved").on("player_moved", (data) => {
+        if (data.side === "left") {
+          this.leftPaddle = data;
+        } else if (data.side === "right") {
+          this.rightPaddle = data;
+        }
+      });
       this.renderPaddle();
       this.initBall();
       requestAnimationFrame(() => this.renderGame());
@@ -97,13 +100,9 @@ export default {
         socket.emit("arrow_keyDown");
         this.keypress = true;
       }
-      socket.on("player_moved", (data) => {
-        if (data.side === "left") {
-          this.leftPaddle = data;
-        } else if (data.side === "right") {
-          this.rightPaddle = data;
-        }
-      });
+    },
+    handleKeyup(event) {
+      this.keypress = false;
     },
     startGame() {
       this.newPlayer = true;
@@ -112,7 +111,6 @@ export default {
     },
     handlePlayerUpdate(data) {
       this.leftPaddle = data;
-      console.log("this.leftPaddle");
     },
     handlePlayer2Update(data) {
       this.rightPaddle = data;
@@ -132,7 +130,7 @@ export default {
           console.log("Opponent reconnected during the pause.");
         });
         console.log("Opponent did not return. Leaving the room.");
-        this.$router.push("/");
+        this.$router.push("/lobby");
       }, 4000);
     },
     handlePlayer1Scored(data) {
@@ -175,9 +173,9 @@ export default {
   mounted() {
     try {
       this.canvasRef = this.$refs.canvasRef;
-
-      document.addEventListener("keydown", this.movePlayer);
       socket.off("START_GAME").on("START_GAME", this.startGame);
+      document.addEventListener("keydown", this.movePlayer);
+      document.addEventListener("keyup", this.handleKeyup);
       socket
         .off("player1_update")
         .on("player1_update", this.handlePlayerUpdate);
@@ -193,20 +191,17 @@ export default {
       socket
         .off("player2_scored")
         .on("player2_scored", this.handlePlayer2Scored);
-      socket.on("player1_won", this.handlePlayer1Won);
-      socket.on("player2_won", this.handlePlayer2Won);
+      socket.off("player1_won").on("player1_won", this.handlePlayer1Won);
+      socket.off("player2_won").on("player2_won", this.handlePlayer2Won);
       this.renderGame();
     } catch (error) {
       console.error("Error in mounted hook:", error);
     }
-    document.addEventListener("keyup", function(event) {
-      this.keypress = false;
-    });
   },
-  
-  // beforeUnmount() {
-  //   window.removeEventListener("keydown", this.movePlayer);
-  // },
+  beforeUnmount() {
+    document.removeEventListener("keydown", this.movePlayer);
+    document.removeEventListener("keyup", this.handleKeyup);
+  },
 };
 </script>
 
@@ -223,6 +218,22 @@ export default {
   cursor: pointer;
   position: fixed;
   left: 50%;
+  bottom: 7px;
+  transform: translate(-50%, 50%);
+}
+
+.my-button2 {
+  background-color: grey;
+  border: 2px;
+  color: white;
+  padding: 7.5px 30px;
+  text-align: center;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
+  position: fixed;
+  left: 75%;
   bottom: 7px;
   transform: translate(-50%, 50%);
 }
