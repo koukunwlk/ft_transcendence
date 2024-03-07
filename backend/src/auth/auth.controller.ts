@@ -14,7 +14,9 @@ import { FortyTwoAuthGuard } from './42-auth/42.guards';
 import { JwtAuthGuard } from './jwt-auth/jwt-auth.guard';
 import { Response } from 'express';
 import { UserService } from '../user/service/user.service';
- 
+import { config } from 'dotenv';
+
+config({ path: '../../../.env' });
 
 @Controller('auth')
 export class AuthController {
@@ -27,7 +29,7 @@ export class AuthController {
   @UseGuards(FortyTwoAuthGuard)
   async fortyTwoRedirect(@Req() req: any, @Res() res: Response): Promise<void> {
     await this.authService.Auth42Redirect(req, res);
-    return res.redirect(`${'https://signin.intra.42.fr/users/sign_out'}/`);
+    return res.redirect(`${process.env.HOST_FRONT}`);
   }
 
   @Get('logout')

@@ -12,9 +12,14 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       secretOrKey: process.env.NEST_API_JWT_SECRET,
     });
   }
+
   async validate(payload: any): Promise<any> {
     if (payload == null) {
       throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     }
+
+    const loggedUser = await this.userService.getUserById(payload.id);
+
+    return loggedUser;
   }
 }
