@@ -3,12 +3,16 @@ import { FriendListRepository } from "../repository/friend-list.respository";
 import { UserService } from "@/user/service/user.service";
 import { FriendListStatusEnum, FriendRequest } from "../domain/model/friend-list.model";
 import { User } from "@/user/domain/model/user.model";
+import { FriendRequestRepository } from "../repository/friend-request.repository";
 
 @Injectable()
 export class FriendListService {
     constructor(
         @Inject(FriendListRepository)
         private readonly friendListRepository: FriendListRepository,
+
+        @Inject(FriendRequestRepository)
+        private readonly friendRequestRepository: FriendRequestRepository,
         @Inject(UserService)
         private readonly userService: UserService
     ) { }
@@ -16,7 +20,7 @@ export class FriendListService {
     async sendFriendRequest(userId: string, receiverId: string) {
         await this.checkIfIsAValidFriendRequest(userId, receiverId);
 
-        await this.friendListRepository.insertFriendRequest(userId, receiverId);
+        await this.friendRequestRepository.insertFriendRequest(userId, receiverId);
     }
 
     async handleFriendRequest(userId: string, friendId: string, status: FriendListStatusEnum) {
@@ -24,7 +28,7 @@ export class FriendListService {
         let friendRequest = await this.checkIfIsAValidFriendRequest(userId, friendId, isHandlingFriendRequest);
         this.checkIfUserCanHandleFriendRequest(friendRequest, userId);
 
-        friendRequest = await this.friendListRepository.updateFriendRequest(friendRequest.id, status);
+        friendRequest = await this.friendRequestRepository.updateFriendRequest(friendRequest.id, status);
         if (friendRequest.status === FriendListStatusEnum.ACCEPTED) {
             await this.friendListRepository.insertFriend(friendRequest);
         }
@@ -48,12 +52,12 @@ export class FriendListService {
     }
 
     async getReceivedFriendRequests(userId: string) {
-        const friendRequests = await this.friendListRepository.getReceivedFriendRequests(userId);
+        const friendRequests = await this.friendRequestRepository.getReceivedFriendRequests(userId);
         return friendRequests.filter(friendRequest => friendRequest.status === FriendListStatusEnum.PENDING);
     }
 
     async getSendedFriendRequests(userId: string) {
-        const friendRequests = await this.friendListRepository.getSendedFriendRequests(userId);
+        const friendRequests = await this.friendRequestRepository.getSendedFriendRequests(userId);
         return friendRequests.filter(friendRequest => friendRequest.status === FriendListStatusEnum.PENDING);
     }
 
@@ -70,8 +74,8 @@ export class FriendListService {
 
     private async checkIfFriendRequestExists(userId: string, friendId: string, isHandlingFriendRequest: boolean) {
         const [persistedFriendRequestAsSender, persistedFriendRequestAsReceiver] = await Promise.all([
-            this.friendListRepository.findOne({ senderId: userId, receiverId: friendId }),
-            this.friendListRepository.findOne({ senderId: friendId, receiverId: userId }),
+            this.friendRequestRepository.findOne({ senderId: userId, receiverId: friendId }),
+            this.friendRequestRepository.findOne({ senderId: friendId, receiverId: userId }),
         ]);
         if (persistedFriendRequestAsSender) {
             this.checkIfFriendRequestStatus(persistedFriendRequestAsSender);
