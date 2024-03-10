@@ -23,12 +23,14 @@ export class UserController {
 
   @Get()
   async getUsers() {
-    return await this.userService.getUserList();
+    const users = await this.userService.getUserList();
+    return users.map(user => user.toJson());
   }
 
   @Get('me')
   async me(@Req() req: any): Promise<string> {
-    return (await this.userService.getUserById(req.user.id)).toJson();
+    const user = await this.userService.getUserById(req.user.id);
+    return user.toJson();
   }
 
   @Get(':nickname')

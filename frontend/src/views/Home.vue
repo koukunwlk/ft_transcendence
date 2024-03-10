@@ -19,7 +19,7 @@ export default {
     };
   },
   mounted() {
-    this.saveToken(document.cookie.substring(6));
+    this.getTokenFromCookie();
     this.getLoggedUser();
   },
   methods: {
@@ -33,7 +33,17 @@ export default {
           this.$router.push({ name: "Login" });
         });
     },
-    saveToken(token) {
+    getTokenFromCookie() {
+      const cookies = document.cookie.split(";");
+
+      cookies.forEach((cookie) => {
+        if (cookie.startsWith("token=")) {
+          this.saveToken(cookie);
+        }
+      });
+    },
+    saveToken(tokenCookie) {
+      const token = tokenCookie.substring(6);
       authStore.setToken(token);
     },
   },
