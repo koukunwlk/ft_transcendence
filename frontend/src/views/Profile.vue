@@ -1,5 +1,6 @@
 <script setup>
 import Navbar from "../components/Navbar.vue";
+import PicUpload from "../components/ProfilePicUpload.vue"
 import Avatar from "vue3-avatar";
 import router from '../Router/index.ts';
 import { useAuthStore } from "../stores/authStore.ts";
@@ -25,6 +26,7 @@ function onClick() {
 			<div class="flex flex-col justify-center items-center h-2/6">
 				<div class="flex justify-center items-center">
 					<Avatar :name=nickname :size=80 borderColor="black"></Avatar>
+					<PicUpload></PicUpload>
 				</div>
 				<div class="flex justify-center items-center">
 					<p>{{ nickname }}</p>
