@@ -1,31 +1,45 @@
-import { Injectable } from "@nestjs/common";
-import { UserRepository } from "./user.repository";
-import { User, UserProps } from "../domain/model/user/user";
+// import { Injectable } from '@nestjs/common';
+// import { UserRepository } from './user.repository';
+// import { FriendList, User, UserProps } from '../domain/model/user.model';
 
-@Injectable()
-export class InMemory implements UserRepository {
-  private users: User[];
+// @Injectable()
+// export class InMemory implements UserRepository {
+//   private users: User[];
 
-  constructor() {
-    this.users = []
-   }
+//   private friendList: { ownerId: string; friendId: string }[];
 
-  findOne(options: Partial<UserProps>): Promise<User> {
-    const user = this.users.find(user => {
-      if (user.getNickname() === options.nickname) {
-        return user;
-      }
-    });
-    return Promise.resolve(user);
-  }
+//   constructor() {
+//     this.users = [];
+//   }
 
-  insert(user: User): Promise<string> {
-    this.users.push(user);
+//   findOne(options: Partial<UserProps>): Promise<User> {
+//     const user = this.users.find((user) => {
+//       if (user.getNickname() === options.nickname) {
+//         return user;
+//       }
+//     });
+//     return Promise.resolve(user);
+//   }
 
-    return Promise.resolve(user.id);
-  }
+//   findAll(): Promise<User[]> {
+//     return Promise.resolve(this.users);
+//   }
 
-  getSize(): number {
-    return this.users.length
-  }
-}
+//   insert(user: User): Promise<string> {
+//     this.users.push(user);
+
+//     return Promise.resolve(user.id);
+//   }
+
+//   getFriendList(ownerId: string): Promise<FriendList[]> {
+//     const populatedFriendList: FriendList[] = this.users.filter((user) =>
+//       this.friendList.includes({ ownerId, friendId: user.id }),
+//     );
+
+//     return Promise.resolve(populatedFriendList);
+//   }
+
+//   getSize(): number {
+//     return this.users.length;
+//   }
+// }

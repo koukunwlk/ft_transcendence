@@ -24,5 +24,9 @@
         "../../shared/*"
       ]
     }
-  }
+  },
+  "include": [
+    "**/*",
+    "migrations.config.ts"
+  ]
 }
