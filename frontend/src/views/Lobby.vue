@@ -4,7 +4,7 @@
     <form class="form">
       <div class="JoinRoomButton" @click="startGame">START</div>
     </form>
-    <button id="my-button2" class="my-button2" @click="increaseSpeed">
+    <button id="speed-button" class="speed-button" @click="increaseSpeed">
       Increase Speed
     </button>
   </div>
@@ -22,7 +22,7 @@ export default {
       console.log("join game");
     },
     increaseSpeed() {
-      document.getElementById("my-button2").style.display = "none";
+      document.getElementById("speed-button").style.display = "none";
       socket.emit("increase_speed");
     },
   },
@@ -30,6 +30,22 @@ export default {
 </script>
 
 <style scoped>
+.speed-button {
+  background-color: grey;
+  border: 2px;
+  color: white;
+  padding: 7.5px 30px;
+  text-align: center;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
+  position: fixed;
+  left: 75%;
+  bottom: 7px;
+  transform: translate(-50%, 50%);
+}
+
 .Container {
   display: flex;
   flex-direction: column;

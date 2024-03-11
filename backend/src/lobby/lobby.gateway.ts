@@ -5,7 +5,6 @@ import {
   OnGatewayDisconnect,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { lstat } from 'fs';
 import { Socket, Server } from 'socket.io';
 
 class P1 {
@@ -18,7 +17,6 @@ class P1 {
   side = 'left';
   points = 0;
   room = '';
-  //playing = false;
 }
 
 class P2 {
@@ -31,7 +29,6 @@ class P2 {
   side = 'right';
   points = 0;
   room = '';
-  //playing = false;
 }
 class BALL {
   id = 0;
@@ -41,6 +38,7 @@ class BALL {
   dy = 7;
   rad = 9;
   speed = 2;
+  intervalid;
 }
 class BALL2 {
   id = 0;
@@ -50,16 +48,16 @@ class BALL2 {
   dy = 7;
   rad = 9;
   speed = 4;
+  intervalid;
 }
 
 const listOfPlayers: Map<number, any> = new Map();
-let intervalid;
 let i = 0;
 let lastRoom = 'empty';
 let fastSpeed;
-
 const ballOfRoom: Map<string, any> = new Map();
 let queue = Array<string>();
+
 @WebSocketGateway({ cors: true })
 export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
@@ -81,11 +79,12 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
       }
     }
     this.server.emit('PlayerDisconnected', client.id);
+    if (listOfPlayers.get(i) && listOfPlayers.get(i)?.room) {
+      client.leave(listOfPlayers.get(i)?.room);
+      clearInterval(ballOfRoom.get(listOfPlayers.get(i).room).intervalid);
+    }
     listOfPlayers.delete(id);
     i--;
-    // console.clear();
-    clearInterval(intervalid);
-    intervalid = null;
   }
 
   @SubscribeMessage('handle_reconnect')
@@ -110,7 +109,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
     for (let [key, value] of listOfPlayers.entries()) {
       if (value.id === client.id) {
         player = value;
-        console.log('it exists');
+        console.log('player already exists');
         break;
       }
     }
@@ -131,16 +130,10 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
       client.join(roomId);
     } else if (i % 2 === 0) {
       const roomId = lastRoom;
-      // Set the player's room and join the room
       listOfPlayers.get(i).room = roomId;
       client.join(roomId);
-
-      console.log(queue);
-      // Emit player updates
-      this.server.to(roomId).emit('player1_update', listOfPlayers.get(i - 1));
-      this.server.to(roomId).emit('player2_update', listOfPlayers.get(i));
-
-      // Emit game start event
+      this.server.to(roomId).emit('player_moved', listOfPlayers.get(i - 1));
+      this.server.to(roomId).emit('player_moved', listOfPlayers.get(i));
       this.server.to(roomId).emit('START_GAME');
       if (fastSpeed === true) ballOfRoom.set(roomId, new BALL2());
       else ballOfRoom.set(roomId, new BALL());
@@ -151,6 +144,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
         listOfPlayers.get(i - 1),
         listOfPlayers.get(i),
         ballOfRoom.get(roomId),
+        client,
       );
     }
   }
@@ -158,7 +152,6 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
   handleCancelQueue(client: Socket) {
     let id: number;
     for (id of listOfPlayers.keys()) {
-      console.log('id do cancelado:', id);
       if (listOfPlayers.get(id).id === client.id) {
         break;
       } else {
@@ -189,8 +182,6 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
         continue;
       }
     }
-    console.log(listOfPlayers);
-    console.log(ballOfRoom);
     if (
       listOfPlayers.get(id).room &&
       ballOfRoom.get(listOfPlayers.get(id).room)
@@ -234,9 +225,14 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
         .emit('player_moved', listOfPlayers.get(id));
     }
   }
-  handleBallMovement(player1: any, player2: any, ball_ins: any) {
+  handleBallMovement(
+    player1: any,
+    player2: any,
+    ball_ins: any,
+    client: Socket,
+  ) {
     if (!player1 || !player2) {
-      console.log('player2 not connected');
+      console.log('both players not connected');
       return false;
     }
     function collision(objPlayer: any, objBall: any) {
@@ -251,7 +247,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
         return false;
       }
     }
-    intervalid = setInterval(
+    ball_ins.intervalid = setInterval(
       () => {
         if (player1.room === ball_ins.id) {
           if (ball_ins.y < 0 || ball_ins.y + ball_ins.rad > 720) {
@@ -265,6 +261,9 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
                 .emit('player2_scored', player2.points);
               if (player2.points === 10) {
                 this.server.to(player2.room).emit('player2_won');
+                clearInterval(ball_ins.intervalid);
+                client.leave(player2.room);
+
                 player2.points = 0;
                 let id: number;
                 let room = player1.room;
@@ -273,9 +272,6 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
                     listOfPlayers.get(id).id === player1.id ||
                     listOfPlayers.get(id).id === player2.id
                   ) {
-                    console.log('deletou: ', id);
-                    listOfPlayers.get(id).id = null;
-                    listOfPlayers.get(id).room = null;
                     listOfPlayers.delete(id);
                   } else {
                     continue;
@@ -284,12 +280,9 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
                 let ball: string;
                 for (ball of ballOfRoom.keys()) {
                   if (ballOfRoom.get(room)) {
-                    console.log('delete: ', room);
                     ballOfRoom.delete(room);
                   }
                 }
-                console.log(ballOfRoom);
-                console.log(listOfPlayers);
               }
             }
             ball_ins.x = 640;
@@ -304,6 +297,8 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
                 .emit('player1_scored', player1.points);
               if (player1.points === 10) {
                 this.server.to(player1.room).emit('player1_won');
+                clearInterval(ball_ins.intervalid);
+                client.leave(player1.room);
                 player1.points = 0;
                 let id: number;
                 let room = player1.room;
@@ -312,9 +307,6 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
                     listOfPlayers.get(id).id === player1.id ||
                     listOfPlayers.get(id).id === player2.id
                   ) {
-                    console.log('deletou: ', id);
-                    listOfPlayers.get(id).id = null;
-                    listOfPlayers.get(id).room = null;
                     listOfPlayers.delete(id);
                   } else {
                     continue;
@@ -322,14 +314,10 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
                 }
                 let ball: string;
                 for (ball of ballOfRoom.keys()) {
-                  console.log(ball);
                   if (ballOfRoom.get(room)) {
-                    console.log('delete: ', room);
                     ballOfRoom.delete(room);
                   }
                 }
-                console.log(ballOfRoom);
-                console.log(listOfPlayers);
               }
             }
             ball_ins.x = 640;
@@ -352,7 +340,6 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
           ) {
             ball_ins.dx = -ball_ins.dx;
           }
-
           ball_ins.x += ball_ins.dx;
           ball_ins.y += ball_ins.dy;
           this.server.sockets.to(player1.room).emit('ball_update', ball_ins);

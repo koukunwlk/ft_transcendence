@@ -1,6 +1,10 @@
 <template>
   <div>
-    <button id="my-button" class="my-button" @click="changeBackground">
+    <button
+      id="background-button"
+      class="background-button"
+      @click="changeBackground"
+    >
       Change Background
     </button>
     <div
@@ -31,8 +35,7 @@ import { io, Socket } from "socket.io-client";
 import JoinRoom from "./JoinRoom.vue";
 import paddle from "./paddle";
 
-export const socket = io("http://192.168.15.16:3000");
-
+export const socket = io("http://10.0.0.173:3000");
 export default {
   components: { JoinRoom },
   name: "Pong",
@@ -76,17 +79,10 @@ export default {
     },
     changeBackground() {
       this.backgroundImage = "earth.jpg";
-      document.getElementById("my-button").style.display = "none";
+      document.getElementById("background-button").style.display = "none";
       console.log("changed");
     },
     renderGame() {
-      socket.off("player_moved").on("player_moved", (data) => {
-        if (data.side === "left") {
-          this.leftPaddle = data;
-        } else if (data.side === "right") {
-          this.rightPaddle = data;
-        }
-      });
       this.renderPaddle();
       this.initBall();
       requestAnimationFrame(() => this.renderGame());
@@ -123,7 +119,6 @@ export default {
       } else {
         this.rightPaddle = null;
       }
-
       setTimeout(() => {
         socket.emit("handle_reconnect", data);
         socket.off("PlayerReconnected").on("PlayerReconnected", () => {
@@ -131,7 +126,7 @@ export default {
         });
         console.log("Opponent did not return. Leaving the room.");
         this.$router.push("/lobby");
-      }, 4000);
+      }, 2000);
     },
     handlePlayer1Scored(data) {
       this.p1_points = data;
@@ -148,25 +143,14 @@ export default {
       this.showResultMessage("Player 2 won!");
     },
     showResultMessage(message) {
-      var vm = this;
-      var div = document.createElement("div");
-      div.style.position = "fixed";
-      div.style.top = "50%";
-      div.style.left = "50%";
-      div.style.transform = "translate(-50%, -50%)";
-      div.style.fontSize = "24px";
-      div.style.fontWeight = "bold";
-      div.style.textAlign = "center";
-      div.style.backgroundColor = "#c5f56b";
-      div.style.color = "white";
-      div.style.padding = "10px";
-      div.style.borderRadius = "5px";
-      div.appendChild(document.createTextNode(message));
+      const div = document.createElement("div");
+      div.classList.add("result-message");
+      div.textContent = message;
       document.body.appendChild(div);
-      setTimeout(function () {
+
+      setTimeout(() => {
         document.body.removeChild(div);
-        vm.$router.push("lobby");
-        this.gameOn = false;
+        this.$router.push("lobby");
       }, 4000);
     },
   },
@@ -176,12 +160,19 @@ export default {
       socket.off("START_GAME").on("START_GAME", this.startGame);
       document.addEventListener("keydown", this.movePlayer);
       document.addEventListener("keyup", this.handleKeyup);
-      socket
-        .off("player1_update")
-        .on("player1_update", this.handlePlayerUpdate);
-      socket
-        .off("player2_update")
-        .on("player2_update", this.handlePlayer2Update);
+      // socket
+      //   .off("player1_update")
+      //   .on("player1_update", this.handlePlayerUpdate);
+      // socket
+      //   .off("player2_update")
+      //   .on("player2_update", this.handlePlayer2Update);
+      socket.off("player_moved").on("player_moved", (data) => {
+        if (data.side === "left") {
+          this.leftPaddle = data;
+        } else if (data.side === "right") {
+          this.rightPaddle = data;
+        }
+      });
       socket
         .off("PlayerDisconnected")
         .on("PlayerDisconnected", this.handlePlayerDisconnected);
@@ -205,8 +196,8 @@ export default {
 };
 </script>
 
-<style scoped>
-.my-button {
+<style>
+.background-button {
   background-color: grey;
   border: 2px;
   color: white;
@@ -218,22 +209,6 @@ export default {
   cursor: pointer;
   position: fixed;
   left: 50%;
-  bottom: 7px;
-  transform: translate(-50%, 50%);
-}
-
-.my-button2 {
-  background-color: grey;
-  border: 2px;
-  color: white;
-  padding: 7.5px 30px;
-  text-align: center;
-  display: inline-block;
-  font-size: 14px;
-  margin: 4px 2px;
-  cursor: pointer;
-  position: fixed;
-  left: 75%;
   bottom: 7px;
   transform: translate(-50%, 50%);
 }
@@ -317,5 +292,18 @@ export default {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.6);
+}
+.result-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  background-color: #c5f56b;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
 }
 </style>
