@@ -35,7 +35,7 @@ import { io, Socket } from "socket.io-client";
 import JoinRoom from "./JoinRoom.vue";
 import paddle from "./paddle";
 
-export const socket = io("http://10.0.0.173:3000");
+export const socket = io("http://192.168.15.16:3000");
 export default {
   components: { JoinRoom },
   name: "Pong",

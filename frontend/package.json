@@ -18,9 +18,9 @@
     "vue-styled-components": "^1.6.0",
     "axios": "^1.6.7",
     "pinia": "^2.1.7",
-    "vue": "^3.3.8",
+    "vue": "^3.3.13",
     "vue-axios": "^3.5.2",
-    "vue-router": "4"
+    "vue-router": "^4.2.5"
   },
   "devDependencies": {
     "@types/vue-router": "^2.0.0",
