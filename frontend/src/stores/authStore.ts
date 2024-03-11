@@ -24,7 +24,15 @@ const getUserLocalStorage = () => {
 export const useAuthStore = defineStore("auth", {
   // state (propriedades reativas)
   state: () => ({
-    user: getUserLocalStorage(),
+    user: getUserLocalStorage() || {
+      nickname: "",
+      token: null,
+      validCode: false,
+      userId: -1,
+      email: "",
+      username: "",
+      tfaSecret: "",
+    },
     token: "",
   }),
 

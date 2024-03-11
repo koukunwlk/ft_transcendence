@@ -6,7 +6,6 @@ import router from '../Router/index.ts';
 import { useAuthStore } from "../stores/authStore.ts";
 
 const user = useAuthStore();
-const nickname = user.getUser.nickname;
 
 function onClick() {
 	router.push('/')
@@ -25,11 +24,11 @@ function onClick() {
 		<div class="h-4/5 w-4/5 md:w-3/5 bg-opacity-30 rounded-lg border border-zinc-600 text-white">
 			<div class="flex flex-col justify-center items-center h-2/6">
 				<div class="flex justify-center items-center">
-					<Avatar :name=nickname :size=80 borderColor="black"></Avatar>
+					<Avatar v-if="user.getUser" :name=user.getUser.nickname :size=80 borderColor="black"></Avatar>
 					<PicUpload></PicUpload>
 				</div>
 				<div class="flex justify-center items-center">
-					<p>{{ nickname }}</p>
+					<p v-if="user.getUser">{{ user.getUser.nickname }}</p>
 				</div>
 			</div>
 			<div class="h-4/6 flex flex-col md:flex-row justify-center items-center">
