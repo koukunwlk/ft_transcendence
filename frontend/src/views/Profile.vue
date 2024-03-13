@@ -31,7 +31,7 @@ function onClick() {
 						v-if="picture.getPicture"
 						:src="picture.getPicture"
 						alt="profile picture"
-						class="rounded-full w-32 h-32"
+						class="rounded-full object-cover w-32 h-32"
 					>
 					<Avatar
 						v-else-if="user.getUser.nickname"
@@ -47,7 +47,7 @@ function onClick() {
 					>
 					<PicUpload></PicUpload>
 				</div>
-				<!-- <p v-if="user.getUser">{{ user.getUser.nickname }}</p> Somente para teste -->
+				<!-- <p v-if="user.getUser">{{ user.getUser.nickname }}</p> teste -->
 			</div>
 			<div class="h-4/6 flex flex-col md:flex-row justify-center items-center">
 				<div class="flex flex-col md:flex-col justify-center items-center w-full h-full">
