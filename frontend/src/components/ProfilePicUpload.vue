@@ -23,28 +23,36 @@
     </div>
     <div
         v-if="previewImage"
-        class="fixed top-0 w-screen h-screen flex flex-col items-center"
+        class="fixed top-0 w-screen h-screen flex flex-col items-center bg-black bg-blur bg-opacity-80"
     >
             <img
                 :src="previewImage"
                 alt="preview profile image"
                 class="w-56 md:w-72 lg:w-80 h-56 md:h-72 lg:h-80 mt-48 md:mt-40 lg:mt-36 rounded-full object-cover"
             >
-            <button
-                @click="closePreview"
-            >
-                Cancel
-            </button>
+            <div class="flex flex-row mt-6">
+                <button
+                    class="mr-20"
+                    @click="closePreview">
+                    Cancel
+                </button>
+                <button
+                    @click="sendPicture">
+                    Confirm
+                </button>
+            </div>
     </div>
 </template>
 
 <script>
+import { useProfilePictureStore } from '../stores/profilePictureStore.ts';
 
 export default {
     data() {
         return {
             file: null,
-            previewImage: null
+            previewImage: null,
+            picture: useProfilePictureStore()
         }
     },
     methods: {
@@ -58,6 +66,15 @@ export default {
             reader.readAsDataURL(this.file);
         },
         closePreview() {
+            this.previewImage = null;
+            this.$refs.fileInput.value = null;
+        },
+        sendPicture() {
+            this.picture.setPicture(this.previewImage);
+
+            // lógica do back end
+
+            // Ao final da lógica, devemos limpar essas variáveis para que o preview saia de exibição:
             this.previewImage = null;
             this.$refs.fileInput.value = null;
         }
