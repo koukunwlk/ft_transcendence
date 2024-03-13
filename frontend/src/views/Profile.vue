@@ -16,7 +16,7 @@ function onClick() {
 </script>
 
 <template>
-	<div class=" text-white fixed end-0">
+	<div class="bg-default-background text-white fixed end-0">
 		<button
 			class="h-10 w-16 mt-2 mb-6 md:mb-0 mr-2 bg-gray-600 bg-opacity-30 hover:bg-zinc-500 text-zinc-400  font-semibold hover:text-white text-sm focus:outline-none rounded-lg border border-zinc-600 hover:border-transparent focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700"
 			@click="onClick()">

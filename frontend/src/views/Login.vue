@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full flex justify-center items-center">
+  <div class="bg-login-background bg-cover h-full flex justify-center items-center">
     <div
       class="aspect-square h-72 w-72 flex flex-col justify-center items-center"
     >
