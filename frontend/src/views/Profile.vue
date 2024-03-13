@@ -26,7 +26,7 @@ function onClick() {
 	<div class="flex h-full md:h-6/6 justify-center items-center">
 		<div class="h-4/5 w-4/5 md:w-3/5 bg-opacity-30 rounded-lg border border-zinc-600 text-white">
 			<div class="flex flex-col justify-center items-center h-2/6">
-				<div class="flex justify-center items-center">
+				<div class="relative flex justify-center items-center">
 					<img
 						v-if="picture.getPicture"
 						:src="picture.getPicture"
@@ -47,9 +47,7 @@ function onClick() {
 					>
 					<PicUpload></PicUpload>
 				</div>
-				<div class="flex justify-center items-center">
-					<p v-if="user.getUser">{{ user.getUser.nickname }}</p>
-				</div>
+				<!-- <p v-if="user.getUser">{{ user.getUser.nickname }}</p> Somente para teste -->
 			</div>
 			<div class="h-4/6 flex flex-col md:flex-row justify-center items-center">
 				<div class="flex flex-col md:flex-col justify-center items-center w-full h-full">

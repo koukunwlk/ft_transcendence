@@ -1,25 +1,21 @@
 <template>
-    <div>
+    <div class="absolute right-1 bottom-2">
         <input
             class="hidden"
             type="file"
             ref="fileInput"
             @change="onFileSelected"
         >
-        <div class='flex items-center justify-center min-h-screen'>
-            <div class="m-5">
-                <button
-                    @click="$refs.fileInput.click()"
-                    class="flex p-2.5 bg-yellow-500 rounded-xl hover:rounded-3xl hover:bg-yellow-600 transition-all duration-300 text-white"
-                >
-                    <img
-                        class="h-3 w-3"
-                        src="../assets/svgs/edit-icon.svg"
-                        alt="edit icon"
-                    >
-                </button>
-            </div>
-        </div>
+        <button
+            @click="$refs.fileInput.click()"
+            class="flex p-2 bg-yellow-500 rounded-xl hover:rounded-3xl hover:bg-yellow-600 transition-all duration-300 text-white"
+        >
+            <img
+                class="h-4 w-4"
+                src="../assets/svgs/edit-icon.svg"
+                alt="edit icon"
+            >
+        </button>
     </div>
     <div
         v-if="previewImage"
