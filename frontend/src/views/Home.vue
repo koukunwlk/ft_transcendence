@@ -1,6 +1,6 @@
 <template>
 	<h1>Home Page</h1>
-	<div class="flex  bg-blue-200" style="height: 200px">
+	<div class="flex justify-end" style="height: 200px;">
 		<ChatVue />
 	</div>
 	<RouterView />
