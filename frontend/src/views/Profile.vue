@@ -67,17 +67,8 @@ const activateTab = (index) => {
 					{{ tab }}
 				</button>
 			</div>
-			<div v-if="currentView === 'Achievements'">
-				<h2>Selected = Achievements</h2>
-			</div>
-			<div v-else-if="currentView === 'Leader Level'">
-				<h2>Selected = Leader Level</h2>
-			</div>
-			<div v-else-if="currentView === 'Macth History'">
-				<h2>Selected = Match History</h2>
-			</div>
-			<div v-else-if="currentView === 'Wins/Losses'">
-				<h2>Selected = Wins/Losses</h2>
+			<div class="flex justify-center text-3xl text-yellow-500 pt-16">
+				<h2>Selected = {{ tabs[activeTab] }}</h2>
 			</div>
 		</div>
 	</div>
