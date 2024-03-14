@@ -9,7 +9,7 @@ import { ref } from 'vue'
 
 const user = useAuthStore();
 const picture = useProfilePictureStore();
-const tabs = ['Achievements', 'Leader level', 'Match history', 'Wins and losses'];
+const tabs = ['Leader level', 'Achievements', 'Wins and losses', 'Match history'];
 const activeTab = ref(0);
 
 function onClick() {
@@ -60,9 +60,8 @@ const activateTab = (index) => {
 				<button
 					v-for="(tab, index) in tabs"
 					:key="index"
-					:id="`tab${index + 1}`"
-					class="flex-1 pt-2"
-					:class="{'font-bold border-t-2 border-yellow-500' : activeTab === index}"
+					class="flex-1 border-t-2 pt-3"
+					:class="{'font-bold border-yellow-500' : activeTab === index}, {'border-slate-700' : activeTab !== index}"
 					@click="activateTab(index)"
 				>
 					{{ tab }}
