@@ -5,12 +5,19 @@ import Avatar from "vue3-avatar";
 import router from '../Router/index.ts';
 import { useAuthStore } from "../stores/authStore.ts";
 import { useProfilePictureStore } from '../stores/profilePictureStore.ts';
+import { ref } from 'vue'
 
 const user = useAuthStore();
 const picture = useProfilePictureStore();
+const tabs = ['Achievements', 'Leader level', 'Match history', 'Wins and losses'];
+const activeTab = ref(0);
 
 function onClick() {
 	router.push('/')
+}
+
+const activateTab = (index) => {
+	activeTab.value = index;
 }
 
 </script>
@@ -50,17 +57,15 @@ function onClick() {
 				<!-- <p v-if="user.getUser">{{ user.getUser.nickname }}</p> teste -->
 			</div>
 			<div class="flex justify-content items-center text-white text-xs md:text-base lg:text-lg xl:text-xl 2xl:text-2xl font-light h-8">
-				<button class="flex-1 focus:font-bold focus:border-t-2 focus:border-yellow-500 pt-2">
-					Achievements
-				</button>
-				<button class="flex-1 focus:font-bold focus:border-t-2 focus:border-yellow-500 pt-2">
-					Leader Level
-				</button>
-				<button class="flex-1 focus:font-bold focus:border-t-2 focus:border-yellow-500 pt-2">
-					Match History
-				</button>
-				<button class="flex-1 focus:font-bold focus:border-t-2 focus:border-yellow-500 pt-2">
-					Wins/Losses
+				<button
+					v-for="(tab, index) in tabs"
+					:key="index"
+					:id="`tab${index + 1}`"
+					class="flex-1 pt-2"
+					:class="{'font-bold border-t-2 border-yellow-500' : activeTab === index}"
+					@click="activateTab(index)"
+				>
+					{{ tab }}
 				</button>
 			</div>
 			<div v-if="currentView === 'Achievements'">
