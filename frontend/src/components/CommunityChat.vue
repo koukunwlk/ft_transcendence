@@ -1,11 +1,10 @@
 <template>
 	<div class="grid grid-cols-4 max-w-full m-1 border border-gray-400" style="height: 200px; width: 400px;">
-
 		<!-- ####################################### chat messages and input -->
 		<div class="grid col-span-3 bg-gray-200 ">
 			<!-- Friend Chat Messages -->
-			<div v-show="friendBool">
-				<div class="grid grid-cols-6 content-center bg-gray-200">
+			<div v-show="friendBool" class="overflow-y-auto h-52 bg-gray-200">
+				<div class="grid grid-cols-6 content-center">
 					<div class="bg-green col-span-1 m-1">
 						<img class="rounded-full h-10" :src="user.listaDeamigos[friendListIndex].avatar" />
 					</div>
@@ -22,30 +21,17 @@
 											d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
 									</svg>
 								</button>
-							</div>
-							<div v-if="chatIsOpen == true"
-								class="absolute right-28 mt-5 mr-3 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 grid justify-center">
-								<div class="py-1" role="menu" aria-orientation="vertical"
-									aria-labelledby="options-menu">
-									<a href="#"
-										class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-										@click="">Profile</a>
-									<a href="#"
-										class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Block
-										User</a>
-									<a href="#"
-										class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-										@click="showGroupList()">Invite to match</a>
+								<div v-if="chatIsOpen == true"
+									class="absolute right-28 mt-5 mr-3 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 grid justify-center">
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 
-				<div class="h-28">
-					<div class="bg-gray-100 m-2 " v-for="mensagens in user.listaDeamigos[friendListIndex].mensagens">
-						<!-- concatenar mensagem com o nome do usuario -->
-						{{ mensagens }}
+				<div class="h-28 overflow-y-auto bg-gray-100 m-2">
+					<div class="bg-gray-100 m-2" v-for="mensagem in user.listaDeamigos[friendListIndex].mensagens">
+						{{ mensagem }}
 					</div>
 				</div>
 
@@ -62,74 +48,67 @@
 					</div>
 				</form>
 			</div>
+
 
 			<!-- Group Chat Messages -->
-
 			<div v-show="groupBool">
-				<div class="grid grid-cols-6 content-center bg-gray-200">
-					<div class="bg-green col-span-1 m-1">
-						<a></a>
-					</div>
-					<div class="col-span-5 m-3 font-medium">
-						<div class="grid grid-cols-2">
-							<div class="col-span-1">
-								{{ groupList[groupListIndex].name }}
-							</div>
-							<div class="col-span-1 grid justify-end">
-								<button @click="chatIsOpen = !chatIsOpen"
-									class="flex items-center gap-2 text-gray-600 hover:text-gray-900 focus:outline-none">
-									<svg viewBox="0 0 24 24" width="20" height="20">
-										<path
-											d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
-									</svg>
-								</button>
-							</div>
-							<div v-if="chatIsOpen == true"
-								class="absolute right-28 mt-5 mr-3 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 grid justify-center">
-								<div class="py-1" role="menu" aria-orientation="vertical"
-									aria-labelledby="options-menu">
-									<a href="#"
-										class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-										@click="">Add User</a>
-									<a href="#"
-										class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">Remove
-										User</a>
-									<a href="#"
-										class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-										@click="showGroupList()">Mute Member</a>
-										<a href="#"
-										class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-										@click="showGroupList()">Add Admin</a>
-										<a href="#"
-										class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-										@click="showGroupList()">Room Settings</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+  <div class="grid grid-cols-6 content-center bg-gray-200 overflow-y-auto">
+    <div class="bg-green col-span-1 m-1">
+      <a href="#">
+      </a>
+    </div>
+    <div class="col-span-5 m-3 font-medium">
+      <div class="grid grid-cols-2">
+        <div class="col-span-1">
+          {{ groupList[groupListIndex].name }}
+        </div>
+        <div class="col-span-1 grid justify-end">
+          <button @click="chatIsOpen = !chatIsOpen"
+                  class="flex items-center gap-2 text-gray-600 hover:text-gray-900 focus:outline-none">
+            <svg viewBox="0 0 24 24" width="20" height="20">
+              <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+            </svg>
+          </button>
+          <div v-if="chatIsOpen == true"
+               class="absolute right-28 mt-5 mr-3 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 grid justify-center">
+            <div class="py-1" role="menu" aria-orientation="vertical"
+                 aria-labelledby="options-menu">
+              <a href="#"
+                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
+                Add User
+              </a>
+              <a href="#"
+                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
+                Remove User
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-				<div class="h-28">
-					<div class="bg-gray-100 m-2" v-for="mensagens in groupList[groupListIndex].messages">
-						<!-- concatenar mensagem com o nome do usuario -->
-						{{ mensagens.content }}
-					</div>
-				</div>
+  <div class="h-28 overflow-y-auto bg-gray-100 m-2">
+    <div class="bg-gray-100 m-2" v-for="mensagem in groupList[groupListIndex].messages">
+      <span class="text-sm font-medium"> {{ mensagem.user }} </span>
+      {{ mensagem.content }}
+    </div>
+  </div>
 
-				<form @submit.prevent="sendMessage">
-					<div class="grid grid-cols-6 p-1 mt-2">
-						<div class="col-span-5">
-							<input class="w-full" type="text" placeholder="Type your message..."
-								v-model="messageText" />
-						</div>
-						<div
-							class="col-span-1 border border-gray-400 rounded text-sm flex justify-center font-medium h-full ml-1">
-							<button type="submit" class="">Send</button>
-						</div>
-					</div>
-				</form>
+  <form @submit.prevent="sendMessage">
+    <div class="grid grid-cols-6 p-1 mt-2">
+      <div class="col-span-5">
+        <input class="w-full" type="text" placeholder="Type your message..."
+               v-model="messageText" />
+      </div>
+      <div class="col-span-1 border border-gray-400 rounded text-sm flex justify-center font-medium h-full ml-1">
+        <button type="submit" class="">Send</button>
+      </div>
+    </div>
+  </form>
+</div>
 
-			</div>
+
 
 
 		</div>
@@ -431,6 +410,22 @@ const groupList = [
 				content: "bom dia grupo",
 				timestamp: "2024-03-06 20:34:21",
 			},
+			{
+				content: "aorba grupo",
+				timestamp: "2024-03-06 20:34:21",
+			},
+			{
+				content: "aorba grupo",
+				timestamp: "2024-03-06 20:34:21",
+			},
+			{
+				content: "aorba grupo",
+				timestamp: "2024-03-06 20:34:21",
+			},
+			{
+				content: "aorba grupo",
+				timestamp: "2024-03-06 20:34:21",
+			},
 		],
 	},
 	{
@@ -470,6 +465,22 @@ const groupList = [
 			},
 			{
 				content: "bom dia",
+				timestamp: "2024-03-06 20:34:21",
+			},
+			{
+				content: "bom dia grupo",
+				timestamp: "2024-03-06 20:34:21",
+			},
+			{
+				content: "bom dia grupo",
+				timestamp: "2024-03-06 20:34:21",
+			},
+			{
+				content: "bom dia grupo",
+				timestamp: "2024-03-06 20:34:21",
+			},
+			{
+				content: "bom dia grupo",
 				timestamp: "2024-03-06 20:34:21",
 			},
 			{
