@@ -32,8 +32,8 @@ const activateTab = (index) => {
 	</div>
 	<div class="flex h-full md:h-6/6 justify-center items-center">
 		<div class="h-full w-full md:w-3/5 bg-opacity-30 rounded-lg border border-zinc-600 text-white">
-			<div class="flex flex-col justify-center items-center h-1/3">
-				<div class="relative flex justify-center items-center">
+			<div class="flex flex-col justify-center items-start h-1/3">
+				<div class="relative flex justify-center items-center ml-3 md:ml-4 lg:ml-5 xl:ml-6 2xl:ml-7">
 					<img
 						v-if="picture.getPicture"
 						:src="picture.getPicture"
@@ -68,7 +68,7 @@ const activateTab = (index) => {
 				</button>
 			</div>
 			<div class="flex justify-center text-3xl text-yellow-500 pt-16">
-				<h2>Selected = {{ tabs[activeTab] }}</h2>
+				<h2>Show {{ tabs[activeTab] }}</h2>
 			</div>
 		</div>
 	</div>
