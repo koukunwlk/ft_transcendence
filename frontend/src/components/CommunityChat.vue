@@ -2,16 +2,17 @@
 	<div class="grid grid-cols-4 max-w-full m-1 border border-gray-400" style="height: 200px; width: 400px;">
 		<!-- ####################################### chat messages and input -->
 		<div class="grid col-span-3 bg-gray-200 ">
+
 			<!-- Friend Chat Messages -->
 			<div v-show="friendBool" class="overflow-y-auto h-52 bg-gray-200">
 				<div class="grid grid-cols-6 content-center">
 					<div class="bg-green col-span-1 m-1">
-						<img class="rounded-full h-10" :src="user.listaDeamigos[friendListIndex].avatar" />
+						<img class="rounded-full h-10" :src="friendList[friendListIndex].avatar" />
 					</div>
 					<div class="col-span-5 m-3 font-medium">
 						<div class="grid grid-cols-2">
 							<div class="col-span-1">
-								{{ user.listaDeamigos[friendListIndex].name }}
+								{{ friendList[friendListIndex].name }}
 							</div>
 							<div class="col-span-1 grid justify-end">
 								<button @click="chatIsOpen = !chatIsOpen"
@@ -26,11 +27,13 @@
 									<div class="py-1" role="menu" aria-orientation="vertical"
 										aria-labelledby="options-menu">
 										<a href="#"
-											class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
+											class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+											@click="showFriendProfile()">
 											Profile
 										</a>
 										<a href="#"
-											class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
+											class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+											@click="blockUser()">
 											Block User
 										</a>
 									</div>
@@ -41,10 +44,10 @@
 				</div>
 
 				<div class="chat-messages overflow-y-auto h-28 bg-gray-200 m-2 rounded-lg p-2">
-					<div v-for="mensagem in user.listaDeamigos[friendListIndex].mensagens" :key="mensagem"
-						class="message flex flex-col mb-2 text-sm">
+					<div v-for="messages in friendList[friendListIndex].messages" :key="messages"
+						class="message flex flex-col mb-2 text-sm scroll-smooth scroll-chat-message-box">
 						<div class="flex-grow bg-gray-300 rounded-lg p-2">
-							<p class="break-words">{{ mensagem }}</p>
+							<p class="break-words">{{ messages.content }}</p>
 						</div>
 					</div>
 				</div>
@@ -62,7 +65,6 @@
 					</div>
 				</form>
 			</div>
-
 
 			<!-- Group Chat Messages -->
 			<div v-show="groupBool" class="overflow-y-auto h-52 bg-gray-200">
@@ -88,11 +90,23 @@
 										aria-labelledby="options-menu">
 										<a href="#"
 											class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
-											Profile
+											Add User
 										</a>
 										<a href="#"
 											class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
-											Block User
+											Remove User
+										</a>
+										<a href="#"
+											class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
+											Mute User
+										</a>
+										<a href="#"
+											class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
+											Add Admin
+										</a>
+										<a href="#"
+											class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
+											Room Config
 										</a>
 									</div>
 								</div>
@@ -164,12 +178,12 @@
 						class="absolute right-0 mt-6 mr-4 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
 						<div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
 							<a href="#"
-								class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">New
-								Room</a>
-							<a href="#"
 								class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
 								@click="showFriendList">List
 								Friends</a>
+							<a href="#"
+								class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">New
+								Room</a>
 						</div>
 					</div>
 
@@ -180,7 +194,7 @@
 			<!-- Friend List -->
 			<div v-if="sidebarFriendListIsVisible">
 				<ul>
-					<li v-for="(friends, index) in user.listaDeamigos">
+					<li v-for="(friends, index) in friendList">
 						<div class="bg-gray-300 m-1 flex justify-center content-center h-6">
 							<button class=" text-gray-800 font-semibold m-1 text-sm" @click="friendIndexHandler(index)">
 								{{ friends.name }}
@@ -350,6 +364,11 @@
 </template>
 
 <script setup>
+import { io } from "socket.io-client"
+import { onBeforeMount, ref, defineEmits } from "vue"
+
+
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ DUMMIE DATA
 
 const friendList = [
 	{
@@ -376,6 +395,29 @@ const friendList = [
 			},
 		],
 	},
+	{
+		name: 'Amigo 2',
+		id: 2,
+		blocked: null,
+		avatar: 'https://i.pravatar.cc/300',
+		messages: [
+			{
+				content: "x1",
+				timestamp: "2024-03-06 20:34:21",
+			},
+			{
+				content: "noob",
+				timestamp: "2024-03-06 20:34:21",
+			},
+			{
+				content: "kkkkkj",
+				timestamp: "2024-03-06 20:34:21",
+			},
+			{
+				content: "vamo ve",
+				timestamp: "2024-03-06 20:34:21",
+			},
+	]}
 ]
 
 const groupList = [
@@ -534,34 +576,27 @@ const user = {
 	},
 }
 
-const friendOptions = [
-	{
-		name: 'addFriend',
-		text: 'Add Friend',
-	},
-	{
-		name: 'blockFriend',
-		text: 'Block User'
-	},
-	{
-		name: 'listRoom',
-		text: 'List Rooms',
-	},
-	{
-		name: 'createRoom',
-		text: 'Create Room'
-	}
-
-]
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ CHAT CONTENT
 
 const sidebarIsOpen = ref(false);
 const chatIsOpen = ref(false);
-
 const addFriendModalVisible = ref(false);
+const openSidebarChatDropdown = false;
 const sidebarFriendListIsVisible = ref(true);
 const sidebarGroupListIsVisible = ref(false);
-const openSidebarChatDropdown = false;
+const createGroupModalVisible = ref(false);
 
+function showFriendProfile() {
+	console.log(friendListIndex.value)
+	// redirecionar o usuario para a pagina de profile dele;
+}
+
+function blockUser() {
+	friendList.splice(friendListIndex.value);
+	console.log("usuario bloqueado");
+	console.log(friendList.value);
+	// fazer post para atualizar o valor da lista
+}
 
 function closeAddFriendModal() {
 	addFriendModalVisible.value = false;
@@ -609,7 +644,6 @@ function blockFriend() {
 	blockFriendModalVisible.value = true;
 }
 
-const createGroupModalVisible = ref(false);
 
 function closeCreateGroupModal() {
 	createGroupModalVisible.value = false;
@@ -620,8 +654,6 @@ function createGroup() {
 }
 
 // //////////////////////////////////////////////////////////////// CHAT CODE
-import { io } from "socket.io-client"
-import { onBeforeMount, ref, defineEmits } from "vue"
 
 // const socket = io('http://localhost:3000')
 const messages = ref([]);
