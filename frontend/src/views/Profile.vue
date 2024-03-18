@@ -52,7 +52,7 @@ const activateTab = (index) => {
 				</div>
 				<div class="mt-14 ml-4">
 					<h2 v-if="user.getUser && user.getUser.nickname">{{ user.getUser.nickname }}</h2>
-					<h2 v-else>athosfilad</h2>
+					<h2 v-else class="text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl">GandalfTheGrey</h2>
 					<h4 class="flex justify-end text-xs italic text-slate-300">nickname</h4>
 				</div>
 			</div>
