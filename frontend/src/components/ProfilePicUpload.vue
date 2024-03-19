@@ -8,11 +8,11 @@
         >
         <button
             @click="$refs.fileInput.click()"
-            class="flex p-2 bg-yellow-500 rounded-xl hover:rounded-3xl hover:bg-yellow-600 transition-all duration-300 text-white"
+            class="flex p-1 bg-yellow-500 rounded-xl hover:rounded-3xl transition-all duration-300"
         >
             <img
-                class="h-3 w-3 md:h-4 md:w-4 lg:h-5 lg:w-5 xl:w-6 xl:h-6 2xl:w-7 2xl:h-7"
-                src="../assets/svgs/edit-icon.svg"
+                class="h-4 w-4 lg:h-5 lg:w-5 xl:w-6 xl:h-6 2xl:w-7 2xl:h-7"
+                src="../assets/svgs/edit.svg"
                 alt="edit icon"
             >
         </button>
