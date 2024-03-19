@@ -1,20 +1,23 @@
 <template>
 	<div class="container min-h-[100%] min-w-[100%] max-h-[100%] max-w-[100%] bg-gray-700">
-		<div class="grid grid-cols-4 max-w-[100%] max-h-[100%] min-w-[320px] min-h-[232px] ">
+		<div
+			class="grid grid-cols-4 max-w-[100%] max-h-[100%] min-w-[320px] min-h-[232px]  border-gray-900 border-x-2 border-y-1">
 			<!-- ####################################### chat messages and input -->
 			<div class="grid col-span-3 max-w-[100%] max-h-[100%] min-w-[228px] min-h-[224px]  ">
 
-				<!-- Friend Chat Messages -->
+				<!-- Friend Chat -->
 				<div v-show="friendBool"
-					class="grid overflow-y-auto max-w-[100%] min-w-[229px] min-h-[239px] max-h-[100%] border-00 border-gray-900">
+					class="grid overflow-y-auto max-w-[100%] min-w-[229px] min-h-[240px] max-h-[100%] border-00 border-gray-900">
 
-					<div class="grid grid-cols-8 max-h-[100%] max-w-[100%] font-normal text-slate-400 ">
-						<div
-							class="grid col-span-2 items-center justify-center rounded border-3 max-h-[48px] max-w-[58px] mr-1">
-							<img class=" max-h-[38px] m-1.5" :src="friendList[friendListIndex].avatar" />
+					<!-- avatar -->
+					<div
+						class="grid grid-cols-8 max-h-[50px] max-w-[100%] font-normal text-slate-400 border-y-2 border-y-gray-900 border-x-gray-900">
+						<div class="grid col-span-2 items-center justify-center rounded max-h-[48px] max-w-[58px] mr-2">
+							<img class=" max-h-[42px] border-2 border-gray-700 rounded-3xl"
+								:src="friendList[friendListIndex].avatar" />
 						</div>
 
-						<div class="grid col-span-5 max-h-[40px] mt-3">
+						<div class="grid col-span-5 max-h-[40px] mt-4">
 							<div class="grid items-center col-span-5">
 								{{ friendList[friendListIndex].name }}
 							</div>
@@ -47,36 +50,38 @@
 						</div>
 					</div>
 
-					<div class="col-span-1 overflow-y-auto max-h-[170px]  p-2">
+					<!-- chat -->
+					<div class="col-span-1 overflow-y-auto max-h-[130px] p-1 ">
 						<div v-for="messages in friendList[friendListIndex].messages" :key="messages"
 							class="flex flex-col max-h-[19px] text-sm scroll-smooth mt-2">
 							<div class="flex-growrounded-lg max-h-[19px] font-normal text-slate-300">
 								<div
-									class="flex justify-start m-1 pt-1 pl-1 pb-0.5 border-1 bg-gray-600 border-gray-800 rounded-lg shadow text-xs">
+									class="flex justify-start m-1 pt-1 pl-1 pb-0.5 border-1 bg-slate-800 border-gray-800 shadow text-xs">
 									<p class="break-words">{{ messages.content }}</p>
 								</div>
 							</div>
 						</div>
 					</div>
 
-					<div class="grid items-center max-h-[85px] pr-1 pl-1">
+					<!-- send message -->
+					<div class="grid items-center min-h-[25px] pr-1 pl-1 border-y-2 border-gray-900">
 						<form class="" @submit.prevent="sendMessage">
 							<div class="grid grid-cols-6">
 								<div class="col-span-5 max-h-[100%] grid items-center">
 									<input
-										class="max-h-[18px] max-w-[173px] text-xs bg-gray-600 border-2 border-gray-700 rounded-md placeholder-text-xs p-1"
+										class="max-h-[23px] max-w-[180px] text-xs bg-gray-900 border-2 text-slate-400 border-gray-700 hover:border hover:border-gray-700 placeholder-text-xs p-1"
 										type="text" placeholder="Type your message..." v-model="messageText" />
 								</div>
 								<div
-									class="col-span-1 border-1 border-gray-500 bg-gray-600 rounded text-xs flex justify-center font-normal  h-full max-h-[19px] hover:bg-gray-500 hover:border-gray-300">
-									<button type="submit" class="grid items-start max-h-[14px]">Send</button>
+									class="col-span-1 mt-0.5 border-2 border-gray-900 bg-gray-900 text-xs flex justify-center font-normal h-full max-h-[19px] hover:border hover:bg-gray-800 hover:border-gray-600 hover:text-slate-600 text-slate-400">
+									<button type="submit" class=" max-h-[full] ">Send</button>
 								</div>
 							</div>
 						</form>
 					</div>
 				</div>
 
-				<!-- Group Chat Messages -->
+				<!-- Group Chat -->
 				<div v-show="groupBool" class="overflow-y-auto max-w-[229px] min-w-[229px] min-h-[205px] max-h-[210px]">
 					<div class="grid grid-cols-6 content-center">
 						<div class="bg-green col-span-1 m-1">
@@ -147,11 +152,15 @@
 						</div>
 					</form>
 				</div>
+
 			</div>
 
 			<!--########################################## chat sidebar -->
 			<div class="grid col-span-1 grid-rows-7 max-w-[100%] min-h-[238px] min-w-[76px] border-2 border-gray-900">
-				<div class="grid row-start-1 row-end-1 justify-end max-w-[100%] max-h-[100%] min-h-[px] min-w-[75px]">
+
+				<!-- Sidebar header -->
+				<div
+					class="grid row-start-1 row-end-1 justify-end max-w-[100%] max-h-[100%] min-h-[px] min-w-[75px] border-b-2 border-b-gray-900">
 					<div class="relative grid align-top row-span-1 content-start">
 						<button @click="sidebarIsOpen = !sidebarIsOpen"
 							class=" text-gray-600 hover:text-gray-900 focus:outline-none">
@@ -199,7 +208,7 @@
 					<ul>
 						<li v-for="(friends, index) in friendList">
 							<div
-								class="bg-gray-500 m-1 flex justify-start  h-6 rounded-full items-center font-normal text-slate-300 max-h-[20px]">
+								class="bg-gray-500 m-1 flex justify-center h-6 items-center font-normal text-slate-400 max-h-[20px] border-2 border-gray-900 bg-gray-900">
 								<button class=" font-semibold m-1 text-xs" @click="friendIndexHandler(index)">
 									{{ friends.name }}
 								</button>
@@ -726,18 +735,18 @@ var groupBool = false;
 
 /* Track */
 ::-webkit-scrollbar-track {
-	background: #646464;
+	background: #111827;
 	border-radius: 5px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-	background: #1a1a1a;
+	background: #030712;
 	border-radius: 5px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-	background: #3b3b3b;
+	background: #030712;
 }
 </style>
