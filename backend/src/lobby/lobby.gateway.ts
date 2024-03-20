@@ -79,8 +79,12 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
       }
     }
     this.server.emit('PlayerDisconnected', client.id);
-    if (listOfPlayers.get(i) && listOfPlayers.get(i)?.room) {
-      client.leave(listOfPlayers.get(i)?.room);
+    if (
+      listOfPlayers.get(i) &&
+      listOfPlayers.get(i).room &&
+      ballOfRoom.get(listOfPlayers.get(i).room).intervalid
+    ) {
+      client.leave(listOfPlayers.get(i).room);
       clearInterval(ballOfRoom.get(listOfPlayers.get(i).room).intervalid);
     }
     listOfPlayers.delete(id);
@@ -103,9 +107,9 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('join_game')
-  handleJoinGame(client: Socket) {
+  handleJoinGame(client: Socket, data: any) {
     let player = null;
-
+    console.log('Player connected: ', data.username);
     for (let [key, value] of listOfPlayers.entries()) {
       if (value.id === client.id) {
         player = value;

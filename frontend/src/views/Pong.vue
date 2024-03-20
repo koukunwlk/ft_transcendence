@@ -34,8 +34,12 @@ import { useRouter } from "vue-router";
 import { io, Socket } from "socket.io-client";
 import JoinRoom from "./JoinRoom.vue";
 import paddle from "./paddle";
+import { useAuthStore } from "../stores/authStore";
 
-export const socket = io("http://192.168.15.16:3000");
+export const socket = io("http://localhost:3000");
+
+const authStore = useAuthStore();
+//authStore.getUser;
 export default {
   components: { JoinRoom },
   name: "Pong",

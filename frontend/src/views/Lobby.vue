@@ -12,13 +12,19 @@
 
 <script>
 import { socket } from "./Pong.vue";
+import { useAuthStore } from "../stores/authStore";
+import { ref } from "vue";
+
+const authStore = useAuthStore();
+const teste = await authStore.getUser;
+console.log("teste>:", teste);
 
 export default {
   name: "Lobby",
   methods: {
     startGame() {
+      socket.emit("join_game", teste);
       this.$router.push("/pong");
-      socket.emit("join_game");
       console.log("join game");
     },
     increaseSpeed() {

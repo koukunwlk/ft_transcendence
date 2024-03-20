@@ -4,7 +4,7 @@
       <h4>Waiting Player</h4>
       <div class="pongBall" style="background-color: #2cf718"></div>
       <div class="pongPaddle" style="background-color: #b9fdd5"></div>
-      <div class="JoinRoomButton" @click="userCancelQueue">Back to Lobby</div>
+      <button @click="userCancelQueue">Back to Lobby</button>
     </div>
   </div>
 </template>
@@ -18,7 +18,6 @@ export default {
     userCancelQueue() {
       this.$router.push("lobby");
       socket.emit("cancelQueue");
-      console.log("leave");
     },
   },
 };
@@ -32,7 +31,6 @@ export default {
   justify-content: center;
   align-items: center;
 }
-
 .JoinRoomcontainer {
   width: 20em;
   display: flex;
