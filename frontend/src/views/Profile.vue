@@ -50,8 +50,8 @@ const openSettings = () => {
 					alt="home icon"
 				>
 			</button>
-			<div class="relative flex flex-row h-56 md:h-60 lg:h-64 xl:h-72 2xl:h-80">
-				<div class="flex items-center ml-3 md:ml-4 lg:ml-5 xl:ml-6 2xl:ml-7">
+			<div class="relative flex flex-row h-52 md:h-56 lg:h-60 xl:h-64 2xl:h-72">
+				<div class="flex items-end mb-6 ml-3 md:ml-4 lg:ml-5 xl:ml-6 2xl:ml-7">
 					<div class="relative w-32 h-32 md:w-36 md:h-36 xl:w-40 xl:h-40 2xl:w-52 2xl:h-52">
 						<img
 							v-if="picture.getPicture"
@@ -82,7 +82,7 @@ const openSettings = () => {
 				<p class="mt-14 lg:mt-16 xl:mt-20 text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-xl ml-1 ">
 					🟢online
 				</p>
-				<div class="bg-slate-700 h-24 w-48 absolute bottom-4 left-40">
+				<div class="bg-slate-700 h-20 w-48 md:h-24 2xl:h-28 md:w-64 lg:w-80 absolute bottom-6 left-40 md:left-44 xl:left-52 2xl:left-64">
 					Conquistas
 				</div>
 			</div>
