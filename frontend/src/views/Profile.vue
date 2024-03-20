@@ -50,7 +50,7 @@ const openSettings = () => {
 					alt="home icon"
 				>
 			</button>
-			<div class="flex flex-row h-1/3">
+			<div class="flex flex-row h-56 md:h-60 lg:h-64 xl:h-72 2xl:h-80">
 				<div class="flex items-center ml-3 md:ml-4 lg:ml-5 xl:ml-6 2xl:ml-7">
 					<div class="relative w-32 h-32 md:w-36 md:h-36 xl:w-40 xl:h-40 2xl:w-52 2xl:h-52">
 						<img
@@ -68,12 +68,12 @@ const openSettings = () => {
 						<PicUpload></PicUpload>
 					</div>
 				</div>
-				<div class="mt-14 ml-4">
+				<div class="mt-14 lg:mt-16 xl:mt-20 ml-4">
 					<h2 class="text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl" title="nickname">Gandalf</h2>
 					<h2 v-if="user.getUser && user.getUser.nickname">{{ user.getUser.nickname }}</h2>
 					<h4 v-else class="flex justify-end text-xs italic text-slate-300" title="intra nickname">TheWhite</h4>
 				</div>
-				<p class="mt-16 ml-1 text-xs">🟢 online</p>
+				<p class="mt-14 lg:mt-16 xl:mt-20 text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-xl ml-1 ">🟢online</p>
 			</div>
 			<div class="flex justify-content items-center text-white text-xs md:text-base lg:text-lg xl:text-xl 2xl:text-2xl font-light h-8">
 				<button
