@@ -9,7 +9,7 @@ import { ref } from 'vue'
 
 const user = useAuthStore();
 const picture = useProfilePictureStore();
-const tabs = ['Leader level', 'Achievements', 'Wins and losses', 'Match history'];
+const tabs = ['Ranking', 'Match Stats'];
 const activeTab = ref(0);
 const isOpenSettings = ref(false);
 
