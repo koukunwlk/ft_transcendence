@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       backgroundImage: {
-        'login-background': "url('./src/Assets/Images/kai-pilger.jpg')",
+        'login-background': "url('./src/assets/images/kai-pilger.jpg')",
       },
       colors: {
         'default-background': "#14141c",
