@@ -19,7 +19,7 @@
     </div>
     <div
         v-if="previewImage"
-        class="fixed top-0 left-0 w-screen h-screen flex flex-col items-center bg-black bg-blur bg-opacity-80"
+        class="fixed top-0 left-0 w-screen h-screen flex flex-col items-center bg-black bg-blur bg-opacity-80 z-10"
     >
             <img
                 :src="previewImage"
