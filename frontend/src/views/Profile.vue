@@ -13,7 +13,6 @@ const tabs = ['Ranking', 'Match Stats'];
 const activeTab = ref(0);
 const isOpenSettings = ref(false);
 
-
 function goHome() {
 	router.push('/');
 }
@@ -33,7 +32,7 @@ const openSettings = () => {
 	<div class="flex h-full md:h-6/6 justify-center">
 		<div class="relative h-full w-full md:w-3/5 bg-opacity-30 rounded-lg border border-zinc-600 text-white">
 			<button
-				class="absolute top-2 right-2 flex w-6 h-6"
+				class="absolute z-10 top-2 right-2 flex w-6 h-6"
 				@click="openSettings()">
 				<img
 					class="h-6 w-6 lg:h-7 lg:w-7 xl:w-8 xl:h-8 2xl:w-9 2xl:h-9"
@@ -42,7 +41,7 @@ const openSettings = () => {
 				>
 			</button>
 			<button
-				class="absolute top-2 left-2 flex w-6 h-6"
+				class="absolute z-10 top-2 left-2 flex w-6 h-6"
 				@click="goHome()">
 				<img
 					class="h-6 w-6 lg:h-7 lg:w-7 xl:w-8 xl:h-8 2xl:w-9 2xl:h-9"
@@ -82,8 +81,15 @@ const openSettings = () => {
 				<p class="mt-14 lg:mt-16 xl:mt-20 text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-xl ml-1 ">
 					🟢online
 				</p>
-				<div class="bg-slate-700 h-20 w-48 md:h-24 2xl:h-28 md:w-64 lg:w-80 absolute bottom-6 left-40 md:left-44 xl:left-52 2xl:left-64">
-					Conquistas
+				<div class="flex flex-wrap p-1 h-20 w-48 md:h-24 2xl:h-28 md:w-64 lg:w-80 absolute bottom-6 left-40 md:left-44 xl:left-52 2xl:left-64">
+					<div
+						v-for="(item, index) in 10" :key="index"
+						class="w-1/6 h-1/2 border flex items-center justify-center">
+						<img
+							src="../assets/images/medal.png" alt="medal"
+							class="h-5/6"
+						>
+					</div>
 				</div>
 			</div>
 			<div class="flex justify-content items-center text-white text-xs md:text-base lg:text-lg xl:text-xl 2xl:text-2xl font-light h-8">
