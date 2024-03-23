@@ -15,7 +15,9 @@ export class MatchHistoryService {
     }
 
     async findAllByPlayerId(playerId: string): Promise<MatchHistory[]> {
-        return await this.matchHistoryRepository.findAllByPlayerId(playerId);
+        const matches = await this.matchHistoryRepository.findAllByPlayerId(playerId);
+        console.log(matches)
+        return matches
     }
 
     async findAllByPlayerIdAndMatchType(playerId: string, matchType: string): Promise<MatchHistory[]> {

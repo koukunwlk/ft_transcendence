@@ -5,11 +5,12 @@ import Avatar from "vue3-avatar";
 import router from '../Router/index.ts';
 import { useAuthStore } from "../stores/authStore.ts";
 import { useProfilePictureStore } from '../stores/profilePictureStore.ts';
+import LastMatches from "../components/LastMatches.vue";
 import { ref } from 'vue'
 
 const user = useAuthStore();
 const picture = useProfilePictureStore();
-const tabs = ['Ranking', 'Match Stats'];
+const tabs = ['Ranking', 'Last Matches'];
 const activeTab = ref(0);
 const isOpenSettings = ref(false);
 
@@ -103,8 +104,8 @@ const openSettings = () => {
 					{{ tab }}
 				</button>
 			</div>
-			<div class="flex justify-center text-3xl text-yellow-500 pt-16">
-				<h2>Show {{ tabs[activeTab] }}</h2>
+			<div v-if="activeTab === 1" class="text-3xl text-yellow-500 pt-16 w-full">
+        		<LastMatches />
 			</div>
 		</div>
 	</div>

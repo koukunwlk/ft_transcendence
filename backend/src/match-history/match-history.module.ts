@@ -4,13 +4,13 @@ import { MatchHistoryRepositoryProvider } from './repository/match-history.repos
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MatchHistoryTypeormEntity } from './repository/entities/match-history.typeorm.entity';
 import { MatchStartedListner } from './listners/match-started.listner';
-import { AuthModule } from '@/auth/auth.module';
 import { MatchHistoryService } from './service/match-history.service';
 import { MatchEndedListner } from './listners/match-ended.listner';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([MatchHistoryTypeormEntity]), AuthModule],
+  imports: [TypeOrmModule.forFeature([MatchHistoryTypeormEntity])],
   controllers: [MatchHistoryController],
-  providers: [MatchHistoryRepositoryProvider, MatchStartedListner, MatchEndedListner,MatchHistoryService]
+  providers: [MatchHistoryRepositoryProvider, MatchStartedListner, MatchEndedListner,MatchHistoryService, JwtService]
 })
 export class MatchHistoryModule { }

@@ -17,15 +17,15 @@ export class MatchHistoryTypeormRepository {
 
     async findAllByPlayerId(playerId: string): Promise<MatchHistoryTypeormEntity[]> {
         return await this.matchHistoryRepository.find({ where: [
-            { playerOneId: playerId },
-            { playerTwoId: playerId }
+           {playerOne: {id: playerId}},
+           {playerTwo: {id: playerId}},
         ] });
     }
 
     async findAllByPlayerIdAndMatchType(playerId: string, matchType: string): Promise<MatchHistoryTypeormEntity[]> {
         return await this.matchHistoryRepository.find({where: [
-            { playerOneId: playerId, matchType },
-            { playerTwoId: playerId, matchType },
+            {playerOne: {id: playerId}, matchType},
+            {playerTwo: {id: playerId}, matchType},
         ] });
     }
 
