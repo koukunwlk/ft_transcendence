@@ -79,6 +79,7 @@ export class UserTypeOrmRepository implements UserRepository {
       email: user.getEmail(),
       nickname: user.getNickname(),
       token: user.getToken(),
+      status: user.getStatus(),
     };
 
     await this.userRepository.update(user.id, updateUser);

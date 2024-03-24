@@ -57,4 +57,8 @@ export class User extends Model<UserProps> {
   setToken(token: string) {
     this.props.token = token;
   }
+
+  setStatus(status: UserStatusEnum) {
+    this.props.status = status;
+  }
 }

@@ -6,10 +6,12 @@ import {
   Param,
   UseGuards,
   Req,
+  Patch,
 } from '@nestjs/common';
 import { UserService } from './service/user.service';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { JwtAuthGuard } from '@/auth/jwt-auth/jwt-auth.guard';
+import { UserStatusEnum } from './domain/model/user.model';
 
 @Controller('user')
 @UseGuards(JwtAuthGuard)
@@ -21,7 +23,7 @@ export class UserController {
     return await this.userService.insertUser(createUser);
   }
 
-  @Get()
+  @Get() 
   async getUsers() {
     const users = await this.userService.getUserList();
     return users.map(user => user.toJson());
@@ -32,6 +34,11 @@ export class UserController {
     const user = await this.userService.getUserById(req.user.id);
     return user.toJson();
   }
+
+  @Patch("status")
+  async updateStatus(@Req() req: any, @Body() body: { status: UserStatusEnum }) {
+    return await this.userService.updateStatus(req.user.id, body.status);
+  } 
 
   @Get(':nickname')
   async getUser(@Param('nickname') nickname: string) {

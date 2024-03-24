@@ -9,7 +9,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { UserRepository } from '../repository/user.repository';
-import { User } from '../domain/model/user.model';
+import { User, UserStatusEnum } from '../domain/model/user.model';
 import { CreateUserDTO } from '../dto/create-user.dto';
 import { generateSecret, verify } from '2fa-util';
 
@@ -81,6 +81,18 @@ export class UserService {
     }
 
     return user;
+  }
+
+  async updateStatus(id: string, status: UserStatusEnum): Promise<void> {
+    let user = await this.userRepository.findOne({
+      id,
+    });
+
+    if (!user) {
+      throw new HttpException('Invalid user id', HttpStatus.BAD_REQUEST);
+    }
+    user.setStatus(status);
+    return await this.userRepository.update(user);
   }
 
   async updateUserToken(username: string, token: string): Promise<void> {
