@@ -8,6 +8,7 @@ import { useAuthStore } from "../stores/authStore.ts";
 import { useProfilePictureStore } from '../stores/profilePictureStore.ts';
 import { ProfileService } from '../services/ProfileService.ts';
 import LastMatches from "../components/LastMatches.vue";
+import Ranking from '../components/Ranking.vue';
 import { onBeforeMount, ref } from 'vue';
 
 export default {
@@ -16,7 +17,8 @@ export default {
 		PicUpload,
 		Avatar,
 		LastMatches,
-		UserStatus
+		UserStatus,
+		Ranking
 	},
 	data() {
 		return {
@@ -90,7 +92,7 @@ export default {
 							class="rounded-full object-cover">
 						<img v-else src="../assets/profile-pictures/default-5.png" alt="default picture"
 							class="rounded-full object-cover">
-						<PicUpload></PicUpload>
+						<PicUpload/>
 					</div>
 				</div>
 				<div class="mt-14 lg:mt-16 xl:mt-20 ml-4">
@@ -98,7 +100,7 @@ export default {
 						{{ profileUser ? profileUser.username : '' }}
 					</h2>
 					<h4 class="flex justify-end text-xs italic text-slate-300" title="intra nickname">
-						The {{ profileUser.nickname ? profileUser.nickname : 'Unknown' }}
+						The {{ profileUser && profileUser.nickname ? profileUser.nickname : 'Unknown' }}
 					</h4>
 				</div>
 				<div class="flex justify-center">
@@ -135,7 +137,10 @@ export default {
 					{{ tab }}
 				</button>
 			</div>
-			<div v-if="activeTab === 1" class="text-3xl text-yellow-500 pt-16 w-full">
+			<div v-if="activeTab === 0">
+				<Ranking/>
+			</div>
+			<div v-else="activeTab === 1" class="text-3xl text-yellow-500 pt-16 w-full">
 				<LastMatches />
 			</div>
 		</div>
