@@ -1,3 +1,12 @@
+backend/node_modules
+frontend/node_modules
+backend/.env
+frontend/Dockerfile
+dist
 .env
 postgres/
 node_modules/
+backend/yarn.lock
+frontend/yarn.lock
+yarn.lock
+

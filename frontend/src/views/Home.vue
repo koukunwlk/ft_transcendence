@@ -3,6 +3,7 @@
 	<div class="flex h-full justify-center items-center">
 		<div class="justify-center flex bg-yellow-300 items-center h-screen">
 			<div class="text-4xl">Hello 👋🏼 {{ user }}</div>
+    		<button @click="lobbyRedirect">Lobby</button>
 		</div>
 		<div class="flex flex-col justify-center items-center h-full w-full md:flex-row">
 			<div class="">
@@ -85,17 +86,21 @@ export default {
         .me()
         .then(({ data }) => {
           this.user = data.username;
+          authStore.setUser(data);
         })
         .catch((error) => {
           this.$router.push({ name: "Login" });
         });
     },
+    lobbyRedirect() {
+      this.$router.push({ name: "Lobby" });
+    },
     getTokenFromCookie() {
       const cookies = document.cookie.split(";");
 
       cookies.forEach((cookie) => {
-        if (cookie.startsWith("token=")) {
-          this.saveToken(cookie);
+        if (cookie.trimStart().startsWith("token=")) {
+          this.saveToken(cookie.trimStart());
         }
       });
     },

@@ -23,6 +23,20 @@ var routes = [
 		component: () => import('../views/Community.vue')
 	},
 	
+	,	
+	,
+	{
+		path: '/lobby',
+		name: 'Lobby',
+		component: () => import('../views/Lobby.vue')
+	}
+	,
+	{
+		path: '/pong',
+		name: 'Pong',
+		component: () => import('../views/Pong.vue')
+	}
+
 ];
 
 const router = createRouter({

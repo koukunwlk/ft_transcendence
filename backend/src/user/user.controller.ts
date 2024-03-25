@@ -7,6 +7,7 @@ import {
   UseGuards,
   Req,
   Patch,
+  HttpException,
 } from '@nestjs/common';
 import { UserService } from './service/user.service';
 import { CreateUserDTO } from './dto/create-user.dto';
@@ -23,16 +24,25 @@ export class UserController {
     return await this.userService.insertUser(createUser);
   }
 
-  @Get() 
+
+  @Get('list')
   async getUsers() {
-    const users = await this.userService.getUserList();
-    return users.map(user => user.toJson());
+    try {
+      const users = await this.userService.getUserList();
+      return users.map((user) => user.toJson());
+    } catch (error) {
+      throw new HttpException(error.response, error.status);
+    }
   }
 
   @Get('me')
   async me(@Req() req: any): Promise<string> {
-    const user = await this.userService.getUserById(req.user.id);
-    return user.toJson();
+    try {
+      const user = await this.userService.getUserById(req.user.id);
+      return user.toJson();
+    } catch (error) {
+      throw new HttpException(error.response, error.status);
+    }
   }
 
   @Patch("status")
@@ -42,6 +52,10 @@ export class UserController {
 
   @Get(':nickname')
   async getUser(@Param('nickname') nickname: string) {
-    return await this.userService.getUserByNickname(nickname);
+    try {
+      return await this.userService.getUserByNickname(nickname);
+    } catch (error) {
+      throw new HttpException(error.response, error.status);
+    }
   }
 }

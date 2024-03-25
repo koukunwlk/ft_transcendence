@@ -14,7 +14,7 @@ export class UserTypeOrmRepository implements UserRepository {
 
   async findOne(options: Partial<UserProps>): Promise<User> {
     const user = await this.userRepository.findOne({
-      where: { username: options.username },
+      where: { ...options },
     });
 
     if (user) {
