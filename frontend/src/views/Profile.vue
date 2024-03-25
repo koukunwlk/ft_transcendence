@@ -9,6 +9,7 @@ import { useProfilePictureStore } from '../stores/profilePictureStore.ts';
 import { ProfileService } from '../services/ProfileService.ts';
 import LastMatches from "../components/LastMatches.vue";
 import Ranking from '../components/Ranking.vue';
+import Achievements from '../components/Achievements.vue'
 import { onBeforeMount, ref } from 'vue';
 
 export default {
@@ -18,7 +19,8 @@ export default {
 		Avatar,
 		LastMatches,
 		UserStatus,
-		Ranking
+		Ranking,
+		Achievements
 	},
 	data() {
 		return {
@@ -120,14 +122,7 @@ export default {
 						</select>
 					</p>
 				</div>
-
-				<div
-					class="flex flex-wrap p-1 h-20 w-48 md:h-24 2xl:h-28 md:w-64 lg:w-80 absolute bottom-6 left-40 md:left-44 xl:left-52 2xl:left-64">
-					<div v-for="(item, index) in 10" :key="index"
-						class="w-1/6 h-1/2 border flex items-center justify-center">
-						<img src="../assets/images/medal.png" alt="medal" class="h-5/6">
-					</div>
-				</div>
+				<Achievements/>
 			</div>
 			<div
 				class="flex justify-content items-center text-white text-xs md:text-base lg:text-lg xl:text-xl 2xl:text-2xl font-light h-8">
