@@ -6,16 +6,19 @@ import { FriendListModule } from './friend-list/friend-list.module';
 import { AuthModule } from './auth/auth.module'
 import { MatchHistoryModule } from './match-history/match-history.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { LobbyModule } from './lobby/lobby.module';
+import { AppService } from './app.service';
+import { AppController } from './app.controller'
 @Module({
   imports: [
     UserModule,
     FriendListModule,
-    AuthModule,
+    AuthModule, LobbyModule,
     TypeOrmModule.forRoot(typeOrmConfig),
     MatchHistoryModule,
     EventEmitterModule.forRoot()
   ],
-  controllers: [],
-  providers: [],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule { }

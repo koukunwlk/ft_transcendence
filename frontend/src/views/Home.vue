@@ -1,6 +1,7 @@
 <template>
   <div class="justify-center flex bg-yellow-300 items-center h-screen">
     <div class="text-4xl">Hello 👋🏼 {{ user }}</div>
+    <button @click="lobbyRedirect">Lobby</button>
   </div>
 </template>
 
@@ -28,17 +29,21 @@ export default {
         .me()
         .then(({ data }) => {
           this.user = data.username;
+          authStore.setUser(data);
         })
         .catch((error) => {
           this.$router.push({ name: "Login" });
         });
     },
+    lobbyRedirect() {
+      this.$router.push({ name: "Lobby" });
+    },
     getTokenFromCookie() {
       const cookies = document.cookie.split(";");
 
       cookies.forEach((cookie) => {
-        if (cookie.startsWith("token=")) {
-          this.saveToken(cookie);
+        if (cookie.trimStart().startsWith("token=")) {
+          this.saveToken(cookie.trimStart());
         }
       });
     },

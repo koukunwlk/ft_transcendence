@@ -7,6 +7,7 @@ import {
   Injectable,
   HttpException,
   HttpStatus,
+  NotFoundException,
 } from '@nestjs/common';
 import { UserRepository } from '../repository/user.repository';
 import { User } from '../domain/model/user.model';
@@ -34,7 +35,13 @@ export class UserService {
   }
 
   async getUserByNickname(nickname: string): Promise<User> {
-    return await this.userRepository.findOne({ nickname });
+    const user = await this.userRepository.findOne({ nickname });
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return user;
   }
 
   async getUserById(id: string): Promise<User> {
