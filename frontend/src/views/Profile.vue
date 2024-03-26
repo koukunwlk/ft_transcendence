@@ -78,7 +78,7 @@ export default {
 
 <template>
 	<div class="flex h-full md:h-6/6 justify-center">
-		<div class="relative h-full w-full md:w-3/5 bg-opacity-30 rounded-lg border border-zinc-600 text-white">
+		<div class="relative h-max w-full md:w-3/5 bg-opacity-30 rounded-lg border border-zinc-600 text-white">
 			<button class="absolute z-10 top-2 right-2 flex w-6 h-6" @click="openSettings">
 				<img class="h-6 w-6 lg:h-7 lg:w-7 xl:w-8 xl:h-8 2xl:w-9 2xl:h-9" src="../assets/svgs/settings.svg"
 					alt="settings icon">
@@ -133,6 +133,7 @@ export default {
 				</button>
 			</div>
 			<div
+				class="mb-4"
 				v-if="activeTab === 0">
 				<Ranking/>
 			</div>
