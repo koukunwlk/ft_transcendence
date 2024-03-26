@@ -91,7 +91,7 @@ export default {
 				<div class="flex items-end mb-6 ml-3 md:ml-4 lg:ml-5 xl:ml-6 2xl:ml-7">
 					<div class="relative w-32 h-32 md:w-36 md:h-36 xl:w-40 xl:h-40 2xl:w-52 2xl:h-52">
 						<img v-if="picture.getPicture" :src="picture.getPicture" alt="profile picture"
-							class="rounded-full object-cover">
+							class="w-full h-full rounded-full object-cover">
 						<img v-else src="../assets/profile-pictures/default-5.png" alt="default picture"
 							class="rounded-full object-cover">
 						<PicUpload/>
