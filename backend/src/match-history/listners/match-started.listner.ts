@@ -15,8 +15,8 @@ export class MatchStartedListner {
     @OnEvent('match-started')
     handleMatchStartedEvent(match: MatchStartedEvent, matchId: string) {
         const newMatch = new MatchHistory({
-            playerOneId: match.playerOneId,
-            playerTwoId: match.playerTwoId,
+            playerOne: {id: match.playerOneId},
+            playerTwo: {id: match.playerTwoId},
             matchType: match.matchType,
             playerOneGoalsCount: match.playerOneGoals,
             playerTwoGoalsCount: match.playerTwoGoals

@@ -15,8 +15,8 @@ export class MatchEndedListner {
     @OnEvent('match-ended')
     handleMatchEndedEvent(match: MatchEndedEvent, matchId: string) {
         const endedMatch = new MatchHistory({
-            playerOneId: match.playerOneId,
-            playerTwoId: match.playerTwoId,
+            playerOne: {id: match.playerOneId},
+            playerTwo: {id: match.playerTwoId},
             matchType: match.matchType,
             playerOneGoalsCount: match.playerOneGoalsCount,
             playerTwoGoalsCount: match.playerTwoGoalsCount,
