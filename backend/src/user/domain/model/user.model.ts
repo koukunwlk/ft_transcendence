@@ -61,4 +61,12 @@ export class User extends Model<UserProps> {
   setStatus(status: UserStatusEnum) {
     this.props.status = status;
   }
+
+  toMatchHistory() {
+    return {
+      id: this.id,
+      username: this.props.username,
+      nickname: this.props.nickname,
+    };
+  }
 }

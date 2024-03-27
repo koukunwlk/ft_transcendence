@@ -1,15 +1,21 @@
 import { Model } from "@/common/domain/model/model";
 
+type MatchPlayer = {
+    id: string;
+    username?: string;
+    nickname?: string;
+}
+
 export type MatchHistoryType = {
-    playerOneId: string;
+    playerOne: MatchPlayer;
     playerOneGoalsCount?: number;
-    playerTwoId: string;
+    playerTwo: MatchPlayer;
     playerTwoGoalsCount?: number;
     winnerId?: string;
     matchType?: string;
     matchDuration?: string;
-    createdAt?: string;
-    updatedAt?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 export class MatchHistory extends Model<MatchHistoryType> {
@@ -23,16 +29,12 @@ export class MatchHistory extends Model<MatchHistoryType> {
         return this.id;
     }
 
-    getPlayerOneId(): string {
-        return this.props.playerOneId;
-    }
-
     getPlayerOneGoalsCount(): number {
         return this.props.playerOneGoalsCount;
     }
 
-    getPlayerTwoId(): string {
-        return this.props.playerTwoId;
+    getPlayerOne(): MatchPlayer {
+        return this.props.playerOne;
     }
 
     getPlayerTwoGoalsCount(): number {
@@ -51,24 +53,24 @@ export class MatchHistory extends Model<MatchHistoryType> {
         return this.props.matchDuration;
     }
 
-    getCreatedAt(): string {
+    getCreatedAt(): Date {
         return this.props.createdAt;
     }
 
-    getUpdatedAt(): string {
+    getUpdatedAt(): Date {
         return this.props.updatedAt;
     }
 
-    setPlayerOneId(playerOneId: string): void {
-        this.props.playerOneId = playerOneId;
+    setPlayerOne(matchPlayer: MatchPlayer): void {
+        this.props.playerOne = matchPlayer;
     }
 
     setPlayerOneGoalsCount(playerOneGoalsCount: number): void {
         this.props.playerOneGoalsCount = playerOneGoalsCount;
     }
 
-    setPlayerTwoId(playerTwoId: string): void {
-        this.props.playerTwoId = playerTwoId;
+    setPlayerTwo(matchPlayer: MatchPlayer): void {
+        this.props.playerTwo = matchPlayer;
     }
 
     setPlayerTwoGoalsCount(playerTwoGoalsCount: number): void {
@@ -87,11 +89,11 @@ export class MatchHistory extends Model<MatchHistoryType> {
         this.props.matchDuration = matchDuration;
     }
 
-    setCreatedAt(createdAt: string): void {
+    setCreatedAt(createdAt: Date): void {
         this.props.createdAt = createdAt;
     }
 
-    setUpdatedAt(updatedAt: string): void {
+    setUpdatedAt(updatedAt: Date): void {
         this.props.updatedAt = updatedAt;
     }
 }

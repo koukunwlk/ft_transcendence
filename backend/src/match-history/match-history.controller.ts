@@ -15,8 +15,8 @@ export class MatchHistoryController {
 
     @Get("me")
     async getMyMatches(@Req() req: any){
-        console.log("user ", req.user)
-        return await this.matchHistoryService.findAllByPlayerId(req.user.id);
+        const matches = await this.matchHistoryService.findAllByPlayerId(req.user.id);
+        return matches.map(match => match.toJson());
     }
 
     @Get("matches/:playerId")
