@@ -10,6 +10,7 @@ import { ProfileService } from '../services/ProfileService.ts';
 import LastMatches from "../components/LastMatches.vue";
 import Ranking from '../components/Ranking.vue';
 import Achievements from '../components/Achievements.vue'
+import Settings from '../components/Settings.vue'
 import { onBeforeMount, ref } from 'vue';
 
 export default {
@@ -20,13 +21,14 @@ export default {
 		LastMatches,
 		UserStatus,
 		Ranking,
-		Achievements
+		Achievements,
+		Settings
 	},
 	data() {
 		return {
 			tabs: ['Ranking', 'Last Matches'],
 			activeTab: 0,
-			isOpenSettings: false,
+			showSettingsModal: false,
 			profileUser: null,
 			picture: useProfilePictureStore(),
 			profileService: new ProfileService(),
@@ -51,8 +53,8 @@ export default {
 			this.activeTab = index;
 		},
 		openSettings() {
-			this.isOpenSettings = true;
-			console.log(this.isOpenSettings);
+			this.showSettingsModal = true;
+			console.log(this.showSettingsModal);
 		},
 		// toggleDropdown() {
 		// 	console.log(this.showDropdown);
@@ -83,6 +85,9 @@ export default {
 				<img class="h-6 w-6 lg:h-7 lg:w-7 xl:w-8 xl:h-8 2xl:w-9 2xl:h-9" src="../assets/svgs/settings.svg"
 					alt="settings icon">
 			</button>
+			<div v-if="showSettingsModal">
+				<Settings/>
+			</div>
 			<button class="absolute z-10 top-2 left-2 flex w-6 h-6" @click="goHome">
 				<img class="h-6 w-6 lg:h-7 lg:w-7 xl:w-8 xl:h-8 2xl:w-9 2xl:h-9" src="../assets/svgs/home.svg"
 					alt="home icon">
