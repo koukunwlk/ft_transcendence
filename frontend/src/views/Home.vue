@@ -1,9 +1,9 @@
 <template>
 	<Navbar />
-	<div class="flex h-full justify-center items-center">
+	<div class="flex h-full justify-center items-center border-4">
 		<div class="justify-center flex bg-yellow-300 items-center h-screen">
 			<div class="text-4xl">Hello 👋🏼 {{ user }}</div>
-    		<button @click="lobbyRedirect">Lobby</button>
+			<button @click="lobbyRedirect">Lobby</button>
 		</div>
 		<div class="flex flex-col justify-center items-center h-full w-full md:flex-row">
 			<div class="">
@@ -30,6 +30,7 @@
 				</button>
 			</div>
 		</div>
+		<FriendList />
 	</div>
 	<!-- <div class="grid grid-cols-2 w-screen h-screen justify-center content-center">
 		<div class="grid sm:h-96">
@@ -66,49 +67,53 @@ import { useAuthStore } from "../stores/authStore";
 import { ref } from "vue";
 import Navbar from "../components/Navbar.vue";
 import { useRouter } from "vue-router";
+import FriendList from "../components/FriendList.vue";
 
 const authStore = useAuthStore();
 
 export default {
-  name: "Home",
-  data() {
-    return {
-      user: ref(""),
-    };
-  },
-  mounted() {
-    this.getTokenFromCookie();
-    this.getLoggedUser();
-  },
-  methods: {
-    getLoggedUser() {
-      userService
-        .me()
-        .then(({ data }) => {
-          this.user = data.username;
-          authStore.setUser(data);
-        })
-        .catch((error) => {
-          this.$router.push({ name: "Login" });
-        });
-    },
-    lobbyRedirect() {
-      this.$router.push({ name: "Lobby" });
-    },
-    getTokenFromCookie() {
-      const cookies = document.cookie.split(";");
+	name: "Home",
+	data() {
+		return {
+			user: ref(""),
+		};
+	},
+	mounted() {
+		this.getTokenFromCookie();
+		this.getLoggedUser();
+	},
+	components: {
+		FriendList,
+	},
+	methods: {
+		getLoggedUser() {
+			userService
+				.me()
+				.then(({ data }) => {
+					this.user = data.username;
+					authStore.setUser(data);
+				})
+				.catch((error) => {
+					this.$router.push({ name: "Login" });
+				});
+		},
+		lobbyRedirect() {
+			this.$router.push({ name: "Lobby" });
+		},
+		getTokenFromCookie() {
+			const cookies = document.cookie.split(";");
 
-      cookies.forEach((cookie) => {
-        if (cookie.trimStart().startsWith("token=")) {
-          this.saveToken(cookie.trimStart());
-        }
-      });
-    },
-    saveToken(tokenCookie) {
-      const token = tokenCookie.substring(6);
-      authStore.setToken(token);
-    },
-  },
+			cookies.forEach((cookie) => {
+				if (cookie.trimStart().startsWith("token=")) {
+					this.saveToken(cookie.trimStart());
+				}
+			});
+		},
+		saveToken(tokenCookie) {
+			const token = tokenCookie.substring(6);
+			authStore.setToken(token);
+		},
+	},
 };
 
 const router = useRouter();
