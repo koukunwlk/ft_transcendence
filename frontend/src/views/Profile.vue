@@ -30,7 +30,7 @@ export default {
 			profileUser: null,
 			picture: useProfilePictureStore(),
 			profileService: new ProfileService(),
-			showDropdown: false,
+			// showDropdown: false,
 			loadingPage: true,
 		}
 	},
@@ -54,10 +54,10 @@ export default {
 			this.isOpenSettings = true;
 			console.log(this.isOpenSettings);
 		},
-		toggleDropdown() {
-			console.log(this.showDropdown);
-			this.showDropdown = !this.showDropdown;
-		},
+		// toggleDropdown() {
+		// 	console.log(this.showDropdown);
+		// 	this.showDropdown = !this.showDropdown;
+		// },
 		updateStatus() {
 			const oldStatus = this.profileUser.status;
 			this.profileService.updateStatus(Number(this.selectedStatus)).then((response) => {
@@ -68,9 +68,9 @@ export default {
 					console.error("Error updating status:", e);
 					this.profileUser.status = oldStatus;
 				})
-				.finally(() => {
-					this.showDropdown = false;
-				});
+				// .finally(() => {
+				// 	this.showDropdown = false;
+				// });
 		},
 	}
 }
@@ -107,18 +107,16 @@ export default {
 				</div>
 				<div class="flex justify-center">
 					<p
-						class="mt-14 lg:mt-16 xl:mt-20 text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-xl ml-1 relative">
+						class="relative flex flex-row mt-14 lg:mt-16 xl:mt-20 text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-xl ml-1">
 						<UserStatus :status="profileUser ? profileUser.status : 0" />
-						<img src="../assets/svgs/down-arrow.svg" alt="arrow down" class="w-4 cursor-pointer ml-2"
-							@click="toggleDropdown">
 						<select v-model="selectedStatus" @change="updateStatus"
-							class="block w-auto absolute top-0 left-0 z-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-							v-show="showDropdown">
-							<option value="0">Offline</option>
-							<option value="1">Online</option>
-							<option value="2">Invisible</option>
-							<option value="3">AFK</option>
-							<option value="4">In Game</option>
+							class="w-1 h-1 p-2 ml-1 md:mt-1 lg:mt-1.5 z-10 bg-transparent text-sm rounded-lg text-white"
+							>
+							<option class="bg-gray-700" value="0">Offline</option>
+							<option class="bg-gray-700" value="1">Online</option>
+							<option class="bg-gray-700" value="2">Invisible</option>
+							<option class="bg-gray-700" value="3">AFK</option>
+							<option class="bg-gray-700" value="4">In Game</option>
 						</select>
 					</p>
 				</div>
