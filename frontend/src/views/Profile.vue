@@ -138,117 +138,98 @@ export default {
 				<img class="h-6 w-6 lg:h-7 lg:w-7 xl:w-8 xl:h-8 2xl:w-9 2xl:h-9" src="../assets/svgs/home.svg"
 					alt="home icon">
 			</button>
-			<div class="flex">
-				<div class="relative flex flex-row h-52 md:h-56 lg:h-60 xl:h-64 2xl:h-72 grow">
-					<div class="flex items-end mb-6 ml-3 md:ml-4 lg:ml-5 xl:ml-6 2xl:ml-7">
-						<div class="relative w-32 h-32 md:w-36 md:h-36 xl:w-40 xl:h-40 2xl:w-52 2xl:h-52">
-							<img v-if="picture.getPicture" :src="picture.getPicture" alt="profile picture"
-								class="rounded-full object-cover">
-							<img v-else src="../assets/profile-pictures/default-5.png" alt="default picture"
-								class="rounded-full object-cover">
-							<PicUpload />
-						</div>
-						=======
-						<div class="relative flex flex-row h-52 md:h-56 lg:h-60 xl:h-64 2xl:h-72">
-							<div class="flex items-end mb-6 ml-3 md:ml-4 lg:ml-5 xl:ml-6 2xl:ml-7">
-								<div class="relative w-32 h-32 md:w-36 md:h-36 xl:w-40 xl:h-40 2xl:w-52 2xl:h-52">
-									<img v-if="picture.getPicture" :src="picture.getPicture" alt="profile picture"
-										class="w-full h-full rounded-full object-cover">
-									<img v-else src="../assets/profile-pictures/default-5.png" alt="default picture"
-										class="rounded-full object-cover">
-									<PicUpload />
-									>>>>>>> 24d1c39d1a896d36f1feede5571c9a9388622988
-								</div>
-								<div class="mt-14 lg:mt-16 xl:mt-20 ml-4">
-									<h3 class="md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl" title="nickname">
-										{{ profileUser ? profileUser.username : '' }}
-									</h3>
-									<h4 class="flex justify-end text-xs italic text-slate-300" title="intra nickname">
-										The {{ profileUser && profileUser.nickname ? profileUser.nickname :
-				'Unknown' }}
-									</h4>
-								</div>
-								<div class="flex justify-center">
-									<p
-										class="mt-14 lg:mt-16 xl:mt-20 text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-xl ml-1 relative">
-										<UserStatus :status="profileUser ? profileUser.status : 0" />
-										<img src="../assets/svgs/down-arrow.svg" alt="arrow down"
-											class="w-4 cursor-pointer ml-2" @click="toggleDropdown">
-										<select v-model="selectedStatus" @change="updateStatus"
-											class="block w-auto absolute top-0 left-0 z-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-											v-show="showDropdown">
-											<option value="0">Offline</option>
-											<option value="1">Online</option>
-											<option value="2">Invisible</option>
-											<option value="3">AFK</option>
-											<option value="4">In Game</option>
-										</select>
-									</p>
-								</div>
-								<Achievements />
-							</div>
-							<div class="flex flex-col px-14">
-								<table class="min-w-full divide-y text-yellow-500">
-									<tbody>
-										<tr class="border-b-2 border-yellow-500">
-											<th scope="row"
-												class="bg-transparent px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-												Total games
-											</th>
-											<td class="px-6 py-4 whitespace-nowrap">{{ this.userStats.totalGames
-												}}</td>
-										</tr>
-										<tr class="border-b-2 border-yellow-500">
-											<th scope="row"
-												class="bg-transparent px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-												Wins
-											</th>
-											<td class="px-6 py-4 whitespace-nowrap">{{ this.userStats.wins }}
-											</td>
-										</tr>
-										<tr class="border-b-2 border-yellow-500">
-											<th scope="row"
-												class="bg-transparent px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-												Loses
-											</th>
-											<td class="px-6 py-4 whitespace-nowrap">{{ this.userStats.loses }}
-											</td>
-										</tr>
-										<tr class="border-b-2 border-yellow-500">
-											<th scope="row"
-												class="bg-transparent px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-												Win Rate %
-											</th>
-											<td class="px-6 py-4 whitespace-nowrap">{{ this.userStats.winRate
-												}}%</td>
-										</tr>
-										<tr>
-											<th scope="row"
-												class="bg-transparent px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-												Rank
-											</th>
-											<td class="px-6 py-4 whitespace-nowrap"># {{ 1 }}</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-						<div
-							class="flex justify-content items-center text-white text-xs md:text-base lg:text-lg xl:text-xl 2xl:text-2xl font-light h-8">
-							<button v-for="(tab, index) in tabs" :key="index" class="flex-1 border-t-2 pt-3"
-								:class="{ 'font-bold border-yellow-500': activeTab === index, 'border-slate-700': activeTab !== index }"
-								@click="activateTab(index)">
-								{{ tab }}
-							</button>
-						</div>
-						<div class="mb-4" v-if="activeTab === 0">
-							<Ranking />
-						</div>
-						<div v-else="activeTab === 1" class="text-3xl text-yellow-500 pt-16 w-full">
-							<LastMatches :matches="matches" />
-						</div>
+			<div class="relative flex flex-row h-52 md:h-56 lg:h-60 xl:h-64 2xl:h-72 grow">
+				<div class="flex items-end mb-6 ml-3 md:ml-4 lg:ml-5 xl:ml-6 2xl:ml-7">
+					<div class="relative w-32 h-32 md:w-36 md:h-36 xl:w-40 xl:h-40 2xl:w-52 2xl:h-52">
+						<img v-if="picture.getPicture" :src="picture.getPicture" alt="profile picture"
+							class="w-full h-full rounded-full object-cover">
+						<img v-else src="../assets/profile-pictures/default-5.png" alt="default picture"
+							class="rounded-full object-cover">
+						<PicUpload />
 					</div>
 				</div>
+				<div class="mt-14 lg:mt-16 xl:mt-20 ml-4">
+					<h3 class="md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl" title="nickname">
+						{{ profileUser ? profileUser.username : '' }}
+					</h3>
+					<h4 class="flex justify-end text-xs italic text-slate-300" title="intra nickname">
+						The {{ profileUser && profileUser.nickname ? profileUser.nickname : 'Unknown' }}
+					</h4>
+				</div>
+				<div class="flex justify-center">
+					<p
+						class="relative flex flex-row mt-14 lg:mt-16 xl:mt-20 text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-xl ml-1">
+						<UserStatus :status="profileUser ? profileUser.status : 0" />
+						<select v-model="selectedStatus" @change="updateStatus"
+							class="w-1 h-1 p-2 ml-1 md:mt-1 lg:mt-1.5 z-10 bg-transparent text-sm rounded-lg text-white">
+							<option class="bg-gray-700" value="0">Offline</option>
+							<option class="bg-gray-700" value="1">Online</option>
+							<option class="bg-gray-700" value="2">Invisible</option>
+							<option class="bg-gray-700" value="3">AFK</option>
+							<option class="bg-gray-700" value="4">In Game</option>
+						</select>
+					</p>
+				</div>
+				<Achievements />
+			</div>
+			<div class="absolute top-0 right-0 px-14">
+				<table class="min-w-full divide-y text-yellow-500">
+					<tbody>
+						<tr class="border-b-2 border-yellow-500">
+							<th scope="row"
+								class="bg-transparent px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								Total games
+							</th>
+							<td class="px-6 py-4 whitespace-nowrap">{{ this.userStats.totalGames
+								}}</td>
+						</tr>
+						<tr class="border-b-2 border-yellow-500">
+							<th scope="row"
+								class="bg-transparent px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								Wins
+							</th>
+							<td class="px-6 py-4 whitespace-nowrap">{{ this.userStats.wins }}
+							</td>
+						</tr>
+						<tr class="border-b-2 border-yellow-500">
+							<th scope="row"
+								class="bg-transparent px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								Loses
+							</th>
+							<td class="px-6 py-4 whitespace-nowrap">{{ this.userStats.loses }}
+							</td>
+						</tr>
+						<tr class="border-b-2 border-yellow-500">
+							<th scope="row"
+								class="bg-transparent px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								Win Rate %
+							</th>
+							<td class="px-6 py-4 whitespace-nowrap">{{ this.userStats.winRate
+								}}%</td>
+						</tr>
+						<tr>
+							<th scope="row"
+								class="bg-transparent px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								Rank
+							</th>
+							<td class="px-6 py-4 whitespace-nowrap"># {{ 1 }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div
+				class="flex justify-content items-center text-white text-xs md:text-base lg:text-lg xl:text-xl 2xl:text-2xl font-light h-8">
+				<button v-for="(tab, index) in tabs" :key="index" class="flex-1 border-t-2 pt-3"
+					:class="{ 'font-bold border-yellow-500': activeTab === index, 'border-slate-700': activeTab !== index }"
+					@click="activateTab(index)">
+					{{ tab }}
+				</button>
+			</div>
+			<div class="mb-4" v-if="activeTab === 0">
+				<Ranking />
+			</div>
+			<div v-else="activeTab === 1" class="text-3xl text-yellow-500 pt-16 w-full">
+				<LastMatches :matches="matches" />
 			</div>
 		</div>
 	</div>
