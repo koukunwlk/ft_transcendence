@@ -29,6 +29,7 @@ export default {
 	data() {
 		return {
 			tabs: ['Ranking', 'Last Matches'],
+			stats: ['Total games', 'Wins', 'Loses', 'Win Rate %', 'Rank'],
 			activeTab: 0,
 			showSettingsModal: false,
 			profileUser: null,
@@ -37,6 +38,7 @@ export default {
 				wins: 0,
 				loses: 0,
 				winRate: 0,
+				rank: 0,
 			},
 			matchService: new MatchService(),
 			picture: useProfilePictureStore(),
@@ -46,6 +48,15 @@ export default {
 			matches: [],
 			// showDropdown: false,
 			loadingPage: true,
+		}
+	},
+	computed: {
+		combinedPair() {
+			const userStatsArray = Object.values(this.userStats);
+			return this.stats.map((stat, index) => ({
+				stat: stat,
+				userStats: userStatsArray[index],
+			}));
 		}
 	},
 	beforeMount() {
@@ -173,46 +184,16 @@ export default {
 				<Achievements />
 			</div>
 			<div class="absolute top-0 right-0 px-14">
-				<table class="min-w-full divide-y text-yellow-500">
+				<table class="divide-y text-yellow-500">
 					<tbody>
-						<tr class="border-b-2 border-yellow-500">
+						<tr v-for="(pair, index) in combinedPair" :key="'pair_' + index">
 							<th scope="row"
-								class="bg-transparent px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-								Total games
+								class="bg-transparent pr-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								{{ pair.stat }}
 							</th>
-							<td class="px-6 py-4 whitespace-nowrap">{{ this.userStats.totalGames
-								}}</td>
-						</tr>
-						<tr class="border-b-2 border-yellow-500">
-							<th scope="row"
-								class="bg-transparent px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-								Wins
-							</th>
-							<td class="px-6 py-4 whitespace-nowrap">{{ this.userStats.wins }}
+							<td class="whitespace-nowrap">
+								{{ pair.userStats }}
 							</td>
-						</tr>
-						<tr class="border-b-2 border-yellow-500">
-							<th scope="row"
-								class="bg-transparent px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-								Loses
-							</th>
-							<td class="px-6 py-4 whitespace-nowrap">{{ this.userStats.loses }}
-							</td>
-						</tr>
-						<tr class="border-b-2 border-yellow-500">
-							<th scope="row"
-								class="bg-transparent px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-								Win Rate %
-							</th>
-							<td class="px-6 py-4 whitespace-nowrap">{{ this.userStats.winRate
-								}}%</td>
-						</tr>
-						<tr>
-							<th scope="row"
-								class="bg-transparent px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-								Rank
-							</th>
-							<td class="px-6 py-4 whitespace-nowrap"># {{ 1 }}</td>
 						</tr>
 					</tbody>
 				</table>
