@@ -1,15 +1,14 @@
 <template>
 	<div v-if="isOpen"
-		class="fixed z-10 inset-0 bg-gray-500 bg-opacity-75 backdrop-blur-sm flex justify-center items-center"
-		aria-labelledby="modal-title" role="dialog" aria-modal="true">
+		class="fixed z-10 inset-0 bg-gray-500 bg-opacity-75 backdrop-blur-sm flex justify-center items-center">
 		<div class="bg-white p-6 rounded-md w-full max-w-lg">
 			<div class="sm:flex sm:items-start">
 				<div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
 					<h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
 						{{ title }}
 					</h3>
-					<ul v-if="list" role="list" class="list-disc list-inside space-y-2 mt-4">
-						<li v-for="(item, index) in list" :key="index">
+					<ul v-if="list" class="space-y-2 mt-4">
+						<li class="list-none" v-for="(item, index) in list" :key="index">
 							{{ item.name }} te enviou uma notificação de amizade
 						</li>
 					</ul>
