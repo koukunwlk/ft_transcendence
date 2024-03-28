@@ -1,6 +1,6 @@
 <template>
   <div class="justify-center flex bg-yellow-300 items-center h-screen">
-    <div class="text-4xl">Hello 👋🏼 {{ user }}</div>
+    <div class="text-4xl">Hello 👋🏼 {{ username }}</div>
     <button @click="lobbyRedirect">Lobby</button>
   </div>
 </template>
@@ -16,7 +16,7 @@ export default {
   name: "Home",
   data() {
     return {
-      user: ref(""),
+      username: ref(""),
     };
   },
   mounted() {
@@ -28,7 +28,7 @@ export default {
       userService
         .me()
         .then(({ data }) => {
-          this.user = data.username;
+          this.username = data.username;
           authStore.setUser(data);
         })
         .catch((error) => {

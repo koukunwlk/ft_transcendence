@@ -1,7 +1,5 @@
 import { defineStore } from "pinia";
 
-const STORE_KEY = "user";
-
 interface User {
   nickname: string;
   token: null;
@@ -12,40 +10,37 @@ interface User {
   tfaSecret: string;
 }
 
-interface AuthState {
-  user: User | null;
-}
-
-const getUserLocalStorage = () => {
-  const user = localStorage.getItem(STORE_KEY);
-  return user ? JSON.parse(user) : null;
-};
-
 export const useAuthStore = defineStore("auth", {
   // state (propriedades reativas)
   state: () => ({
-    user: getUserLocalStorage(),
+    user: {},
     token: "",
   }),
 
   // actions (métodos)
   actions: {
-    setUser(user: AuthState["user"]) {
+    setUser(user: User) {
       this.user = user;
-      localStorage.setItem(STORE_KEY, JSON.stringify(this.user));
     },
     setToken(token: string) {
-        this.token = token;
+      this.token = token;
     },
     clearToken() {
-        this.token = '';
-    }
+      this.token = "";
+    },
+    clearUser() {
+      this.user = "";
+    },
+    clearStore() {
+      this.clearToken();
+      this.clearUser();
+    },
   },
 
   // getters (propriedades computadas)
   getters: {
-    getUser(): User | null {
-      return this.user;
+    getUser({ user }) {
+      return user;
     },
     getToken({ token }) {
       return token;
