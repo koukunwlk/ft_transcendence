@@ -30,15 +30,16 @@ export default {
 		return {
 			tabs: ['Ranking', 'Last Matches'],
 			stats: ['Total games', 'Wins', 'Loses', 'Win Rate %', 'Rank'],
+			statsKeys: ['totalGames', 'wins', 'loses', 'winRate', 'rank'],
 			activeTab: 0,
 			showSettingsModal: false,
 			profileUser: null,
 			userStats: {
 				totalGames: 0,
-				wins: 0,
-				loses: 0,
-				winRate: 0,
-				rank: 0,
+				wins: 1,
+				loses: 2,
+				winRate: 3,
+				rank: 4,
 			},
 			matchService: new MatchService(),
 			picture: useProfilePictureStore(),
@@ -48,15 +49,6 @@ export default {
 			matches: [],
 			// showDropdown: false,
 			loadingPage: true,
-		}
-	},
-	computed: {
-		combinedPair() {
-			const userStatsArray = Object.values(this.userStats);
-			return this.stats.map((stat, index) => ({
-				stat: stat,
-				userStats: userStatsArray[index],
-			}));
 		}
 	},
 	beforeMount() {
@@ -186,14 +178,12 @@ export default {
 			<div class="absolute top-0 right-0 px-14">
 				<table class="divide-y text-yellow-500">
 					<tbody>
-						<tr v-for="(pair, index) in combinedPair" :key="'pair_' + index">
+						<tr v-for="(stat, index) in stats" :key="index">
 							<th scope="row"
 								class="bg-transparent pr-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-								{{ pair.stat }}
+								{{ stat }}
 							</th>
-							<td class="whitespace-nowrap">
-								{{ pair.userStats }}
-							</td>
+							<td>{{ userStats[this.statsKeys[index]] }}</td>
 						</tr>
 					</tbody>
 				</table>
