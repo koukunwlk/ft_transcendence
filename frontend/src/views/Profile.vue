@@ -105,6 +105,10 @@ export default {
 			this.showSettingsModal = true;
 			console.log(this.showSettingsModal);
 		},
+		closeSettings() {
+			this.showSettingsModal = false;
+			console.log(this.showSettingsModal);
+		},
 		// toggleDropdown() {
 		// 	console.log(this.showDropdown);
 		// 	this.showDropdown = !this.showDropdown;
@@ -135,7 +139,7 @@ export default {
 					alt="settings icon">
 			</button>
 			<div v-if="showSettingsModal">
-				<Settings/>
+				<Settings @clickedButton="closeSettings"/>
 			</div>
 			<button class="absolute z-10 top-2 left-2 flex w-6 h-6" @click="goHome">
 				<img class="h-6 w-6 lg:h-7 lg:w-7 xl:w-8 xl:h-8 2xl:w-9 2xl:h-9" src="../assets/svgs/home.svg"
