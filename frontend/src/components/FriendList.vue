@@ -1,6 +1,6 @@
 <template>
     <div
-        class="flex flex-col bg-gray-600 items-center h-full w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 border-2 border-yellow-500 border-opacity-15 rounded bg-opacity-40 overflow-x-hidden">
+        class="flex flex-col bg-gray-600 items-center h-full w-full border-2 border-yellow-500 border-opacity-15 rounded bg-opacity-40 overflow-x-hidden">
         <div class="w-full my-2">
             <FriendListActions :friend="friend" :friendRequests="friendRequests" />
         </div>
