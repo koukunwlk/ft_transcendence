@@ -38,7 +38,7 @@ export default {
 				totalGames: 0,
 				wins: 1,
 				loses: 2,
-				winRate: 3,
+				winRate: 0,
 				rank: 4,
 			},
 			matchService: new MatchService(),
@@ -175,15 +175,18 @@ export default {
 				</div>
 				<Achievements />
 			</div>
-			<div class="absolute top-0 right-0 px-14">
-				<table class="divide-y text-yellow-500">
+			<div class="absolute right-0 xl:right-10 2xl:right-14 top-24 md:top-28 lg:top-16 xl:top-20 px-2 md:px-4">
+				<table>
 					<tbody>
-						<tr v-for="(stat, index) in stats" :key="index">
+						<tr v-for="(stat, index) in stats" :key="index"
+							class="text-xs md:text-sm lg:text-lg 2xl:text-xl text-yellow-500">
 							<th scope="row"
-								class="bg-transparent pr-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+								class="bg-transparent pr-2 lg:pr-4 xl:pr-6 3xl:pr-8 text-left text-gray-500 uppercase md:tracking-wider">
 								{{ stat }}
 							</th>
-							<td>{{ userStats[this.statsKeys[index]] }}</td>
+							<td>
+								{{ userStats[this.statsKeys[index]] }}
+							</td>
 						</tr>
 					</tbody>
 				</table>
