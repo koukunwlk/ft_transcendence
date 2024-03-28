@@ -1,10 +1,10 @@
 <template>
 	<Navbar />
 	<div class="flex h-full justify-center items-center border-4">
-		<div class="justify-center flex bg-yellow-300 items-center h-screen">
+		<!-- <div class="justify-center flex bg-yellow-300 items-center h-screen">
 			<div class="text-4xl">Hello 👋🏼 {{ user }}</div>
 			<button @click="lobbyRedirect">Lobby</button>
-		</div>
+		</div> -->
 		<div class="flex flex-col justify-center items-center h-full w-full md:flex-row">
 			<div class="">
 				<button
