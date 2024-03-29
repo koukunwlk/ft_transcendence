@@ -30,13 +30,13 @@ export default {
         .then(({ data }) => {
           this.username = data.username;
           authStore.setUser(data);
+          if (authStore.getUser.tfaEnabled && !authStore.getUser.tfaAuthenticated) {
+            this.$router.push({ name: "TFA" });
+          }
         })
         .catch((error) => {
           this.$router.push({ name: "Login" });
         });
-    },
-    lobbyRedirect() {
-      this.$router.push({ name: "Lobby" });
     },
     getTokenFromCookie() {
       const cookies = document.cookie.split(";");
@@ -50,6 +50,9 @@ export default {
     saveToken(tokenCookie) {
       const token = tokenCookie.substring(6);
       authStore.setToken(token);
+    },
+    lobbyRedirect() {
+      this.$router.push({ name: "Lobby" });
     },
   },
 };
