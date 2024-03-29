@@ -19,6 +19,7 @@ export type UserProps = {
   token?: string;
   tfaEnabled?: boolean;
   tfaSecret?: string;
+  tfaAuthenticated?: boolean;
 };
 
 export class User extends Model<UserProps> {
@@ -33,6 +34,7 @@ export class User extends Model<UserProps> {
       token,
       tfaEnabled,
       tfaSecret,
+      tfaAuthenticated,
     }: UserProps,
     id?: string,
   ) {
@@ -44,6 +46,7 @@ export class User extends Model<UserProps> {
     this.props.token = token;
     this.props.tfaEnabled = tfaEnabled;
     this.props.tfaSecret = tfaSecret;
+    this.props.tfaAuthenticated = tfaAuthenticated;
   }
 
   getUsername(): string {
@@ -84,5 +87,13 @@ export class User extends Model<UserProps> {
 
   setTfaSecret(tfaSecret: string) {
     this.props.tfaSecret = tfaSecret;
+  }
+
+  getTfaAuthenticated(): boolean {
+    return this.props.tfaAuthenticated;
+  }
+
+  setTfaAuthenticated(tfaAuthenticated: boolean) {
+    this.props.tfaAuthenticated = tfaAuthenticated;
   }
 }

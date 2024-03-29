@@ -39,7 +39,7 @@ export class AuthService {
   }
 
   private generateJwtToken(user: User): string {
-    console.log(user, `${process.env.NEST_API_JWT_SECRET}`);
+    // console.log(user, `${process.env.NEST_API_JWT_SECRET}`);
     return this.jwtService.sign(
       {
         id: user.id,
@@ -70,6 +70,8 @@ export class AuthService {
     if (!verify(code, user.getTfaSecret())) {
       throw new HttpException('Token is Invalid', HttpStatus.BAD_REQUEST);
     }
+
+    await this.userService.updateTfaAuthenticated(userId, true);
 
     return true;
   }

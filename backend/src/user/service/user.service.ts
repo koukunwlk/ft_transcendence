@@ -116,4 +116,20 @@ export class UserService {
     user.setTfaEnabled(true);
     return await this.userRepository.update(user);
   }
+
+  async updateTfaAuthenticated(
+    id: string,
+    tfaAuthenticated: boolean,
+  ): Promise<void> {
+    let user = await this.userRepository.findOne({
+      id,
+    });
+
+    if (!user) {
+      throw new HttpException('Invalid username', HttpStatus.BAD_REQUEST);
+    }
+
+    user.setTfaAuthenticated(tfaAuthenticated);
+    return await this.userRepository.update(user);
+  }
 }

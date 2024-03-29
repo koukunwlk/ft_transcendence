@@ -36,4 +36,7 @@ export class UserEntity {
 
   @Column({ nullable: true })
   tfaSecret: string;
+
+  @Column({ nullable: true })
+  tfaAuthenticated: boolean;
 }
