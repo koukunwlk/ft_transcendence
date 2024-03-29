@@ -39,9 +39,8 @@ export default {
                     <img class="h-6 w-6" src="../assets/svgs/x-icon.svg" alt="close modal icon">
                 </button>
             </div>
-            <div class="flex justify-start items-center ml-4 md:ml-6 xl:ml-8 2xl:ml-12"">
-                <img class="mr-3 h-6 w-6 lg:h-7 lg:w-7 xl:w-8 xl:h-8 2xl:w-9 2xl:h-9" src="../assets/svgs/settings.svg"
-                alt="settings icon">
+            <div class="flex justify-start items-center ml-4 md:ml-6 xl:ml-8 2xl:ml-12">
+                <img class="mr-3 h-6 w-6 lg:h-7 lg:w-7 xl:w-8 xl:h-8 2xl:w-9 2xl:h-9" src="../assets/svgs/settings.svg" alt="settings icon">
                 <h1 class="flex flex-row justify-center text-3xl lg:text-4xl uppercase">
                     Settings
                 </h1>
