@@ -1,19 +1,16 @@
 import {
   Post,
   Body,
-  Patch,
   Controller,
   Get,
   UseGuards,
   Req,
   Res,
-  HttpStatus,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { FortyTwoAuthGuard } from './42-auth/42.guards';
 import { JwtAuthGuard } from './jwt-auth/jwt-auth.guard';
 import { Response } from 'express';
-import { UserService } from '../user/service/user.service';
 import { config } from 'dotenv';
 
 config({ path: '../../../.env' });
@@ -22,7 +19,6 @@ config({ path: '../../../.env' });
 export class AuthController {
   constructor(
     private authService: AuthService,
-    private userService: UserService,
   ) {}
 
   @Get('42/callback')
@@ -39,11 +35,25 @@ export class AuthController {
     return res.redirect(process.env.HOST_FRONT);
   }
 
+  @Post('generate-2fa')
+  @UseGuards(JwtAuthGuard)
+  async generateTfaSecret(@Req() req) {
+    return await this.authService.generateTfaSecret(req.user.id);
+  }
+
   @Post('verify-2fa')
-  async verifyTfaSecret(@Req() req, @Body() body): Promise<void> {
-    return this.authService.verifyTfaSecret(
-      await this.userService.getUser('acosta-a'),
-      body.code,
-    );
+  @UseGuards(JwtAuthGuard)
+  async verifyTfaSecret(
+    @Req() req,
+    @Res() res: Response,
+    @Body() body,
+  ): Promise<Response> {
+    try {
+      await this.authService.verifyTfaSecret(req.user.id, body.code);
+
+      return res.status(200).send();
+    } catch (error) {
+      return res.status(error.status).send(error.response);
+    }
   }
 }
