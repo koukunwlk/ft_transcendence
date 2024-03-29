@@ -1,7 +1,4 @@
 import {
-  Req,
-  Res,
-  Post,
   BadRequestException,
   Inject,
   Injectable,
@@ -100,6 +97,23 @@ export class UserService {
     }
 
     user.setToken(token);
+    return await this.userRepository.update(user);
+  }
+
+  async updateUserTfaSecret(
+    username: string,
+    tfaSecret: string,
+  ): Promise<void> {
+    let user = await this.userRepository.findOne({
+      username,
+    });
+
+    if (!user) {
+      throw new HttpException('Invalid username', HttpStatus.BAD_REQUEST);
+    }
+
+    user.setTfaSecret(tfaSecret);
+    user.setTfaEnabled(true);
     return await this.userRepository.update(user);
   }
 }
