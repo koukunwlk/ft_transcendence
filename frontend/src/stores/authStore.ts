@@ -29,7 +29,7 @@ export const useAuthStore = defineStore("auth", {
       this.token = "";
     },
     clearUser() {
-      this.user = "";
+      this.user = {};
     },
     clearStore() {
       this.clearToken();
