@@ -38,6 +38,10 @@ export class AuthService {
     return;
   }
 
+  async logout(userId: string): Promise<void> {
+    return await this.userService.logoutUser(userId);
+  }
+
   private generateJwtToken(user: User): string {
     // console.log(user, `${process.env.NEST_API_JWT_SECRET}`);
     return this.jwtService.sign(

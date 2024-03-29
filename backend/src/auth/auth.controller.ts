@@ -17,9 +17,7 @@ config({ path: '../../../.env' });
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private authService: AuthService,
-  ) {}
+  constructor(private authService: AuthService) {}
 
   @Get('42/callback')
   @UseGuards(FortyTwoAuthGuard)
@@ -29,10 +27,12 @@ export class AuthController {
   }
 
   @Get('logout')
-  async logout(@Req() req: any, @Res() res: Response): Promise<void> {
+  @UseGuards(JwtAuthGuard)
+  async logout(@Req() req: any, @Res() res: Response): Promise<Response> {
+    await this.authService.logout(req.user.id);
     res.clearCookie('token');
     res.status(200).send({ message: 'Logout sucessful' });
-    return res.redirect(process.env.HOST_FRONT);
+    return res;
   }
 
   @Post('generate-2fa')
