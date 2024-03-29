@@ -89,6 +89,7 @@ export default {
     renderGame() {
       this.renderPaddle();
       this.initBall();
+
       requestAnimationFrame(() => this.renderGame());
     },
     movePlayer(event) {
