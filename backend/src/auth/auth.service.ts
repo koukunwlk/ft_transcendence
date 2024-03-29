@@ -4,12 +4,11 @@ import {
   Injectable,
   Req,
   Res,
-  Inject,
 } from '@nestjs/common';
 import { UserService } from '../user/service/user.service';
 import { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
-import { verify } from '2fa-util';
+import { generateSecret, verify } from '2fa-util';
 import { User } from '@/user/domain/model/user.model';
 
 @Injectable()
@@ -39,8 +38,12 @@ export class AuthService {
     return;
   }
 
+  async logout(userId: string): Promise<void> {
+    return await this.userService.logoutUser(userId);
+  }
+
   private generateJwtToken(user: User): string {
-    console.log(user, `${process.env.NEST_API_JWT_SECRET}`);
+    // console.log(user, `${process.env.NEST_API_JWT_SECRET}`);
     return this.jwtService.sign(
       {
         id: user.id,
@@ -50,15 +53,30 @@ export class AuthService {
     );
   }
 
-  async verifyTfaSecret(id: string, code: string): Promise<void> {
-    const user = await this.userService.getUser('acosta-a');
+  async generateTfaSecret(userId: string) {
+    const user = await this.userService.getUserById(userId);
+    const mfaSecret = await generateSecret(user.id, 'Pong');
 
-    if (!(await verify(code, user.props.tfaSecret))) {
+    await this.userService.updateUserTfaSecret(
+      user.getUsername(),
+      mfaSecret.secret,
+    );
+
+    return {
+      secret: mfaSecret.secret,
+      qr_code_url: mfaSecret.qrcode,
+    };
+  }
+
+  async verifyTfaSecret(userId: string, code: string): Promise<boolean> {
+    const user = await this.userService.getUserById(userId);
+
+    if (!verify(code, user.getTfaSecret())) {
       throw new HttpException('Token is Invalid', HttpStatus.BAD_REQUEST);
-    } else {
-      console.log('Valid Token');
     }
 
-    const isCodeValid = user.getValidation();
+    await this.userService.updateTfaAuthenticated(userId, true);
+
+    return true;
   }
 }
