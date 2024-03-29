@@ -131,8 +131,7 @@ export default {
 	<div class="flex h-full md:h-6/6 justify-center">
 		<div class="relative h-max w-full md:w-3/5 bg-opacity-30 rounded-lg border border-zinc-600 text-white">
 			<button class="absolute z-10 top-2 right-2 flex w-6 h-6" @click="openCloseSettings">
-				<img class="h-6 w-6 lg:h-7 lg:w-7 xl:w-8 xl:h-8 2xl:w-9 2xl:h-9" src="../assets/svgs/settings.svg"
-					alt="settings icon">
+				<img class="h-6 w-6 lg:h-7 lg:w-7 xl:w-8 xl:h-8 2xl:w-9 2xl:h-9" src="../assets/svgs/settings.svg" alt="settings icon">
 			</button>
 			<div v-if="showSettingsModal">
 				<Settings @clickedButton="openCloseSettings"/>
@@ -153,10 +152,10 @@ export default {
 				</div>
 				<div class="mt-14 lg:mt-16 xl:mt-20 ml-4">
 					<h3 class="md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl" title="nickname">
-						{{ profileUser ? profileUser.username : '' }}
+						The {{ profileUser && profileUser.nickname ? profileUser.nickname : 'Unknown' }}
 					</h3>
 					<h4 class="flex justify-end text-xs italic text-slate-300" title="intra nickname">
-						The {{ profileUser && profileUser.nickname ? profileUser.nickname : 'Unknown' }}
+						{{ profileUser ? profileUser.username : '' }}
 					</h4>
 				</div>
 				<div class="flex justify-center">
