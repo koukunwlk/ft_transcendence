@@ -7,11 +7,12 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { FriendListTypeormEntity } from "./repository/entities/friend-list-typeorm.entity";
 import { friendRequestRepositoryProvider } from "./repository/friend-request.respository.provider";
 import { FriendRequestTypeormEntity } from "./repository/entities/friend-request-typeorm.entity";
+import { JwtService } from "@nestjs/jwt";
 
 @Module({
     imports: [UserModule, TypeOrmModule.forFeature([FriendListTypeormEntity, FriendRequestTypeormEntity])],
     controllers: [FriendListController],
-    providers: [friendListRepositoryProvider, friendRequestRepositoryProvider, FriendListService],
+    providers: [friendListRepositoryProvider, friendRequestRepositoryProvider, FriendListService, JwtService],
     exports: []
 })
 export class FriendListModule { }

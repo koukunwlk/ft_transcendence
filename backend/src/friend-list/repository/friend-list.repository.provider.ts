@@ -1,8 +1,8 @@
 import { ClassProvider } from "@nestjs/common";
 import { FriendListRepository } from "./friend-list.respository";
-import { FriendRequestTypeormRepository } from "./friend-request-typeorm.respository";
+import { FriendListTypeormRepository } from "./friend-list-typeorm.repository";
 
 export const friendListRepositoryProvider: ClassProvider = {
-    useClass: FriendRequestTypeormRepository,
+    useClass: FriendListTypeormRepository,
     provide: FriendListRepository,
 }

@@ -1,10 +1,18 @@
 import { useAuthStore } from "../stores/authStore";
-import axios from "axios";
+import axios, { AxiosInstance } from "axios";
 
 export class FriendService {
 	private authStore = useAuthStore();
 	private token: string;
+	private friendListClient: AxiosInstance
 	constructor() {
+		this.friendListClient = axios.create({
+			baseURL: "http://localhost:3000/friend-controller/",
+			headers: {
+				Authorization: `Bearer ${this.authStore.token}`,
+				token: this.authStore.token,
+			},
+		});
 		const cookies = document.cookie.split(";");
 		cookies.forEach((cookie) => {
 			if (cookie.startsWith("token=")) {
@@ -14,36 +22,28 @@ export class FriendService {
 		this.token = this.authStore.token;
 	}
 
-	me() {
-		return axios.get("http://localhost:3000/user/me", {
-			headers: {
-				Authorization: `Bearer ${this.token}`,
-				token: this.token,
-			},
+	getReceivedFriendRequests() {
+		return this.friendListClient.get("received-friend-requests/");
+	}
+
+	getSendedFriendRequests() {
+		return this.friendListClient.get("sended-friend-requests/");
+	}
+
+	getFriendList() {
+		return this.friendListClient.get("friend-list/");
+	}
+
+	sendFriendRequest(receiverNickname: string) {
+		return this.friendListClient.post("send-friend-request", {
+			receiverNickname,
 		});
 	}
 
-	getUserToAddId(username: string) {
-		return axios.get(
-			"http://localhost:3000/user/" + username,
-			{
-				headers: {
-					Authorization: `Bearer ${this.token}`,
-					token: this.token,
-				},
-			}
-		);
-	}
-
-	addFriend(username: string) {
-		userToAdd: string;
-
-		userToAddId = getUserToAddId(username);
-		return axios.get("http://localhost:3000/received-friend-requests/" + userToAddId, {
-			headers: {
-				Authorization: `Bearer ${this.token}`,
-				token: this.token,
-			},
+	handleFriendRequest(friendId: string, status: string) {
+		return this.friendListClient.post("handle-friend-request/", {
+			friendId,
+			status,
 		});
 	}
 

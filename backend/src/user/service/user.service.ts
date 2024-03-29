@@ -38,7 +38,7 @@ export class UserService {
     const user = await this.userRepository.findOne({ nickname });
 
     if (!user) {
-      throw new NotFoundException();
+      throw new BadRequestException("User doesn't exist");  
     }
 
     return user;
