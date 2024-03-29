@@ -4,7 +4,7 @@
         <div class="w-full my-2">
             <FriendListActions :friend="friend" :friendRequests="friendRequests" />
         </div>
-        <div v-for="friend in friends" :key="friend.id" class="w-full h-24 m-1 center justify-center ">
+        <div v-for="friend in friends" :key="friend.id" class="w-full h-24 m-1 center justify-center" @click="getFriendOnClick(friend.id)">
             <FriendComponent :friend="friend"/>
         </div>
     </div>
@@ -56,6 +56,10 @@ export default {
         };
     },
     methods: {
+
+        getFriendOnClick(id) {
+            this.$emit('actual-friend', this.friends[id - 1])
+        }
     },
 };
 </script>
