@@ -16,17 +16,31 @@ import { useAuthStore } from "../stores/authStore";
 import { ref } from "vue";
 
 const authStore = useAuthStore();
-const teste = await authStore.getUser;
-console.log("teste>:", teste);
+let userData = await authStore.getUser;
+let otherPlayer = null;
+if (
+  userData.username.trim() == "acosta-a" ||
+  userData.username.trim() == "mamaro-d"
+) {
+  otherPlayer = "mamaro-d+acosta-a";
+  console.log("acosta ou mamaro");
+}
+if (
+  userData.username.trim() == "gusalves" ||
+  userData.username.trim() == "dpiza"
+) {
+  console.log("null");
+}
 
 export default {
   name: "Lobby",
   methods: {
     startGame() {
-      socket.emit("join_game", teste);
+      socket.emit("join_game", userData, otherPlayer);
       this.$router.push("/pong");
       console.log("join game");
     },
+
     increaseSpeed() {
       document.getElementById("speed-button").style.display = "none";
       socket.emit("increase_speed");
@@ -84,6 +98,7 @@ export default {
   align-items: center;
   justify-content: center;
   margin: 0.5em;
+  z-index: 1;
 
   &:hover {
     background-color: #ed006c;
