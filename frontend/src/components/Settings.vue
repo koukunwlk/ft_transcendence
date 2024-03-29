@@ -3,11 +3,28 @@ export default {
     methods: {
         emitEvent() {
             this.$emit('clickedButton');
+        },
+        handleToggleChange() {
+            try {
+                console.log('isChecked: ' + this.isChecked);
+            }
+            catch (error) {
+                console.log('Error sending data to the backend (2f): ', error);
+            }
+        },
+        saveNickname() {
+            try {
+                console.log('nickname: ' + this.nickname);
+            }
+            catch(error) {
+                console.log('Error saving nickname: ', error);
+            }
         }
     },
     data() {
         return {
             isChecked: false,
+            nickname: '',
         }
     }
 }
@@ -29,7 +46,7 @@ export default {
             <div class="h-4/6 w-full flex flex-col justify-center ml-4 md:ml-6 xl:ml-8 2xl:ml-12">
                 <div for="2f" class="flex flex-row justify-start mb-5">
                     <label class="inline-flex items-center cursor-pointer">
-                        <input type="checkbox" id="2f" class="sr-only peer">
+                        <input v-model="isChecked" @change="handleToggleChange" type="checkbox" id="2f" class="sr-only peer">
                         <div class="relative w-11 h-6 peer-focus:outline-none rounded-full peer bg-gray-500 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-500">
                         </div>
                     </label>
@@ -40,8 +57,8 @@ export default {
                 <div class="pt-3">
                     <label for="nickname" class="block text-sm lg:text-lg text-gray-900 dark:text-gray-300">Nickname</label>
                     <div class="flex items-center">
-                        <input type="text" id="nickname" class="bg-gray-50 w-4/6 p-2.5 border border-gray-300 text-gray-900 text-sm rounded-sm focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500" placeholder="enter new nickname" required />
-                        <button type="button" class="bg-yellow-500 text-sm text-gray-900 dark:text-gray-300 p-2.5 border-yellow-300 rounded-sm block dark:bg-yellow-500 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 ml-1">save</button>
+                        <input placeholder="enter new nickname" required v-model="nickname" type="text" id="nickname" class="bg-gray-50 w-4/6 p-2.5 border border-gray-300 text-gray-900 text-sm rounded-sm focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500"/>
+                        <button type="button" @click="saveNickname" class="bg-yellow-500 text-sm text-gray-900 dark:text-gray-300 p-2.5 border-yellow-300 rounded-sm block dark:bg-yellow-500 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 ml-1">save</button>
                     </div>
                 </div>
             </div>
