@@ -1,7 +1,7 @@
-import { Column, PrimaryGeneratedColumn, Entity } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { UserStatusEnum } from '../domain/model/user.model';
 
-@Entity("user")
+@Entity('user')
 export class UserEntity {
   @Column({
     primary: true,
@@ -32,6 +32,11 @@ export class UserEntity {
   username: string;
 
   @Column({ nullable: true })
+  tfaEnabled: boolean;
+
+  @Column({ nullable: true })
   tfaSecret: string;
 
+  @Column({ nullable: true })
+  tfaAuthenticated: boolean;
 }

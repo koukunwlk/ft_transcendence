@@ -4,7 +4,8 @@ backend/.env
 frontend/Dockerfile
 dist
 .env
-postgres/*
+postgres/
+node_modules/
 backend/yarn.lock
 frontend/yarn.lock
 yarn.lock

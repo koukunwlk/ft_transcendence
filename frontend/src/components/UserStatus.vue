@@ -1,0 +1,32 @@
+<template>
+    <div>
+      <span v-if="status === UserStatusEnum.OFFLINE">🔴offline</span>
+      <span v-else-if="status === UserStatusEnum.ONLINE">🟢online</span>
+      <span v-else-if="status === UserStatusEnum.INVISIBLE">🟠invisible</span>
+      <span v-else-if="status === UserStatusEnum.AFK">⚪AFK</span>
+      <span v-else-if="status === UserStatusEnum.IN_GAME">🎮in game</span>
+    </div>
+  </template>
+  
+  <script>
+  export default {
+    props: {
+      status: {
+        type: Number,
+        required: true
+      }
+    },
+    data() {
+      return {
+        UserStatusEnum: {
+          OFFLINE: 0,
+          ONLINE: 1,
+          INVISIBLE: 2,
+          AFK: 3,
+          IN_GAME: 4
+        }
+      }
+    }
+  }
+  </script>
+  

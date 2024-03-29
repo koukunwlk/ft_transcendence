@@ -1,50 +1,40 @@
-import { Column, Entity } from "typeorm";
-
+import { UserEntity } from "@/user/entities/user.entity";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("match_history")
 export class MatchHistoryTypeormEntity {
-    @Column("uuid", { primary: true })
+    @PrimaryGeneratedColumn("uuid")
     id: string;
 
-    @Column("uuid")
-    playerOneId: string;
-
-    @Column("integer", {
-        nullable: true,
+    @ManyToOne(() => UserEntity, {
+        eager: true
     })
+    playerOne: UserEntity;
+
+    @Column("integer", { nullable: true })
     playerOneGoalsCount: number;
 
-    @Column("uuid")
-    playerTwoId: string;
-
-    @Column("integer", {
-        nullable: true,
+    @ManyToOne(() => UserEntity, {
+        eager: true
     })
+    playerTwo: UserEntity;
+
+    @Column("integer", { nullable: true })
     playerTwoGoalsCount: number;
 
-    @Column("uuid", {
-        nullable: true,
-    })
-    winnerId: string;
+    @ManyToOne(() => UserEntity, { nullable: true })
+    @JoinColumn({ name: "winnerId" })
+    winner: UserEntity;
 
-    @Column("varchar")
+    @Column()
     matchType: string;
 
-    @Column("varchar", {
-        nullable: true,
-    })
+    @Column({ nullable: true })
     matchDuration: string;
 
-    @Column({
-        type: "timestamp",
-        default: () => "CURRENT_TIMESTAMP",
-    })
-    createdAt: string;
+    @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+    createdAt: Date;
 
-    @Column({
-        type: "timestamp",
-        default: () => "CURRENT_TIMESTAMP",
-        onUpdate: "CURRENT_TIMESTAMP",
-    })
-    updatedAt: string;
+    @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP", onUpdate: "CURRENT_TIMESTAMP" })
+    updatedAt: Date;
 }

@@ -1,7 +1,4 @@
 import {
-  Req,
-  Res,
-  Post,
   BadRequestException,
   Inject,
   Injectable,
@@ -10,7 +7,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { UserRepository } from '../repository/user.repository';
-import { User } from '../domain/model/user.model';
+import { User, UserStatusEnum } from '../domain/model/user.model';
 import { CreateUserDTO } from '../dto/create-user.dto';
 import { generateSecret, verify } from '2fa-util';
 
@@ -90,6 +87,18 @@ export class UserService {
     return user;
   }
 
+  async logoutUser(id: string) {
+    let user = await this.userRepository.findOne({
+      id,
+    });
+
+    if (!user) {
+      throw new HttpException('Invalid user', HttpStatus.BAD_REQUEST);
+    }
+
+    return await this.updateTfaAuthenticated(id, false);
+  }
+
   async updateUserToken(username: string, token: string): Promise<void> {
     let user = await this.userRepository.findOne({
       username,
@@ -100,6 +109,51 @@ export class UserService {
     }
 
     user.setToken(token);
+    return await this.userRepository.update(user);
+  }
+
+  async updateUserTfaSecret(
+    username: string,
+    tfaSecret: string,
+  ): Promise<void> {
+    let user = await this.userRepository.findOne({
+      username,
+    });
+
+    if (!user) {
+      throw new HttpException('Invalid username', HttpStatus.BAD_REQUEST);
+    }
+
+    user.setTfaSecret(tfaSecret);
+    user.setTfaEnabled(true);
+    return await this.userRepository.update(user);
+  }
+
+  async updateTfaAuthenticated(
+    id: string,
+    tfaAuthenticated: boolean,
+  ): Promise<void> {
+    let user = await this.userRepository.findOne({
+      id,
+    });
+
+    if (!user) {
+      throw new HttpException('Invalid username', HttpStatus.BAD_REQUEST);
+    }
+
+    user.setTfaAuthenticated(tfaAuthenticated);
+    return await this.userRepository.update(user);
+  }
+  
+  async updateStatus(id: string, status: UserStatusEnum): Promise<void> {
+    let user = await this.userRepository.findOne({
+      id,
+    });
+
+    if (!user) {
+      throw new HttpException('Invalid user id', HttpStatus.BAD_REQUEST);
+    }
+    user.setStatus(status);
     return await this.userRepository.update(user);
   }
 }

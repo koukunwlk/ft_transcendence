@@ -4,7 +4,10 @@ export default {
   theme: {
     extend: {
       backgroundImage: {
-        'dark-starry-sky': "url('/Assets/Images/kai-pilger.jpg')",
+        'login-background': "url('./src/assets/images/kai-pilger.jpg')",
+      },
+      colors: {
+        'default-background': "#14141c",
       }
     },
   },
