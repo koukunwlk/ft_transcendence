@@ -17,13 +17,25 @@ export type UserProps = {
   email: string;
   status?: UserStatusEnum;
   token?: string;
+  tfaEnabled?: boolean;
+  tfaSecret?: string;
+  tfaAuthenticated?: boolean;
 };
 
 export class User extends Model<UserProps> {
   protected props = {} as UserProps;
 
   constructor(
-    { username, nickname, email, status, token }: UserProps,
+    {
+      username,
+      nickname,
+      email,
+      status,
+      token,
+      tfaEnabled,
+      tfaSecret,
+      tfaAuthenticated,
+    }: UserProps,
     id?: string,
   ) {
     super(id);
@@ -32,6 +44,9 @@ export class User extends Model<UserProps> {
     this.props.email = email;
     this.props.status = status || UserStatusEnum.OFFLINE;
     this.props.token = token;
+    this.props.tfaEnabled = tfaEnabled;
+    this.props.tfaSecret = tfaSecret;
+    this.props.tfaAuthenticated = tfaAuthenticated;
   }
 
   getUsername(): string {
@@ -56,5 +71,29 @@ export class User extends Model<UserProps> {
 
   setToken(token: string) {
     this.props.token = token;
+  }
+
+  getTfaEnabled(): boolean {
+    return this.props.tfaEnabled;
+  }
+
+  setTfaEnabled(tfaEnabled: boolean) {
+    this.props.tfaEnabled = tfaEnabled;
+  }
+
+  getTfaSecret(): string {
+    return this.props.tfaSecret;
+  }
+
+  setTfaSecret(tfaSecret: string) {
+    this.props.tfaSecret = tfaSecret;
+  }
+
+  getTfaAuthenticated(): boolean {
+    return this.props.tfaAuthenticated;
+  }
+
+  setTfaAuthenticated(tfaAuthenticated: boolean) {
+    this.props.tfaAuthenticated = tfaAuthenticated;
   }
 }
