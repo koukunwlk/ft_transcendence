@@ -1,15 +1,15 @@
 <template>
-	<div class="bg-red-200 container">
+	<div class="container">
 		<div class="grid grid-cols-4 justify-center ">
 
-			<div class="col-span-3 bg-green-200 grid justify-center">
+			<div class="col-span-3 grid justify-center">
 				<form id="image-upload-form">
 					<input
 						class="file:bg-gray-700 file:text-gray-200 hover:file:bg-gray-400 hover:file:text-gray-700 file:rounded file:shadow file:font-semibold"
 						type="file" id="image-file" accept="image/*" @change="onFileSelected">
 				</form>
 			</div>
-			<div class="col-span-1 bg-green-500 content-center
+			<div class="col-span-1 content-center
 			">
 				<button type="button" id="upload-button" class="bg-gray-600 hover:bg-gray-400 hover:text-gray-700 text-gray-200  text-sm font-semibold py-1 px-2 border-2 border-gray-800 hover:border-gray-700 rounded shadow
 				" @click="handleUpload">Upload</button>
@@ -20,6 +20,9 @@
 </template>
 
 <script>
+import UserService from '../services/UserService.ts';
+import {Buffer} from 'buffer';
+
 export default {
 	name: "ImageUpload",
 	data() {
@@ -28,7 +31,9 @@ export default {
 			imageToRender: null,
 			imageBlob: null,
 			imageSelectedSize: null,
-			hideUploadButton: false
+			hideUploadButton: false,
+			userService: UserService
+
 		};
 	},
 	methods: {
@@ -45,6 +50,8 @@ export default {
 				if (this.validateSize()) {
 					const blob = new Blob([this.selectedFile], { type: this.selectedFile.type });
 					this.imageBlob = blob;
+
+					// post
 					console.log(blob);
 					this.handleRender();
 				} else {
@@ -53,9 +60,14 @@ export default {
 			}
 
 		},
-		handleRender() {
+		async handleRender() {
 			const myImage = document.querySelector('img');
-			const objectURL = URL.createObjectURL(this.imageBlob);
+			const user = await UserService.me();
+			console.log(this.imageBlob);
+			console.log(user.data.avatar.data);
+			// console.log(user.data.avatar);
+			const buffs = Buffer.from(user.data.avatar.data);
+			const objectURL = URL.createObjectURL(new Blob([buffs]));
 			myImage.src = objectURL;
 		},
 		validateSize() {
