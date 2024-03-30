@@ -1,26 +1,36 @@
 <script>
 import PicUpload from "../components/ProfilePicUpload.vue";
 import { useProfilePictureStore } from '../stores/profilePictureStore.ts';
+import authService from "../services/AuthService";
+import { useAuthStore } from "../stores/authStore";
+
+const authStore = useAuthStore();
 
 export default {
     components: {
         PicUpload,
+    },
+    data() {
+        return {
+            isChecked: false,
+            nickname: '',
+            picture: useProfilePictureStore(),
+            validationCode: '',
+        }
+    },
+    mounted() {
+        this.isChecked = authStore.getUser.tfaEnabled;
     },
     methods: {
         emitEvent() {
             this.$emit('clickedButton');
         },
         handleToggleChange() {
-            try {
-                // mudar variável caso autenticação seja ativada ou desativada com sucesso
-                if (this.isChecked)
-                    this.validationCode = '123-456';
-                else
-                    this.validationCode = '';
-                console.log('isChecked: ' + this.isChecked);
-            }
-            catch (error) {
-                console.log('Error sending data to the backend (2f): ', error);
+            if (this.isChecked) {
+                this.generateCode();
+            } else {
+                this.disableTfa();
+                this.validationCode = '';
             }
         },
         saveNickname() {
@@ -30,23 +40,32 @@ export default {
             catch (error) {
                 console.log('Error saving nickname: ', error);
             }
-        }
+        },
+        generateCode() {
+            authService
+                .generateTfa()
+                .then(({ data }) => {
+                    this.validationCode = data.secret;
+                })
+                .catch((error) => {
+                    console.log('Error generating 2fa secret: ', error);
+                });
+        },
+        disableTfa() {
+            authService
+                .disableTfa()
+                .catch((error) => {
+                    console.log('Error generating 2fa secret: ', error);
+                });
+        },
     },
-    data() {
-        return {
-            isChecked: false,
-            nickname: '',
-            picture: useProfilePictureStore(),
-            validationCode: '',
-        }
-    }
 }
 </script>
 
 <template>
     <div
         class="fixed top-0 left-0 w-screen h-screen flex flex-col justify-center items-center bg-black bg-blur bg-opacity-80 z-20">
-        <div class="w-64 h-96 md:w-80 md:h-2/5 md:min-h-[32rem] lg:w-1/4 lg:h-2/4 bg-gray-900 rounded-xl">
+        <div class="w-64 h-96 md:w-80 md:h-2/5 md:min-h-[32rem] lg:w-2/4 lg:h-2/4 bg-gray-900 rounded-xl">
             <div class="flex justify-end mr-2 mt-2">
                 <button @click="emitEvent">
                     <img class="h-6 w-6" src="../assets/svgs/x-icon.svg" alt="close modal icon">
@@ -90,10 +109,10 @@ export default {
                 </div>
                 <div class="mt-3 md:mt-4">
                     <span v-if="validationCode" class="dark:text-gray-300">
-                        Your validation code:
+                        Your one-time-use secret:
                     </span>
                     <input v-if="validationCode" type="text" id="disabled-input" aria-label="disabled input"
-                        class="text-center font-semibold tracking-[.65em] bg-gray-100 w-48 p-2.5 border border-gray-300 text-gray-900 text-sm lg:text-base xl:text-lg rounded-sm focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500"
+                        class="text-center font-semibold tracking-[.65em] bg-gray-100 w-120 p-2.5 border border-gray-300 text-gray-900 text-sm lg:text-base xl:text-lg rounded-sm focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500"
                         :placeholder="validationCode" disabled readonly>
                 </div>
             </div>
