@@ -7,7 +7,7 @@ export default {
   me() {
     const token = authStore.getToken;
     
-    return axios.get("http://10.0.0.173:3000/user/me", {
+    return axios.get("http://localhost:3000/user/me", {
       headers: {
         Authorization: `Bearer ${token}`,
         token: token,

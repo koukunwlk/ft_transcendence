@@ -36,7 +36,7 @@ import JoinRoom from "./JoinRoom.vue";
 import paddle from "./paddle";
 import { useAuthStore } from "../stores/authStore";
 
-export const socket = io("http://10.0.0.173:3000");
+export const socket = io("http://localhost:3000");
 
 const authStore = useAuthStore();
 export default {
