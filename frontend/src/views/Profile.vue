@@ -1,6 +1,5 @@
 <script>
 import Navbar from "../components/Navbar.vue";
-import PicUpload from "../components/ProfilePicUpload.vue";
 import Avatar from "vue3-avatar";
 import router from '../Router/index.ts';
 import UserStatus from "../components/UserStatus.vue";
@@ -18,7 +17,6 @@ import { MatchService } from '../services/MatchService';
 export default {
 	components: {
 		Navbar,
-		PicUpload,
 		Avatar,
 		LastMatches,
 		UserStatus,
@@ -147,7 +145,6 @@ export default {
 							class="w-full h-full rounded-full object-cover">
 						<img v-else src="../assets/profile-pictures/default-5.png" alt="default picture"
 							class="rounded-full object-cover">
-						<PicUpload />
 					</div>
 				</div>
 				<div class="mt-14 lg:mt-16 xl:mt-20 ml-4">

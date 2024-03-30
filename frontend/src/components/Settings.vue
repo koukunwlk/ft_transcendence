@@ -1,5 +1,11 @@
 <script>
+import PicUpload from "../components/ProfilePicUpload.vue";
+import { useProfilePictureStore } from '../stores/profilePictureStore.ts';
+
 export default {
+    components: {
+        PicUpload,
+    },
     methods: {
         emitEvent() {
             this.$emit('clickedButton');
@@ -26,6 +32,7 @@ export default {
         return {
             isChecked: false,
             nickname: '',
+            picture: useProfilePictureStore(),
         }
     }
 }
@@ -39,17 +46,20 @@ export default {
                     <img class="h-6 w-6" src="../assets/svgs/x-icon.svg" alt="close modal icon">
                 </button>
             </div>
-            <div class="flex justify-start items-center ml-4 md:ml-6 xl:ml-8 2xl:ml-12">
-                <img class="mr-3 h-6 w-6 lg:h-7 lg:w-7 xl:w-8 xl:h-8 2xl:w-9 2xl:h-9" src="../assets/svgs/settings.svg" alt="settings icon">
-                <h1 class="flex flex-row justify-center text-3xl lg:text-4xl uppercase">
-                    Settings
-                </h1>
+            <div class="w-full flex justify-center mb-5">
+                <div class="relative w-28 h-28 md:w-32 md:h-32 xl:w-36 xl:h-36 2xl:w-44 2xl:h-44">
+                    <img v-if="picture.getPicture" :src="picture.getPicture" alt="profile picture"
+                        class="w-full h-full rounded-full object-cover">
+                    <img v-else src="../assets/profile-pictures/default-5.png" alt="default picture"
+                        class="rounded-full object-cover">
+                    <PicUpload />
+                </div>
             </div>
-            <div class="h-4/6 w-full flex flex-col justify-center ml-4 md:ml-6 xl:ml-8 2xl:ml-12">
+            <div class="w-full flex flex-col justify-center ml-4 md:ml-6 xl:ml-8 2xl:ml-12">
                 <div class="mb-5">
                     <label
                         for="nickname"
-                        class="block text-sm lg:text-lg lg:font-semibold text-gray-900 dark:text-gray-300"
+                        class="block text-sm lg:text-lg font-semibold text-gray-900 dark:text-gray-300"
                     >
                         Nickname
                     </label>
@@ -65,7 +75,7 @@ export default {
                         <button
                             type="button"
                             @click="saveNickname"
-                            class="bg-green-500 text-sm text-gray-900 dark:text-gray-300 p-2.5 border-green-300 rounded-sm block dark:bg-green-500 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 ml-1"
+                            class="bg-green-500 hover:bg-green-400 text-sm text-gray-100 p-2.5 border border-green-400 rounded-sm block placeholder-gray-400 focus:ring-blue-500 ml-1"
                         >
                             save
                         </button>
