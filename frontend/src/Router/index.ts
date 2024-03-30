@@ -18,14 +18,6 @@ var routes = [
 		component: () => import('../views/Profile.vue')
 	},
 	{
-		path: '/community',
-		name: 'Community',
-		component: () => import('../views/Community.vue')
-	},
-	
-	,	
-	,
-	{
 		path: '/lobby',
 		name: 'Lobby',
 		component: () => import('../views/Lobby.vue')
