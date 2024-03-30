@@ -9,6 +9,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { LobbyModule } from './lobby/lobby.module';
 import { AppService } from './app.service';
 import { AppController } from './app.controller'
+import { MulterModule } from '@nestjs/platform-express';
 @Module({
   imports: [
     UserModule,
@@ -16,7 +17,8 @@ import { AppController } from './app.controller'
     AuthModule, LobbyModule,
     TypeOrmModule.forRoot(typeOrmConfig),
     MatchHistoryModule,
-    EventEmitterModule.forRoot()
+    EventEmitterModule.forRoot(),
+    MulterModule
   ],
   controllers: [AppController],
   providers: [AppService],
