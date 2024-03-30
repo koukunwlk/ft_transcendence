@@ -80,7 +80,7 @@ export default {
                         <button
                             type="button"
                             @click="saveNickname"
-                            class="bg-green-500 hover:bg-green-400 text-sm text-gray-100 p-2.5 border border-green-400 rounded-r-sm block placeholder-gray-400 focus:ring-blue-500"
+                            class="bg-gray-500 hover:bg-green-500 text-sm text-gray-100 p-2.5 border border-gray-400 hover:border-green-400 rounded-r-sm block placeholder-gray-400 focus:ring-blue-500"
                         >
                             save
                         </button>
