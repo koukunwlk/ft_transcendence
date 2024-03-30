@@ -1,13 +1,13 @@
 <template>
     <div>
-      <span v-if="status === UserStatusEnum.OFFLINE">🔴offline</span>
-      <span v-else-if="status === UserStatusEnum.ONLINE">🟢online</span>
-      <span v-else-if="status === UserStatusEnum.INVISIBLE">🟠invisible</span>
-      <span v-else-if="status === UserStatusEnum.AFK">⚪AFK</span>
-      <span v-else-if="status === UserStatusEnum.IN_GAME">🎮in game</span>
+      <span v-if="status === UserStatusEnum.OFFLINE">🔴</span>
+      <span v-else-if="status === UserStatusEnum.ONLINE">🟢</span>
+      <span v-else-if="status === UserStatusEnum.INVISIBLE">🟠</span>
+      <span v-else-if="status === UserStatusEnum.AFK">⚪</span>
+      <span v-else-if="status === UserStatusEnum.IN_GAME">🎮</span>
     </div>
   </template>
-  
+
   <script>
   export default {
     props: {
@@ -29,4 +29,3 @@
     }
   }
   </script>
-  

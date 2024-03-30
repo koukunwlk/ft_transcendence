@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable } from "@nestjs/common";
+import { BadRequestException, HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
 import { FriendListRepository } from "../repository/friend-list.respository";
 import { UserService } from "@/user/service/user.service";
 import { FriendListStatusEnum, FriendRequest } from "../domain/model/friend-list.model";
@@ -10,17 +10,20 @@ export class FriendListService {
     constructor(
         @Inject(FriendListRepository)
         private readonly friendListRepository: FriendListRepository,
-
         @Inject(FriendRequestRepository)
         private readonly friendRequestRepository: FriendRequestRepository,
         @Inject(UserService)
         private readonly userService: UserService
     ) { }
 
-    async sendFriendRequest(userId: string, receiverId: string) {
-        await this.checkIfIsAValidFriendRequest(userId, receiverId);
-
-        await this.friendRequestRepository.insertFriendRequest(userId, receiverId);
+    async sendFriendRequest(userId: string, nickname: string) {
+        try {
+            const receiver = await this.userService.getUserByNickname(nickname);
+            await this.checkIfIsAValidFriendRequest(userId, receiver.id);
+            await this.friendRequestRepository.insertFriendRequest(userId, receiver.id);
+        } catch (error) {
+            throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+        }
     }
 
     async handleFriendRequest(userId: string, friendId: string, status: FriendListStatusEnum) {
@@ -62,14 +65,19 @@ export class FriendListService {
     }
 
     private async checkIfIsAValidFriendRequest(userId: string, friendId: string, isHandlingFriendRequest: boolean = false) {
-        const [sender, receiver] = await Promise.all([
-            this.userService.getUserById(userId),
-            this.userService.getUserById(friendId)
-        ]);
-        if (!sender || !receiver) {
+       
+        try {
+            const [sender, receiver] = await Promise.all([
+                this.userService.getUserById(userId),
+                this.userService.getUserById(friendId)
+            ]);
+            if (!sender || !receiver) {
+                throw new BadRequestException("Invalid sender or receiver");
+            }
+            return await this.checkIfFriendRequestExists(userId, friendId, isHandlingFriendRequest);
+        } catch (error) {
             throw new BadRequestException("Invalid sender or receiver");
         }
-        return await this.checkIfFriendRequestExists(userId, friendId, isHandlingFriendRequest);
     }
 
     private async checkIfFriendRequestExists(userId: string, friendId: string, isHandlingFriendRequest: boolean) {
