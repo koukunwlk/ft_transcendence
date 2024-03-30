@@ -10,7 +10,7 @@ export class UserTypeOrmRepository implements UserRepository {
   constructor(
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
-  ) {}
+  ) { }
 
   async findOne(options: Partial<UserProps>): Promise<User> {
     const user = await this.userRepository.findOne({
@@ -28,6 +28,7 @@ export class UserTypeOrmRepository implements UserRepository {
           tfaEnabled: user.tfaEnabled,
           tfaSecret: user.tfaSecret,
           tfaAuthenticated: user.tfaAuthenticated,
+          avatar: user.avatar
         },
         user.id,
       );
@@ -62,6 +63,7 @@ export class UserTypeOrmRepository implements UserRepository {
               username: user.username,
               email: user.email,
               status: user.status,
+              avatar: user.avatar
             },
             user.id,
           ),
@@ -85,6 +87,7 @@ export class UserTypeOrmRepository implements UserRepository {
       tfaEnabled: user.getTfaEnabled(),
       tfaSecret: user.getTfaSecret(),
       tfaAuthenticated: user.getTfaAuthenticated(),
+      avatar: user.getAvatar(),
     };
 
     await this.userRepository.update(user.id, updateUser);
@@ -103,6 +106,7 @@ export class UserTypeOrmRepository implements UserRepository {
           nickname: user.nickname,
           token: user.token,
           status: user.status,
+          avatar: user.avatar
         },
         user.id,
       );
@@ -124,6 +128,7 @@ export class UserTypeOrmRepository implements UserRepository {
           nickname: user.nickname,
           token: user.token,
           status: user.status,
+          avatar: user.avatar
         },
         user.id,
       );
@@ -147,11 +152,13 @@ export class UserTypeOrmRepository implements UserRepository {
             nickname: user.nickname,
             token: user.token,
             status: user.status,
+            avatar: user.avatar,
           },
           user.id,
         );
       });
     }
+
 
     return userModelList;
   }
