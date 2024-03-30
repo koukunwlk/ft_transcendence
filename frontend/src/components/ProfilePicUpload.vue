@@ -11,7 +11,7 @@
             class="flex p-1 lg:p-1.5 bg-gray-500 hover:bg-gray-400 rounded-xl hover:rounded-3xl transition-all duration-300"
         >
             <img
-                class="h-3 w-3 lg:h-4 lg:w-4 xl:w-5 xl:h-5 2xl:w-6 2xl:h-6"
+                class="h-4 w-4 lg:h-4 lg:w-4 xl:w-5 xl:h-5 2xl:w-6 2xl:h-6"
                 src="../assets/svgs/camera.svg"
                 alt="edit camera icon"
             >
