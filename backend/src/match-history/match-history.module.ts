@@ -11,6 +11,7 @@ import { JwtService } from '@nestjs/jwt';
 @Module({
   imports: [TypeOrmModule.forFeature([MatchHistoryTypeormEntity])],
   controllers: [MatchHistoryController],
-  providers: [MatchHistoryRepositoryProvider, MatchStartedListner, MatchEndedListner,MatchHistoryService, JwtService]
+  providers: [MatchHistoryRepositoryProvider, MatchStartedListner, MatchEndedListner,MatchHistoryService, JwtService],
+  exports: [MatchHistoryService, MatchHistoryRepositoryProvider, MatchStartedListner, MatchEndedListner]
 })
 export class MatchHistoryModule { }
