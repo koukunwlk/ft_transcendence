@@ -26,8 +26,13 @@
           Verify
         </button>
       </div>
-      <div class="flex items-end mt-6">
-        <span class="text-xs mx-4">
+      <div class="flex items-start mt-6">
+        <img
+          class="h-5 w-5 ml-3 mr-2"
+          src="../assets/svgs/phone.svg"
+          alt="phone icon"
+        >
+        <span class="text-xs mr-3">
           Hi, {{ user.username }}! Open the two-factor authentication app on your device to view your authentication code and verify your identity.
         </span>
       </div>
