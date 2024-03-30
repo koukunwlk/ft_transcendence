@@ -13,11 +13,12 @@ import { UserService } from './service/user.service';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { JwtAuthGuard } from '@/auth/jwt-auth/jwt-auth.guard';
 import { UserStatusEnum } from './domain/model/user.model';
+import { UpdateNicknameDTO } from './dto/update-nickname.dto';
 
 @Controller('user')
 @UseGuards(JwtAuthGuard)
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Post()
   async create(@Body() createUser: CreateUserDTO) {
@@ -48,7 +49,12 @@ export class UserController {
   @Patch("status")
   async updateStatus(@Req() req: any, @Body() body: { status: UserStatusEnum }) {
     return await this.userService.updateStatus(req.user.id, body.status);
-  } 
+  }
+
+  @Patch("nickname")
+  async updateNickname(@Req() req: any, @Body() body: UpdateNicknameDTO) {
+    return await this.userService.updateNickname(req.user.id, body.nickname);
+  }
 
   @Get(':nickname')
   async getUser(@Param('nickname') nickname: string) {
