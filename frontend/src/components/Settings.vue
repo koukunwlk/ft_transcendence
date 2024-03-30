@@ -45,7 +45,7 @@ export default {
 
 <template>
     <div class="fixed top-0 left-0 w-screen h-screen flex flex-col justify-center items-center bg-black bg-blur bg-opacity-80 z-20">
-        <div class="w-64 h-96 md:w-80 md:h-2/5 lg:w-1/4 lg:h-2/4 bg-gray-900 rounded-xl">
+        <div class="w-64 h-96 md:w-80 md:h-2/5 md:min-h-[32rem] lg:w-1/4 lg:h-2/4 bg-gray-900 rounded-xl">
             <div class="flex justify-end mr-2 mt-2">
                 <button @click="emitEvent">
                     <img class="h-6 w-6" src="../assets/svgs/x-icon.svg" alt="close modal icon">
