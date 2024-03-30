@@ -4,19 +4,17 @@ import {
   Injectable,
   HttpException,
   HttpStatus,
-  NotFoundException,
 } from '@nestjs/common';
 import { UserRepository } from '../repository/user.repository';
 import { User, UserStatusEnum } from '../domain/model/user.model';
 import { CreateUserDTO } from '../dto/create-user.dto';
-import { generateSecret, verify } from '2fa-util';
 
 @Injectable()
 export class UserService {
   constructor(
     @Inject(UserRepository)
     private readonly userRepository: UserRepository,
-  ) {}
+  ) { }
 
   async insertUser(createUser: CreateUserDTO): Promise<string> {
     // await this.checkDuplicatedUser(createUser.nickname);
@@ -35,7 +33,7 @@ export class UserService {
     const user = await this.userRepository.findOne({ nickname });
 
     if (!user) {
-      throw new BadRequestException("User doesn't exist");  
+      throw new BadRequestException("User doesn't exist");
     }
 
     return user;
@@ -129,6 +127,22 @@ export class UserService {
     return await this.userRepository.update(user);
   }
 
+  async disableUserTfa(
+    username: string,
+  ): Promise<void> {
+    let user = await this.userRepository.findOne({
+      username,
+    });
+
+    if (!user) {
+      throw new HttpException('Invalid username', HttpStatus.BAD_REQUEST);
+    }
+
+    user.setTfaSecret(null);
+    user.setTfaEnabled(false);
+    return await this.userRepository.update(user);
+  }
+
   async updateTfaAuthenticated(
     id: string,
     tfaAuthenticated: boolean,
@@ -144,7 +158,7 @@ export class UserService {
     user.setTfaAuthenticated(tfaAuthenticated);
     return await this.userRepository.update(user);
   }
-  
+
   async updateStatus(id: string, status: UserStatusEnum): Promise<void> {
     let user = await this.userRepository.findOne({
       id,
