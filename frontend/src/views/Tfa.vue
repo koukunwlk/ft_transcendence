@@ -22,7 +22,7 @@
               @input="handleImput"
               type="text"
               v-model="code"
-              class="text-start w-56 md:w-72 xl:w-80 tracking-[.35em] md:tracking-[.45em] lg:tracking-[.55em] xl:tracking-[.45em] font-semibold bg-gray-100 p-2.5 border border-red-300 text-gray-900 text-sm lg:text-base xl:text-lg rounded-sm focus:border-red-500 block dark:bg-gray-700 dark:border-red-600 dark:text-white dark:focus:ring-red-500"
+              class="text-center w-56 md:w-72 xl:w-80 tracking-[.35em] md:tracking-[.45em] lg:tracking-[.55em] xl:tracking-[.45em] font-semibold bg-gray-100 p-2.5 border border-red-300 text-gray-900 text-sm lg:text-base xl:text-lg rounded-sm focus:border-red-500 block dark:bg-gray-700 dark:border-red-600 dark:text-white dark:focus:ring-red-500"
               placeholder="Ex: 123456"
             >
             <input
@@ -30,7 +30,7 @@
               @input="handleImput"
               type="text"
               v-model="code"
-              class="text-start w-56 md:w-72 xl:w-80 tracking-[.35em] md:tracking-[.45em] lg:tracking-[.55em] xl:tracking-[.45em] font-semibold bg-gray-100 p-2.5 border border-gray-300 text-gray-900 text-sm lg:text-base xl:text-lg rounded-sm focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500"
+              class="text-center w-56 md:w-72 xl:w-80 tracking-[.35em] md:tracking-[.45em] lg:tracking-[.55em] xl:tracking-[.45em] font-semibold bg-gray-100 p-2.5 border border-gray-300 text-gray-900 text-sm lg:text-base xl:text-lg rounded-sm focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500"
               placeholder="Ex: 123456"
             >
           </div>
