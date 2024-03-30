@@ -160,7 +160,7 @@ export default {
 						class="relative flex flex-row mt-14 lg:mt-16 xl:mt-20 text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-xl ml-1">
 						<UserStatus :status="profileUser ? profileUser.status : 0" />
 						<select v-model="selectedStatus" @change="updateStatus"
-							class="w-1 h-1 p-2 ml-1 md:mt-1 lg:mt-1.5 z-10 bg-transparent text-sm rounded-lg text-white">
+							class="w-1 h-1 p-2 ml-1 md:mt-1 lg:mt-1.5 z-10 cursor-pointer bg-transparent text-sm rounded-lg text-white">
 							<option class="bg-gray-700" value="0">Offline</option>
 							<option class="bg-gray-700" value="1">Online</option>
 							<option class="bg-gray-700" value="2">Invisible</option>
