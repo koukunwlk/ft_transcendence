@@ -195,7 +195,7 @@ export default {
 					{{ tab }}
 				</button>
 			</div>
-			<div class="mb-4" v-if="activeTab === 0">
+			<div class="mb-4 lg:mt-4" v-if="activeTab === 0">
 				<Ranking />
 			</div>
 			<div v-else="activeTab === 1" class="text-3xl text-yellow-500 pt-16 w-full">
