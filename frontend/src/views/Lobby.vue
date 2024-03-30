@@ -39,7 +39,7 @@ export default {
   name: "Lobby",
   methods: {
     startGame() {
-      socket.emit("join_game", userData, otherPlayer);
+      socket.emit("join_game", userData, otherPlayer, userData.id);
       this.$router.push("/pong");
       console.log("join game");
     },

@@ -14,6 +14,7 @@ import { MatchHistory } from '@/match-history/model/match-history.model';
 
 class P1 {
   id = 0;
+  uiid = 0;
   x = 4;
   y = 0;
   width = 8;
@@ -26,6 +27,7 @@ class P1 {
 
 class P2 {
   id = 0;
+  uiid = 0;
   x = 1264;
   y = 0;
   width = 8;
@@ -144,6 +146,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
         listOfPlayers.set(j, new P2());
       }
       listOfPlayers.get(j).id = client.id;
+      listOfPlayers.get(j).uiid = data[2];
       queue[j] = listOfPlayers.get(j).id;
     }
     if (j % 2 !== 0) {
@@ -177,12 +180,10 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('join_game')
   handleJoinGame(client: Socket, data: any) {
     let player = null;
-    console.log(data);
     if (data[1]) {
       this.handleInvitation(client, data, player);
       return;
     }
-
     for (let [key, value] of listOfPlayers.entries()) {
       if (value.id === client.id) {
         player = value;
@@ -198,6 +199,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
         listOfPlayers.set(i, new P2());
       }
       listOfPlayers.get(i).id = client.id;
+      listOfPlayers.get(i).uiid = data[2];
       queue[i] = listOfPlayers.get(i).id;
     }
     if (i % 2 !== 0) {
@@ -340,12 +342,12 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
               if (player2.points === 10) {
                 this.server.to(player2.room).emit('player2_won');
                 const endedMatch = new MatchHistory({
-                  playerOne: { id: player1.id },
-                  playerTwo: { id: player2.id },
+                  playerOne: { id: player1.uiid },
+                  playerTwo: { id: player2.uiid },
                   matchType: 'Pong',
                   playerOneGoalsCount: player1.points,
                   playerTwoGoalsCount: player2.points,
-                  winnerId: player2.id,
+                  winnerId: player2.uiid,
                 });
                 this.matchHistoryService.persistMatch(endedMatch);
                 clearInterval(ball_ins.intervalid);
@@ -385,12 +387,12 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
               if (player1.points === 10) {
                 this.server.to(player1.room).emit('player1_won');
                 const endedMatch = new MatchHistory({
-                  playerOne: { id: player1.id },
-                  playerTwo: { id: player2.id },
+                  playerOne: { id: player1.uiid },
+                  playerTwo: { id: player2.uiid },
                   matchType: 'Pong',
                   playerOneGoalsCount: player1.points,
                   playerTwoGoalsCount: player2.points,
-                  winnerId: player1.id,
+                  winnerId: player1.uiid,
                 });
                 console.log(endedMatch);
                 this.matchHistoryService.persistMatch(endedMatch);
