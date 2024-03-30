@@ -1,6 +1,7 @@
 <script>
 import PicUpload from "../components/ProfilePicUpload.vue";
 import { useProfilePictureStore } from '../stores/profilePictureStore.ts';
+import userService from "../services/UserService";
 import authService from "../services/AuthService";
 import { useAuthStore } from "../stores/authStore";
 
@@ -16,10 +17,13 @@ export default {
             nickname: '',
             picture: useProfilePictureStore(),
             validationCode: '',
+            user: {}
         }
     },
     mounted() {
-        this.isChecked = authStore.getUser.tfaEnabled;
+        this.user = authStore.getUser;
+        this.isChecked = this.user.tfaEnabled;
+        this.nickname = this.user.nickname;
     },
     methods: {
         emitEvent() {
@@ -33,14 +37,6 @@ export default {
                 this.validationCode = '';
             }
         },
-        saveNickname() {
-            try {
-                console.log('nickname: ' + this.nickname);
-            }
-            catch (error) {
-                console.log('Error saving nickname: ', error);
-            }
-        },
         generateCode() {
             authService
                 .generateTfa()
@@ -48,14 +44,21 @@ export default {
                     this.validationCode = data.secret;
                 })
                 .catch((error) => {
-                    console.log('Error generating 2fa secret: ', error);
+                    console.log('Error generating 2fa secret: ', error.message);
                 });
         },
         disableTfa() {
             authService
                 .disableTfa()
                 .catch((error) => {
-                    console.log('Error generating 2fa secret: ', error);
+                    console.log('Error generating 2fa secret: ', error.message);
+                });
+        },
+        updateNickname() {
+            userService
+                .updateNickname(this.nickname)
+                .catch((error) => {
+                    console.log('Error updating nickname: ', error.message);
                 });
         },
     },
@@ -89,7 +92,7 @@ export default {
                     <div class="flex items-center">
                         <input placeholder="Enter new nickname" required v-model="nickname" type="text" id="nickname"
                             class="bg-gray-500 w-4/6 p-2.5 border border-gray-300 text-gray-900 text-sm rounded-l-sm focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500" />
-                        <button type="button" @click="saveNickname"
+                        <button type="button" @click="updateNickname"
                             class="bg-gray-500 hover:bg-green-500 text-sm text-gray-100 p-2.5 border border-gray-400 hover:border-green-400 rounded-r-sm block placeholder-gray-400 focus:ring-blue-500">
                             save
                         </button>

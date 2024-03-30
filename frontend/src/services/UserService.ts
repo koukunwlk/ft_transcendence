@@ -14,4 +14,18 @@ export default {
       },
     });
   },
+  updateNickname(nickname: string) {
+    const token = authStore.getToken;
+
+    const data = {
+      nickname,
+    };
+
+    return axios.patch("http://localhost:3000/user/nickname", data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        token: token,
+      },
+    });
+  },
 };
