@@ -1,7 +1,5 @@
-import { Injectable } from "@nestjs/common";
 
-@Injectable()
-export class MatchEndedEvent {
+export interface MatchEndedEvent {
     playerOneId: string;
     playerOneGoalsCount?: number;
     playerTwoId: string;

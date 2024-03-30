@@ -39,7 +39,6 @@ import { useAuthStore } from "../stores/authStore";
 export const socket = io("http://localhost:3000");
 
 const authStore = useAuthStore();
-//authStore.getUser;
 export default {
   components: { JoinRoom },
   name: "Pong",
@@ -89,7 +88,6 @@ export default {
     renderGame() {
       this.renderPaddle();
       this.initBall();
-
       requestAnimationFrame(() => this.renderGame());
     },
     movePlayer(event) {

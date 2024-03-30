@@ -60,6 +60,10 @@ export class User extends Model<UserProps> {
     return this.props.nickname;
   }
 
+  setNickname(nickname: string) {
+    this.props.nickname = nickname;
+  }
+
   getEmail(): string {
     return this.props.email;
   }
