@@ -7,11 +7,11 @@
     >
       Change Background
     </button>
+    <JoinRoom class="joinroom-button" v-if="!gameOn" />
     <div
       class="Background"
       :style="{ backgroundImage: `url('${backgroundImage}')` }"
     >
-      <JoinRoom v-if="!gameOn" />
       <div class="Container">
         <canvas
           id="pong"
@@ -89,6 +89,7 @@ export default {
     renderGame() {
       this.renderPaddle();
       this.initBall();
+
       requestAnimationFrame(() => this.renderGame());
     },
     movePlayer(event) {
@@ -124,13 +125,13 @@ export default {
         this.rightPaddle = null;
       }
       setTimeout(() => {
-        socket.emit("handle_reconnect", data);
-        socket.off("PlayerReconnected").on("PlayerReconnected", () => {
-          console.log("Opponent reconnected during the pause.");
-        });
-        console.log("Opponent did not return. Leaving the room.");
-        this.$router.push("/lobby");
-      }, 2000);
+        //   socket.emit("handle_reconnect", data);
+        //   socket.off("PlayerReconnected").on("PlayerReconnected", () => {
+        //     console.log("Opponent reconnected during the pause.");
+        //   });
+        //   console.log("Opponent did not return. Leaving the room.");
+        //   this.$router.push("/lobby");
+      }, 1000);
     },
     handlePlayer1Scored(data) {
       this.p1_points = data;
@@ -164,12 +165,6 @@ export default {
       socket.off("START_GAME").on("START_GAME", this.startGame);
       document.addEventListener("keydown", this.movePlayer);
       document.addEventListener("keyup", this.handleKeyup);
-      // socket
-      //   .off("player1_update")
-      //   .on("player1_update", this.handlePlayerUpdate);
-      // socket
-      //   .off("player2_update")
-      //   .on("player2_update", this.handlePlayer2Update);
       socket.off("player_moved").on("player_moved", (data) => {
         if (data.side === "left") {
           this.leftPaddle = data;
@@ -215,6 +210,12 @@ export default {
   left: 50%;
   bottom: 7px;
   transform: translate(-50%, 50%);
+}
+.joinroom-button {
+  text-align: center;
+  display: inline-block;
+  cursor: pointer;
+  position: fixed;
 }
 
 .p1-score {

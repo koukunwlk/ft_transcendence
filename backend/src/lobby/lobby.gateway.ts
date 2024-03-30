@@ -52,9 +52,14 @@ class BALL2 {
 }
 
 const listOfPlayers: Map<number, any> = new Map();
+const listOfInvites: Map<number, any> = new Map();
 let i = 0;
+let j = 5000;
+let countMatches = 0;
 let lastRoom = 'empty';
+let lastRoomJ = 'empty';
 let fastSpeed;
+let roomFlag = 'empty';
 const ballOfRoom: Map<string, any> = new Map();
 let queue = Array<string>();
 
@@ -78,17 +83,17 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
         continue;
       }
     }
-    this.server.emit('PlayerDisconnected', client.id);
-    if (
-      listOfPlayers.get(i) &&
-      listOfPlayers.get(i).room &&
-      ballOfRoom.get(listOfPlayers.get(i).room).intervalid
-    ) {
-      client.leave(listOfPlayers.get(i).room);
-      clearInterval(ballOfRoom.get(listOfPlayers.get(i).room).intervalid);
-    }
-    listOfPlayers.delete(id);
-    i--;
+    // this.server.emit('PlayerDisconnected', client.id);
+    // if (
+    //   listOfPlayers.get(i) &&
+    //   listOfPlayers.get(i).room &&
+    //   ballOfRoom.get(listOfPlayers.get(i)?.room)?.intervalid
+    // ) {
+    //   client.leave(listOfPlayers.get(i).room);
+    //   clearInterval(ballOfRoom.get(listOfPlayers.get(i).room).intervalid);
+    // }
+    // listOfPlayers.delete(id);
+    // i--;
   }
 
   @SubscribeMessage('handle_reconnect')
@@ -105,11 +110,65 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
       }
     }
   }
-
+  handleInvitation(client: Socket, data: any, player: any) {
+    let creatorFlag = false;
+    console.log('Player connected:', data[0].username.trim());
+    console.log('roomname:', data[1]);
+    if (data[1].includes(data[0].username.trim() + '+')) {
+      console.log('creator:', data[0].username);
+      creatorFlag = true;
+      listOfInvites.set(data[1], '+' + data[1].split('+')[1]);
+      console.log(listOfInvites);
+    }
+    if (data[1].includes('+' + data[0].username.trim())) {
+      console.log('opponent:', data[0].username);
+      creatorFlag = false;
+    }
+    if (!player) {
+      j++;
+      if (j % 2 !== 0 && creatorFlag) {
+        listOfPlayers.set(j, new P1());
+      } else {
+        listOfPlayers.set(j, new P2());
+      }
+      listOfPlayers.get(j).id = client.id;
+      queue[j] = listOfPlayers.get(j).id;
+    }
+    if (j % 2 !== 0) {
+      const roomId = (queue[j] + '+' + 'gameRoom').toString();
+      lastRoomJ = roomId;
+      listOfPlayers.get(j).room = roomId;
+      client.join(roomId);
+      console.log(roomId);
+    } else if (j % 2 === 0) {
+      const roomId = lastRoomJ;
+      listOfPlayers.get(j).room = roomId;
+      console.log(roomId);
+      client.join(roomId);
+      this.server.to(roomId).emit('player_moved', listOfPlayers.get(j - 1));
+      this.server.to(roomId).emit('player_moved', listOfPlayers.get(j));
+      this.server.to(roomId).emit('START_GAME');
+      countMatches++;
+      if (fastSpeed === true) ballOfRoom.set(roomId, new BALL2());
+      else ballOfRoom.set(roomId, new BALL());
+      ballOfRoom.get(roomId).id = roomId;
+      fastSpeed = false;
+      this.handleBallMovement(
+        listOfPlayers.get(j - 1),
+        listOfPlayers.get(j),
+        ballOfRoom.get(roomId),
+        client,
+      );
+    }
+  }
   @SubscribeMessage('join_game')
   handleJoinGame(client: Socket, data: any) {
     let player = null;
-    console.log('Player connected: ', data.username);
+    if (data[1]) {
+      this.handleInvitation(client, data, player);
+      return;
+    }
+
     for (let [key, value] of listOfPlayers.entries()) {
       if (value.id === client.id) {
         player = value;
@@ -139,11 +198,11 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
       this.server.to(roomId).emit('player_moved', listOfPlayers.get(i - 1));
       this.server.to(roomId).emit('player_moved', listOfPlayers.get(i));
       this.server.to(roomId).emit('START_GAME');
+      countMatches++;
       if (fastSpeed === true) ballOfRoom.set(roomId, new BALL2());
       else ballOfRoom.set(roomId, new BALL());
       ballOfRoom.get(roomId).id = roomId;
       fastSpeed = false;
-      // Handle ball movement
       this.handleBallMovement(
         listOfPlayers.get(i - 1),
         listOfPlayers.get(i),
@@ -165,8 +224,9 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
     let ball: string;
     for (ball of ballOfRoom.keys()) {
       if (
+        listOfPlayers.has(id) &&
         listOfPlayers.get(id).roomId &&
-        ballOfRoom.get(listOfPlayers.get(id).roomId)
+        ballOfRoom.get(listOfPlayers.get(id)?.roomId)
       ) {
         ballOfRoom.delete(listOfPlayers.get(id).roomId);
       }

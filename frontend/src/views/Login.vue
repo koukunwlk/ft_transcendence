@@ -34,16 +34,46 @@
 
 <script>
 import data from "../data/data.json";
+import userService from "../services/UserService";
 import { useAuthStore } from "../stores/authStore";
 import authService from "../services/AuthService";
 
 const name = "Login";
-const user = useAuthStore();
+const authStore = useAuthStore();
 
 export default {
   name: "Login Page",
   setup() {},
+  mounted() {
+    this.getTokenFromCookie();
+    this.getLoggedUser();
+  },
   methods: {
+    getLoggedUser() {
+      userService
+        .me()
+        .then(({ data }) => {
+          this.username = data.username;
+          authStore.setUser(data);
+          if (authStore.getUser) {
+            this.homeRedirect();
+          }
+        })
+        .catch((error) => {});
+    },
+    getTokenFromCookie() {
+      const cookies = document.cookie.split(";");
+
+      cookies.forEach((cookie) => {
+        if (cookie.trimStart().startsWith("token=")) {
+          this.saveToken(cookie.trimStart());
+        }
+      });
+    },
+    saveToken(tokenCookie) {
+      const token = tokenCookie.substring(6);
+      authStore.setToken(token);
+    },
     async login() {
       try {
         await authService.login();
@@ -51,7 +81,7 @@ export default {
         console.log(error);
       }
     },
-    goHome() {
+    homeRedirect() {
       this.$router.push({ name: "Home" });
     },
   },
