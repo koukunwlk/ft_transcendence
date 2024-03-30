@@ -151,7 +151,7 @@ export default {
 					<h3 class="md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl" title="nickname">
 						The {{ profileUser && profileUser.nickname ? profileUser.nickname : 'Unknown' }}
 					</h3>
-					<h4 class="flex justify-end text-xs italic text-slate-300" title="intra nickname">
+					<h4 class="flex justify-end text-xs md:text-base lg:text-lg xl:text-xl 2xl:text-2xl italic text-slate-300" title="intra nickname">
 						{{ profileUser ? profileUser.username : '' }}
 					</h4>
 				</div>
@@ -171,11 +171,11 @@ export default {
 				</div>
 				<Achievements />
 			</div>
-			<div class="absolute right-0 xl:right-10 2xl:right-14 top-24 md:top-28 lg:top-16 xl:top-20 px-2 md:px-4">
+			<div class="absolute right-0 xl:right-10 2xl:right-14 top-24 md:top-28 xl:top-20 px-2 md:px-4">
 				<table>
 					<tbody>
 						<tr v-for="(stat, index) in stats" :key="index"
-							class="text-xs md:text-sm lg:text-lg 2xl:text-xl text-yellow-500">
+							class="text-xs md:text-sm 2xl:text-xl text-yellow-500">
 							<th scope="row"
 								class="bg-transparent pr-2 lg:pr-4 xl:pr-6 3xl:pr-8 text-left text-gray-500 uppercase md:tracking-wider">
 								{{ stat }}
