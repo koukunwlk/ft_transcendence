@@ -18,7 +18,6 @@ import { ref } from "vue";
 const authStore = useAuthStore();
 let userData = await authStore.getUser;
 let otherPlayer = null;
-console.log(userData);
 if (userData && userData.username) {
   if (
     userData.username.trim() == "acosta-a" ||

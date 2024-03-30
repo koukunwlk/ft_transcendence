@@ -7,7 +7,7 @@ import {
 } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import {v4 as uuidV4} from "uuid";
+import { v4 as uuidV4 } from 'uuid';
 import { Inject } from '@nestjs/common';
 import { MatchHistoryService } from '@/match-history/service/match-history.service';
 import { MatchHistory } from '@/match-history/model/match-history.model';
@@ -62,11 +62,9 @@ const listOfPlayers: Map<number, any> = new Map();
 const listOfInvites: Map<number, any> = new Map();
 let i = 0;
 let j = 5000;
-let countMatches = 0;
 let lastRoom = 'empty';
 let lastRoomJ = 'empty';
 let fastSpeed;
-let roomFlag = 'empty';
 const ballOfRoom: Map<string, any> = new Map();
 let queue = Array<string>();
 
@@ -76,11 +74,10 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
   server: Server;
   evEmitter: EventEmitter2 = new EventEmitter2();
 
-  
   constructor(
     @Inject(MatchHistoryService)
-    private readonly matchHistoryService: MatchHistoryService
-    ) {}
+    private readonly matchHistoryService: MatchHistoryService,
+  ) {}
 
   handleConnection(client: Socket) {
     console.log(`Client connected + ${client.id}`);
@@ -163,8 +160,6 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
       this.server.to(roomId).emit('player_moved', listOfPlayers.get(j - 1));
       this.server.to(roomId).emit('player_moved', listOfPlayers.get(j));
       this.server.to(roomId).emit('START_GAME');
-
-      countMatches++;
       if (fastSpeed === true) ballOfRoom.set(roomId, new BALL2());
       else ballOfRoom.set(roomId, new BALL());
       ballOfRoom.get(roomId).id = roomId;
@@ -214,7 +209,6 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
       this.server.to(roomId).emit('player_moved', listOfPlayers.get(i - 1));
       this.server.to(roomId).emit('player_moved', listOfPlayers.get(i));
       this.server.to(roomId).emit('START_GAME');
-      countMatches++;
       if (fastSpeed === true) ballOfRoom.set(roomId, new BALL2());
       else ballOfRoom.set(roomId, new BALL());
       ballOfRoom.get(roomId).id = roomId;
