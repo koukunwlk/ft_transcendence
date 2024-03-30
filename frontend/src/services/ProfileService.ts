@@ -15,7 +15,7 @@ export class ProfileService {
   }
 
   me() {
-    return axios.get("http://localhost:3000/user/me", {
+    return axios.get("http://10.0.0.173:3000/user/me", {
       headers: {
         Authorization: `Bearer ${this.token}`,
         token: this.token,

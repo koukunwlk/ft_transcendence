@@ -6,6 +6,7 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 class P1 {
   id = 0;
@@ -50,6 +51,7 @@ class BALL2 {
   speed = 4;
   intervalid;
 }
+const eventEmitter = new EventEmitter2();
 
 const listOfPlayers: Map<number, any> = new Map();
 const listOfInvites: Map<number, any> = new Map();
@@ -148,6 +150,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
       this.server.to(roomId).emit('player_moved', listOfPlayers.get(j - 1));
       this.server.to(roomId).emit('player_moved', listOfPlayers.get(j));
       this.server.to(roomId).emit('START_GAME');
+      eventEmitter.emit('match-started', {});
       countMatches++;
       if (fastSpeed === true) ballOfRoom.set(roomId, new BALL2());
       else ballOfRoom.set(roomId, new BALL());
@@ -168,7 +171,6 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
       this.handleInvitation(client, data, player);
       return;
     }
-
     for (let [key, value] of listOfPlayers.entries()) {
       if (value.id === client.id) {
         player = value;
@@ -325,6 +327,17 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
                 .emit('player2_scored', player2.points);
               if (player2.points === 10) {
                 this.server.to(player2.room).emit('player2_won');
+                eventEmitter.emit(
+                  'match-ended',
+                  {
+                    playerOneId: 'player1.id',
+                    playerTwoId: player2.id,
+                    matchType: 'casual',
+                    playerOneGoals: player1.points,
+                    playerTwoGoals: player2.points,
+                  },
+                  player2.room,
+                );
                 clearInterval(ball_ins.intervalid);
                 client.leave(player2.room);
 
@@ -361,6 +374,17 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
                 .emit('player1_scored', player1.points);
               if (player1.points === 10) {
                 this.server.to(player1.room).emit('player1_won');
+                eventEmitter.emit(
+                  'match-ended',
+                  {
+                    playerOneId: player1.id,
+                    playerTwoId: player2.id,
+                    matchType: 'casual',
+                    playerOneGoals: player1.points,
+                    playerTwoGoals: player2.points,
+                  },
+                  player1.room,
+                );
                 clearInterval(ball_ins.intervalid);
                 client.leave(player1.room);
                 player1.points = 0;
