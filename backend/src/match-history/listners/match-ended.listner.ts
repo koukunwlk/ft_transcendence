@@ -14,6 +14,7 @@ export class MatchEndedListner {
 
     @OnEvent('match-ended')
     handleMatchEndedEvent(match: MatchEndedEvent, matchId: string) {
+        console.log("received match ended event", match, matchId)
         const endedMatch = new MatchHistory({
             playerOne: {id: match.playerOneId},
             playerTwo: {id: match.playerTwoId},

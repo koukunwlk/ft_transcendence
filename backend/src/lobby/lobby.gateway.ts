@@ -7,6 +7,10 @@ import {
 } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import {v4 as uuidV4} from "uuid";
+import { Inject } from '@nestjs/common';
+import { MatchHistoryService } from '@/match-history/service/match-history.service';
+import { MatchHistory } from '@/match-history/model/match-history.model';
 
 class P1 {
   id = 0;
@@ -51,7 +55,6 @@ class BALL2 {
   speed = 4;
   intervalid;
 }
-const eventEmitter = new EventEmitter2();
 
 const listOfPlayers: Map<number, any> = new Map();
 const listOfInvites: Map<number, any> = new Map();
@@ -69,6 +72,13 @@ let queue = Array<string>();
 export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
+  evEmitter: EventEmitter2 = new EventEmitter2();
+
+  
+  constructor(
+    @Inject(MatchHistoryService)
+    private readonly matchHistoryService: MatchHistoryService
+    ) {}
 
   handleConnection(client: Socket) {
     console.log(`Client connected + ${client.id}`);
@@ -137,7 +147,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
       queue[j] = listOfPlayers.get(j).id;
     }
     if (j % 2 !== 0) {
-      const roomId = (queue[j] + '+' + 'gameRoom').toString();
+      const roomId = uuidV4();
       lastRoomJ = roomId;
       listOfPlayers.get(j).room = roomId;
       client.join(roomId);
@@ -150,7 +160,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
       this.server.to(roomId).emit('player_moved', listOfPlayers.get(j - 1));
       this.server.to(roomId).emit('player_moved', listOfPlayers.get(j));
       this.server.to(roomId).emit('START_GAME');
-      eventEmitter.emit('match-started', {});
+
       countMatches++;
       if (fastSpeed === true) ballOfRoom.set(roomId, new BALL2());
       else ballOfRoom.set(roomId, new BALL());
@@ -167,10 +177,12 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('join_game')
   handleJoinGame(client: Socket, data: any) {
     let player = null;
+    console.log(data);
     if (data[1]) {
       this.handleInvitation(client, data, player);
       return;
     }
+
     for (let [key, value] of listOfPlayers.entries()) {
       if (value.id === client.id) {
         player = value;
@@ -189,7 +201,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
       queue[i] = listOfPlayers.get(i).id;
     }
     if (i % 2 !== 0) {
-      const roomId = (queue[i] + '+' + 'gameRoom').toString();
+      const roomId = uuidV4();
       lastRoom = roomId;
       listOfPlayers.get(i).room = roomId;
       client.join(roomId);
@@ -327,17 +339,15 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
                 .emit('player2_scored', player2.points);
               if (player2.points === 10) {
                 this.server.to(player2.room).emit('player2_won');
-                eventEmitter.emit(
-                  'match-ended',
-                  {
-                    playerOneId: 'player1.id',
-                    playerTwoId: player2.id,
-                    matchType: 'casual',
-                    playerOneGoals: player1.points,
-                    playerTwoGoals: player2.points,
-                  },
-                  player2.room,
-                );
+                const endedMatch = new MatchHistory({
+                  playerOne: { id: player1.id },
+                  playerTwo: { id: player2.id },
+                  matchType: 'Pong',
+                  playerOneGoalsCount: player1.points,
+                  playerTwoGoalsCount: player2.points,
+                  winnerId: player2.id,
+                });
+                this.matchHistoryService.persistMatch(endedMatch);
                 clearInterval(ball_ins.intervalid);
                 client.leave(player2.room);
 
@@ -374,17 +384,16 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
                 .emit('player1_scored', player1.points);
               if (player1.points === 10) {
                 this.server.to(player1.room).emit('player1_won');
-                eventEmitter.emit(
-                  'match-ended',
-                  {
-                    playerOneId: player1.id,
-                    playerTwoId: player2.id,
-                    matchType: 'casual',
-                    playerOneGoals: player1.points,
-                    playerTwoGoals: player2.points,
-                  },
-                  player1.room,
-                );
+                const endedMatch = new MatchHistory({
+                  playerOne: { id: player1.id },
+                  playerTwo: { id: player2.id },
+                  matchType: 'Pong',
+                  playerOneGoalsCount: player1.points,
+                  playerTwoGoalsCount: player2.points,
+                  winnerId: player1.id,
+                });
+                console.log(endedMatch);
+                this.matchHistoryService.persistMatch(endedMatch);
                 clearInterval(ball_ins.intervalid);
                 client.leave(player1.room);
                 player1.points = 0;
