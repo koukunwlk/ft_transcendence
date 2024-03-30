@@ -16,7 +16,7 @@ export class UserService {
   constructor(
     @Inject(UserRepository)
     private readonly userRepository: UserRepository,
-  ) {}
+  ) { }
 
   async insertUser(createUser: CreateUserDTO): Promise<string> {
     // await this.checkDuplicatedUser(createUser.nickname);
@@ -35,7 +35,7 @@ export class UserService {
     const user = await this.userRepository.findOne({ nickname });
 
     if (!user) {
-      throw new BadRequestException("User doesn't exist");  
+      throw new BadRequestException("User doesn't exist");
     }
 
     return user;
@@ -144,7 +144,7 @@ export class UserService {
     user.setTfaAuthenticated(tfaAuthenticated);
     return await this.userRepository.update(user);
   }
-  
+
   async updateStatus(id: string, status: UserStatusEnum): Promise<void> {
     let user = await this.userRepository.findOne({
       id,
@@ -154,6 +154,21 @@ export class UserService {
       throw new HttpException('Invalid user id', HttpStatus.BAD_REQUEST);
     }
     user.setStatus(status);
+    return await this.userRepository.update(user);
+  }
+
+  async updateAvatar(id: string, avatar: Buffer): Promise<void> {
+    let user = await this.userRepository.findOne({
+      id,
+    });
+
+    if (!user) {
+      throw new HttpException('Invalid user id', HttpStatus.BAD_REQUEST);
+    }
+
+    // const avatarBuffer = Buffer.from(avatar, 'base64');
+
+    user.setAvatar(avatar);
     return await this.userRepository.update(user);
   }
 }
