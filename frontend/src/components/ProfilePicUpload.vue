@@ -8,12 +8,12 @@
         >
         <button
             @click="$refs.fileInput.click()"
-            class="flex p-1 bg-yellow-500 rounded-xl hover:rounded-3xl transition-all duration-300"
+            class="flex p-1 lg:p-1.5 bg-gray-500 hover:bg-green-500 rounded-xl hover:rounded-3xl transition-all duration-300"
         >
             <img
-                class="h-4 w-4 lg:h-5 lg:w-5 xl:w-6 xl:h-6 2xl:w-7 2xl:h-7"
-                src="../assets/svgs/edit.svg"
-                alt="edit icon"
+                class="h-4 w-4 lg:h-4 lg:w-4 xl:w-5 xl:h-5 2xl:w-6 2xl:h-6"
+                src="../assets/svgs/camera.svg"
+                alt="edit camera icon"
             >
         </button>
     </div>
@@ -26,7 +26,7 @@
                 alt="preview profile image"
                 class="w-56 md:w-72 lg:w-80 h-56 md:h-72 lg:h-80 mt-48 md:mt-40 lg:mt-36 rounded-full object-cover"
             >
-            <div class="flex flex-row mt-6">
+            <div class="flex flex-row text-white mt-6">
                 <button
                     class="mr-20"
                     @click="closePreview">

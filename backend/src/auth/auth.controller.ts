@@ -41,6 +41,12 @@ export class AuthController {
     return await this.authService.generateTfaSecret(req.user.id);
   }
 
+  @Post('disable-2fa')
+  @UseGuards(JwtAuthGuard)
+  async disableTfaSecret(@Req() req) {
+    return await this.authService.disableTfa(req.user.id);
+  }
+
   @Post('verify-2fa')
   @UseGuards(JwtAuthGuard)
   async verifyTfaSecret(

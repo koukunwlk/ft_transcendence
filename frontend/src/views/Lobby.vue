@@ -40,7 +40,7 @@ export default {
   data() {
     return {
       user: {},
-    };
+    }
   },
   mounted() {
     this.getTokenFromCookie();
