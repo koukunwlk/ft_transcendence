@@ -14,9 +14,10 @@
 import { socket } from "./Pong.vue";
 import { useAuthStore } from "../stores/authStore";
 import { ref } from "vue";
+import userService from "../services/UserService";
 
 const authStore = useAuthStore();
-let userData = await authStore.getUser;
+// let userData = await authStore.getUser;
 let otherPlayer = null;
 // if (userData && userData.username) {
 //   if (
@@ -36,9 +37,44 @@ let otherPlayer = null;
 
 export default {
   name: "Lobby",
+  data() {
+    return {
+      user: {},
+    };
+  },
+  mounted() {
+    this.getTokenFromCookie();
+    this.getLoggedUser();
+  },
   methods: {
+    getLoggedUser() {
+      userService
+        .me()
+        .then(({ data }) => {
+          this.username = data.username;
+          authStore.setUser(data);
+          this.user = authStore.getUser;
+          console.log(this.user);
+        })
+        .catch((error) => {
+          this.$router.push({ name: "Login" });
+        });
+    },
+    getTokenFromCookie() {
+      const cookies = document.cookie.split(";");
+
+      cookies.forEach((cookie) => {
+        if (cookie.trimStart().startsWith("token=")) {
+          this.saveToken(cookie.trimStart());
+        }
+      });
+    },
+    saveToken(tokenCookie) {
+      const token = tokenCookie.substring(6);
+      authStore.setToken(token);
+    },
     startGame() {
-      socket.emit("join_game", userData, otherPlayer, userData.id);
+      socket.emit("join_game", this.user, otherPlayer, this.user.id);
       this.$router.push("/pong");
       console.log("join game");
     },

@@ -10,11 +10,12 @@
 </template>
 
 <script>
-import { useRouter } from "vue-router";
 import { socket } from "./Pong.vue";
 import { useAuthStore } from "../stores/authStore";
+import { ref } from "vue";
+import userService from "../services/UserService";
+
 const authStore = useAuthStore();
-let userData = await authStore.getUser;
 let otherPlayer = null;
 // if (userData && userData.username) {
 //   if (
@@ -34,7 +35,41 @@ let otherPlayer = null;
 
 export default {
   name: "JoinRoom",
+  data() {
+    return {
+      user: {},
+    };
+  },
+  mounted() {
+    this.getTokenFromCookie();
+    this.getLoggedUser();
+  },
   methods: {
+    getLoggedUser() {
+      userService
+        .me()
+        .then(({ data }) => {
+          this.username = data.username;
+          authStore.setUser(data);
+          this.user = authStore.getUser;
+        })
+        .catch((error) => {
+          this.$router.push({ name: "Login" });
+        });
+    },
+    getTokenFromCookie() {
+      const cookies = document.cookie.split(";");
+
+      cookies.forEach((cookie) => {
+        if (cookie.trimStart().startsWith("token=")) {
+          this.saveToken(cookie.trimStart());
+        }
+      });
+    },
+    saveToken(tokenCookie) {
+      const token = tokenCookie.substring(6);
+      authStore.setToken(token);
+    },
     userCancelQueue() {
       this.$router.push("lobby");
       socket.emit("cancelQueue", otherPlayer);

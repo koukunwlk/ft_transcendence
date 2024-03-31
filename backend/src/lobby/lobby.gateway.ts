@@ -94,17 +94,19 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
         continue;
       }
     }
+    console.log('id: i listOfPlayers.get(id)', id, i, listOfPlayers)
     this.server.emit('PlayerDisconnected', client.id);
     if (
       listOfPlayers.get(i) &&
       listOfPlayers.get(i).room &&
       ballOfRoom.get(listOfPlayers.get(i)?.room)?.intervalid
     ) {
-      client.leave(listOfPlayers.get(i).room);
       clearInterval(ballOfRoom.get(listOfPlayers.get(i).room).intervalid);
+      client.leave(listOfPlayers.get(i).room);
+      ballOfRoom.delete(listOfPlayers.get(i).room);
     }
     listOfPlayers.delete(id);
-//    i--;
+    //    i--;
   }
 
   @SubscribeMessage('handle_reconnect')
@@ -244,11 +246,13 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
       }
     }
     listOfPlayers.delete(id);
-    if (otherPlayer){j--}
-    else{i--;}
-    
-  //  i--;
+    if (otherPlayer) {
+      j--;
+    } else {
+      i--;
+    }
   }
+
   @SubscribeMessage('increase_speed')
   handleSpeed(client: Socket) {
     fastSpeed = true;
