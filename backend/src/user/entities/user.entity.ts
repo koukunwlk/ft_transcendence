@@ -39,4 +39,10 @@ export class UserEntity {
 
   @Column({ nullable: true })
   tfaAuthenticated: boolean;
+
+  @Column({
+    type: 'bytea',
+    nullable: true,
+})
+  avatar: Buffer;
 }
