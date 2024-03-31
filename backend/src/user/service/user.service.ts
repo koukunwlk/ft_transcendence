@@ -192,7 +192,7 @@ export class UserService {
     user.setNickname(nickname);
     return await this.userRepository.update(user);
   }
-  
+
   async updateAvatar(id: string, avatar: Buffer): Promise<void> {
     let user = await this.userRepository.findOne({
       id,
@@ -201,8 +201,6 @@ export class UserService {
     if (!user) {
       throw new HttpException('Invalid user id', HttpStatus.BAD_REQUEST);
     }
-
-    // const avatarBuffer = Buffer.from(avatar, 'base64');
 
     user.setAvatar(avatar);
     return await this.userRepository.update(user);
