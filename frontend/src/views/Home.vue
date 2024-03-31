@@ -15,7 +15,7 @@
         <!-- Play and Profile Buttons -->
         <div class="sm:row-span-2 grid sm:content-end">
           <div class="grid grid-cols-2 gap-6">
-            <button type="button" @click="lobbyRedirect"
+            <button type="button" title="Play" @click="lobbyRedirect"
               class="h-24 w-24 sm:h-56 sm:w-56 lg:h-60 lg:w-60 xl:h-80 xl:w-80 bg-gray-600 bg-opacity-30 hover:bg-zinc-500 text-zinc-500  font-semibold hover:text-white text-sm focus:outline-none rounded-lg border border-zinc-600 hover:border-transparent focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700">
               <div class="flex justify-center items-center">
                 <svg class="h-16 w-16 sm:h-28 sm:w-28" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
@@ -26,7 +26,7 @@
 
               </div>
             </button>
-            <button type="button" @click="profileRedirect()"
+            <button type="button" title="Profile" @click="profileRedirect()"
               class="h-24 w-24 sm:h-56 sm:w-56 lg:h-60 lg:w-60 xl:h-80 xl:w-80 bg-gray-600 bg-opacity-30 hover:bg-zinc-500 text-zinc-500  font-semibold hover:text-white text-sm focus:outline-none rounded-lg border border-zinc-600 hover:border-transparent focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700">
               <div class="grid justify-center">
                 <svg class="h-16 w-16 sm:h-28 sm:w-28" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
@@ -42,7 +42,7 @@
         <!-- Logout buttom -->
         <div class="sm:row-span-1 mt-3 xl:mt-0 xl:ml-44">
           <div class=" grid justify-center content-start ">
-            <button type="button" @click="logout()"
+            <button type="button" title="Logout" @click="logout()"
               class="h-24 w-24 sm:h-56 sm:w-56 lg:h-60 lg:w-60 xl:mt-8 xl:h-80 xl:w-80 xl:mr-48 bg-gray-600 bg-opacity-30 hover:bg-zinc-500 text-zinc-500  font-semibold hover:text-white text-sm focus:outline-none rounded-lg border border-zinc-600 hover:border-transparent focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700">
               <div class="grid justify-center">
                 <svg class="h-16 w-16 sm:h-28 sm:w-28" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
