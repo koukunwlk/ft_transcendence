@@ -1,8 +1,8 @@
 <template>
   <div class="w-screen h-screen overflow-hidden margin-0">
-    <div class="flex image-animation">
-        <img class="flex h-screen object-cover justify-center items-center" src="../assets/images/kai-pilger.jpg" alt="background">
-        <img class="flex h-screen object-cover justify-center items-center" src="../assets/images/kai-pilger.jpg" alt="background">
+    <div class="flex image-animation w-[200%]">
+        <img class="flex h-screen w-1/2 object-cover justify-center items-center" src="../assets/images/kai-pilger.jpg" alt="background">
+        <img class="flex h-screen w-1/2 object-cover justify-center items-center" src="../assets/images/kai-pilger.jpg" alt="background">
     </div>
   </div>
   <div v-if="showSettingsModal">
