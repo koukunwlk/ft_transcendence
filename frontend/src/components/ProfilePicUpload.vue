@@ -26,7 +26,7 @@
                 alt="preview profile image"
                 class="w-56 md:w-72 lg:w-80 h-56 md:h-72 lg:h-80 mt-48 md:mt-40 lg:mt-36 rounded-full object-cover"
             >
-            <div class="flex flex-row mt-6">
+            <div class="flex flex-row text-white mt-6">
                 <button
                     class="mr-20"
                     @click="closePreview">
