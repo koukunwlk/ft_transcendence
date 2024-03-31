@@ -64,6 +64,7 @@
 import { ref } from "vue";
 import { useAuthStore } from "../stores/authStore";
 import authService from "../services/AuthService";
+import userService from "../services/UserService";
 
 const authStore = useAuthStore();
 
@@ -77,11 +78,25 @@ export default {
     };
   },
   mounted() {
-    this.user = this.getStoredUser();
+    this.getLoggedUser();
   },
   methods: {
-    getStoredUser() {
-      return authStore.getUser;
+    getLoggedUser() {
+      userService
+        .me()
+        .then(({ data }) => {
+          authStore.setUser(data);
+          this.user = authStore.getUser;
+          if (
+            this.user.tfaEnabled &&
+            !this.user.tfaAuthenticated
+          ) {
+            this.$router.push({ name: "TFA" });
+          }
+        })
+        .catch((error) => {
+          this.$router.push({ name: "Login" });
+        });
     },
     validateCode() {
       authService

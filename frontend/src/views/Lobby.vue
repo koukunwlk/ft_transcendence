@@ -54,7 +54,12 @@ export default {
           this.username = data.username;
           authStore.setUser(data);
           this.user = authStore.getUser;
-          console.log(this.user);
+          if (
+            this.user.tfaEnabled &&
+            !this.user.tfaAuthenticated
+          ) {
+            this.$router.push({ name: "TFA" });
+          }
         })
         .catch((error) => {
           this.$router.push({ name: "Login" });
