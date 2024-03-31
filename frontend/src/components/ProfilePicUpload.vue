@@ -19,21 +19,15 @@
                 Confirm
             </button>
         </div>
-        <ImageUpload></ImageUpload>
     </div>
 </template>
 
 <script>
 import { useProfilePictureStore } from '../stores/profilePictureStore.ts';
 import UserService from '../services/UserService.ts';
-import ImageUpload from './ImageUpload.vue';
 import { Buffer } from 'buffer';
 
-
 export default {
-    components: {
-        ImageUpload
-    },
     data() {
         return {
             file: null,
