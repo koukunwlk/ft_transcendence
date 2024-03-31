@@ -53,6 +53,9 @@ export class FriendListService {
     }
 
     private async checkIfIsAValidFriendRequest(userId: string, friendId: string, isHandlingFriendRequest: boolean = false) {
+            if(userId === friendId) {
+                throw new BadRequestException("User can't send a friend request to himself");
+            }
             return await this.checkIfFriendRequestExists(userId, friendId, isHandlingFriendRequest);
     }
 
