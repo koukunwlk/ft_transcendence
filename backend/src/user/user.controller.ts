@@ -55,9 +55,8 @@ export class UserController {
   }
 
   @Patch("avatar")
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('image'))
   async updateAvatar(@Req() req: any, @UploadedFile() file: Express.Multer.File) {
-    console.log(file.buffer);
     return await this.userService.updateAvatar(req.user.id, file.buffer);
   }
 
