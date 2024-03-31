@@ -6,7 +6,7 @@ const authStore = useAuthStore();
 export default {
   me() {
     const token = authStore.getToken;
-    
+
     return axios.get("http://localhost:3000/user/me", {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -28,4 +28,18 @@ export default {
       },
     });
   },
+  setAvatarPicture(bodyFormData: FormData) {
+    const token = authStore.getToken;
+    return axios.patch(
+      "http://localhost:3000/user/avatar", bodyFormData,
+      {
+        url: "myurl",
+        data: bodyFormData,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          token: token,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+  }
 };
