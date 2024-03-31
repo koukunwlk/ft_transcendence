@@ -83,7 +83,6 @@ export default {
   },
   methods: {
     getLoggedUser() {
-      console.log('aoba')
       this.loading = true;
       userService
         .me()

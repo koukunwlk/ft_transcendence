@@ -81,7 +81,6 @@ export default {
     startGame() {
       socket.emit("join_game", this.user, otherPlayer, this.user.id);
       this.$router.push("/pong");
-      console.log("join game");
     },
 
     increaseSpeed() {
