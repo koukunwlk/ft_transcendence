@@ -11,6 +11,7 @@ export const typeOrmConfig: DataSourceOptions = {
   username: String(process.env.DB_USERNAME),
   password: String(process.env.DB_PASSWORD),
   database: process.env.DB_DATABASE,
+  ssl: true,
   migrations: ['migrations/*.{ts,js}'],
   synchronize: true,
 };
