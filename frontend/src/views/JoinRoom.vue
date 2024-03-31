@@ -12,12 +12,32 @@
 <script>
 import { useRouter } from "vue-router";
 import { socket } from "./Pong.vue";
+import { useAuthStore } from "../stores/authStore";
+const authStore = useAuthStore();
+let userData = await authStore.getUser;
+let otherPlayer = null;
+// if (userData && userData.username) {
+//   if (
+//     userData.username.trim() == "acosta-a" ||
+//     userData.username.trim() == "mamaro-d"
+//   ) {
+//     otherPlayer = "mamaro-d+acosta-a";
+//     console.log("acosta ou mamaro");
+//   }
+//   if (
+//     userData.username.trim() == "gusalves" ||
+//     userData.username.trim() == "dpiza"
+//   ) {
+//     console.log("null");
+//   }
+// }
+
 export default {
   name: "JoinRoom",
   methods: {
     userCancelQueue() {
       this.$router.push("lobby");
-      socket.emit("cancelQueue");
+      socket.emit("cancelQueue", otherPlayer);
     },
   },
 };
