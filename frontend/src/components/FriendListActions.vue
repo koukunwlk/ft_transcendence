@@ -1,5 +1,5 @@
 <template>
-	<div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+	<div class="grid grid-cols-2 md:grid-cols-4 gap-16 p-2">
 		<!-- Add Friend Button -->
 		<div class="">
 			<button
@@ -15,7 +15,7 @@
 		</div>
 
 		<!-- Block User Button -->
-		<div class=" ">
+		<div class="">
 			<button
 				class="w-12 md:w-12 h-11 px-4 py-2 text-white shadow-lg shadow-yellow-500/5 rounded grid justify-center"
 				@click="openBlockFriendModal">
@@ -31,7 +31,7 @@
 		</div>
 
 		<!-- Notification Button -->
-		<div class=" ">
+		<div class="">
 			<button
 				class="w-12 md:w-12 h-11 px-4 py-2 text-white shadow-lg shadow-yellow-500/5 rounded grid justify-center"
 				@click="openFriendRequestModal">

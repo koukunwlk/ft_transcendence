@@ -12,8 +12,8 @@
       <Settings @clickedButton="closeModal" />
     </div>
     <div
-      class="absolute inset-0 margin-0 grid grid-rows-2 sm:grid-cols-4 lg:grid-cols-8 h-full w-full justify-center items-center overflow-hidden">
-      <div class="row-span-1 sm:col-span-3 lg:col-span-6 justify-center items-center mt-28 lg:mt-12 xl:mt-0">
+      class="absolute inset-0 margin-0 grid grid-rows-2 sm:grid-cols-4 lg:grid-cols-8 xl:grid-cols-8 h-full w-full justify-center items-center overflow-hidden">
+      <div class="row-span-1 sm:col-span-3 lg:col-span-6 xl:col-span-7 justify-center items-center mt-28 lg:mt-12 xl:mt-0">
         <div class="grid sm:grid-rows-3 justify-center content-center">
           <!-- Play and Profile Buttons -->
           <div class="sm:row-span-2 grid sm:content-end">
@@ -60,7 +60,7 @@
           </div>
         </div>
       </div>
-      <div class="row-span-2 h-full sm:col-span-1 lg:col-span-2 overflow-x-hidden max-h-full max-w-full mt-36 sm:mt-0">
+      <div class="row-span-2 h-full sm:col-span-1 lg:col-span-2 xl:col-span-1 overflow-x-hidden max-h-full max-w-full mt-36 sm:mt-0">
         <FriendList @actual-friend="getFriendOnClick" />
       </div>
     </div>
@@ -75,7 +75,6 @@ import { useAuthStore } from "../stores/authStore";
 import { ref } from "vue";
 import FriendList from '../components/FriendList.vue'
 import { FriendService } from "../services/FriendService";
-
 
 const authStore = useAuthStore();
 
