@@ -97,13 +97,13 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
     console.log('id: i listOfPlayers.get(id)', id, i, listOfPlayers)
     this.server.emit('PlayerDisconnected', client.id);
     if (
-      listOfPlayers.get(i) &&
-      listOfPlayers.get(i).room &&
-      ballOfRoom.get(listOfPlayers.get(i)?.room)?.intervalid
+      listOfPlayers.get(id) &&
+      listOfPlayers.get(id).room &&
+      ballOfRoom.get(listOfPlayers.get(id)?.room)?.intervalid
     ) {
-      clearInterval(ballOfRoom.get(listOfPlayers.get(i).room).intervalid);
-      client.leave(listOfPlayers.get(i).room);
-      ballOfRoom.delete(listOfPlayers.get(i).room);
+      clearInterval(ballOfRoom.get(listOfPlayers.get(id).room).intervalid);
+      client.leave(listOfPlayers.get(id).room);
+      ballOfRoom.delete(listOfPlayers.get(id).room);
     }
     listOfPlayers.delete(id);
     //    i--;
