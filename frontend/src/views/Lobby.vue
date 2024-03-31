@@ -79,7 +79,7 @@ export default {
       authStore.setToken(token);
     },
     startGame() {
-      socket.emit("join_game", userData, otherPlayer, userData.id);
+      socket.emit("join_game", this.user, otherPlayer, this.user.id);
       this.$router.push("/pong");
       console.log("join game");
     },
