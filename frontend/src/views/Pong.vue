@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading">
+  <div>
     <button id="background-button" class="background-button" @click="changeBackground">
       Change Background
     </button>
@@ -23,7 +23,7 @@ import paddle from "./paddle";
 import { useAuthStore } from "../stores/authStore";
 import userService from "../services/UserService";
 
-export const socket = io("http://10.0.0.173:3000");
+export const socket = io("http://localhost:3000");
 
 const authStore = useAuthStore();
 
@@ -32,7 +32,6 @@ export default {
   name: "Pong",
   data() {
     return {
-      loading: true,
       user: {},
       leftPaddle: {},
       rightPaddle: {},
@@ -83,7 +82,6 @@ export default {
   },
   methods: {
     getLoggedUser() {
-      this.loading = true;
       userService
         .me()
         .then(({ data }) => {
@@ -95,7 +93,6 @@ export default {
           ) {
             this.$router.push({ name: "TFA" });
           }
-          this.loading = false;
         })
         .catch((error) => {
           this.$router.push({ name: "Login" });
