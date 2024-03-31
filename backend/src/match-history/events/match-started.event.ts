@@ -1,7 +1,4 @@
-import { Injectable } from "@nestjs/common";
-
-@Injectable()
-export class MatchStartedEvent {
+export interface MatchStartedEvent {
     playerOneId: string;
     playerTwoId: string;
     matchType: string;

@@ -14,29 +14,72 @@
 import { socket } from "./Pong.vue";
 import { useAuthStore } from "../stores/authStore";
 import { ref } from "vue";
+import userService from "../services/UserService";
 
 const authStore = useAuthStore();
-let userData = await authStore.getUser;
-let otherPlayer = null;
-// if (
-//   userData.username.trim() == "acosta-a" ||
-//   userData.username.trim() == "mamaro-d"
-// ) {
-//   otherPlayer = "mamaro-d+acosta-a";
-//   console.log("acosta ou mamaro");
-// }
-// if (userData &&
-//   userData.username.trim() == "gusalves" ||
-//   userData.username.trim() == "dpiza"
-// ) {
-//   console.log("null");
+// let userData = await authStore.getUser;
+// let otherPlayer = null;
+// if (userData && userData.username) {
+//   if (
+//     userData.username.trim() == "acosta-a" ||
+//     userData.username.trim() == "mamaro-d"
+//   ) {
+//     otherPlayer = "mamaro-d+acosta-a";
+//     console.log("acosta ou mamaro");
+//   }
+//   if (
+//     userData.username.trim() == "gusalves" ||
+//     userData.username.trim() == "dpiza"
+//   ) {
+//     console.log("null");
+//   }
 // }
 
 export default {
   name: "Lobby",
+  data() {
+    return {
+      user: {},
+    }
+  },
+  mounted() {
+    this.getTokenFromCookie();
+    this.getLoggedUser();
+  },
   methods: {
+    getLoggedUser() {
+      userService
+        .me()
+        .then(({ data }) => {
+          this.username = data.username;
+          authStore.setUser(data);
+          this.user = authStore.getUser;
+          if (
+            this.user.tfaEnabled &&
+            !this.user.tfaAuthenticated
+          ) {
+            this.$router.push({ name: "TFA" });
+          }
+        })
+        .catch((error) => {
+          this.$router.push({ name: "Login" });
+        });
+    },
+    getTokenFromCookie() {
+      const cookies = document.cookie.split(";");
+
+      cookies.forEach((cookie) => {
+        if (cookie.trimStart().startsWith("token=")) {
+          this.saveToken(cookie.trimStart());
+        }
+      });
+    },
+    saveToken(tokenCookie) {
+      const token = tokenCookie.substring(6);
+      authStore.setToken(token);
+    },
     startGame() {
-      socket.emit("join_game", userData, otherPlayer);
+      socket.emit("join_game", userData, otherPlayer, userData.id);
       this.$router.push("/pong");
       console.log("join game");
     },

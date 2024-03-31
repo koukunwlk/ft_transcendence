@@ -68,6 +68,16 @@ export class AuthService {
     };
   }
 
+  async disableTfa(userId: string) {
+    const user = await this.userService.getUserById(userId);
+
+    await this.userService.disableUserTfa(
+      user.getUsername()
+    );
+
+    return true;
+  }
+
   async verifyTfaSecret(userId: string, code: string): Promise<boolean> {
     const user = await this.userService.getUserById(userId);
 

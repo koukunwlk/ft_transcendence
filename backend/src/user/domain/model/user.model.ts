@@ -20,6 +20,7 @@ export type UserProps = {
   tfaEnabled?: boolean;
   tfaSecret?: string;
   tfaAuthenticated?: boolean;
+  avatar?: Buffer;
 };
 
 export class User extends Model<UserProps> {
@@ -35,6 +36,7 @@ export class User extends Model<UserProps> {
       tfaEnabled,
       tfaSecret,
       tfaAuthenticated,
+      avatar
     }: UserProps,
     id?: string,
   ) {
@@ -47,6 +49,7 @@ export class User extends Model<UserProps> {
     this.props.tfaEnabled = tfaEnabled;
     this.props.tfaSecret = tfaSecret;
     this.props.tfaAuthenticated = tfaAuthenticated;
+    this.props.avatar = avatar;
   }
 
   getUsername(): string {
@@ -55,6 +58,10 @@ export class User extends Model<UserProps> {
 
   getNickname(): string {
     return this.props.nickname;
+  }
+
+  setNickname(nickname: string) {
+    this.props.nickname = nickname;
   }
 
   getEmail(): string {
@@ -99,6 +106,14 @@ export class User extends Model<UserProps> {
 
   setStatus(status: UserStatusEnum) {
     this.props.status = status;
+  }
+
+  getAvatar(): Buffer {
+    return this.props.avatar;
+  }
+
+  setAvatar(avatar: Buffer) {
+    this.props.avatar = avatar;
   }
 
   toSimpleEntity() {

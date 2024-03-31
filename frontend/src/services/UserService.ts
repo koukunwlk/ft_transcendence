@@ -14,4 +14,47 @@ export default {
       },
     });
   },
+  updateNickname(nickname: string) {
+    const token = authStore.getToken;
+
+    const data = {
+      nickname,
+    };
+
+    return axios.patch("http://localhost:3000/user/nickname", data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        token: token,
+      },
+    });
+  },
+  setAvatarPicture(bodyFormData: FormData) {
+    const token = authStore.getToken;
+
+    return axios.patch(
+      "http://localhost:3000/user/avatar", bodyFormData,
+      {
+        url: "myurl",
+        data: bodyFormData,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          token: token,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+  },
+  updateStatus(status: number) {
+    const token = authStore.getToken;
+
+    return axios.patch(
+      "http://localhost:3000/user/status",
+      { status },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          token: token,
+        },
+      }
+    );
+  },
 };
