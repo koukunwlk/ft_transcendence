@@ -37,10 +37,10 @@ export default {
 			profileUser: null,
 			userStats: {
 				totalGames: 0,
-				wins: 1,
-				loses: 2,
+				wins: 0,
+				loses: 0,
 				winRate: 0,
-				rank: 4,
+				rank: 0,
 			},
 			matchService: new MatchService(),
 			picture: useProfilePictureStore(),
@@ -51,11 +51,9 @@ export default {
 			loadingPage: true,
 		}
 	},
-	beforeMount() {
-		this.getLoggedUser();
-	},
 	mounted() {
 		this.isLoading = true;
+		this.getLoggedUser();
 		this.getMatches();
 	},
 	methods: {
@@ -131,8 +129,19 @@ export default {
 			userService.me().then(({ data }) => {
 				this.profileUser = data;
 				authStore.setUser(data);
+
+				if (
+            this.profileUser.tfaEnabled &&
+            !this.profileUser.tfaAuthenticated
+          ) {
+            this.$router.push({ name: "TFA" });
+          }
 				this.saveAvatar();
-			});
+				this.isLoading = false;
+			})
+				.catch((error) => {
+					this.$router.push({ name: "Login" });
+				});
 		},
 		saveAvatar() {
 			const buffs = Buffer.from(this.profileUser.avatar.data);
@@ -144,7 +153,7 @@ export default {
 </script>
 
 <template>
-	<div class="flex h-full md:h-6/6 justify-center">
+	<div v-if="!isLoading" class="flex h-full md:h-6/6 justify-center">
 		<div class="relative h-max w-full md:w-3/5 bg-opacity-30 rounded-lg border border-zinc-600 text-white">
 			<button class="absolute z-10 top-2 right-2 flex w-6 h-6" @click="openCloseSettings">
 				<img class="h-6 w-6 lg:h-7 lg:w-7 xl:w-8 xl:h-8 2xl:w-9 2xl:h-9" src="../assets/svgs/settings.svg"

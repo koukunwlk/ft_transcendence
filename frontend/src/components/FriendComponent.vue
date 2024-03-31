@@ -4,7 +4,7 @@
             src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="Sunset in the mountains">
         <div class="h-full w-full grid grid-cols-4">
-            <div class="col-span-3 font-bold text-sm">{{ friend.name }}
+            <div class="col-span-3 font-bold text-sm">{{ friend.nickname }}
             </div>
             <div class="col-span-1 grid justify-center content-center float ">
                 <UserStatus :status="friend.status" />

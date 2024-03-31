@@ -2,16 +2,17 @@
 	<div v-if="isOpen"
 		class="fixed z-10 inset-0 bg-gray-500 bg-opacity-75 backdrop-blur-sm flex justify-center items-center">
 		<div class="bg-white p-6 rounded-md w-full max-w-lg">
-			<div class="sm:flex sm:items-start">
-				<div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+			<div class="sm:flex sm:items-start w-full">
+				<div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
 					<h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
 						{{ title }}
 					</h3>
-					<ul v-if="list" class="space-y-2 mt-4">
-						<li class="list-none" v-for="(item, index) in list" :key="index">
-							{{ item.name }} te enviou uma notificação de amizade
-						</li>
-					</ul>
+					<div class="mt-2">
+						<div class="grid grid-cols-1 gap-4">
+							<friend-request v-for="request in receivedsRequests" :key="request.id"
+								:nickname="request.sender.nickname" :id="request.sender.id" />
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"> <button @click="closeModal"
@@ -23,14 +24,16 @@
 </template>
 
 <script>
+import FriendRequest from './FriendRequest.vue'
+import { FriendService } from '../services/FriendService'
+
 export default {
+	components: {
+		FriendRequest
+	},
 	props: {
 		title: {
 			type: String,
-			required: true
-		},
-		list: {
-			type: Array,
 			required: true
 		},
 		isOpen: {
@@ -40,8 +43,16 @@ export default {
 	},
 	data() {
 		return {
-			modalOpen: false
+			modalOpen: false,
+			friendService: new FriendService(),
+			receivedsRequests: []
 		}
+	},
+
+	beforeMount() {
+		this.friendService.getReceivedFriendRequests().then(response => {
+			this.receivedsRequests = response.data;
+		})
 	},
 
 	methods: {

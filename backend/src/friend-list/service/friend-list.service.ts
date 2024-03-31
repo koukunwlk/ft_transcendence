@@ -31,27 +31,15 @@ export class FriendListService {
         let friendRequest = await this.checkIfIsAValidFriendRequest(userId, friendId, isHandlingFriendRequest);
         this.checkIfUserCanHandleFriendRequest(friendRequest, userId);
 
-        friendRequest = await this.friendRequestRepository.updateFriendRequest(friendRequest.id, status);
+        this.friendRequestRepository.updateFriendRequest(friendRequest.id, status);
         if (friendRequest.status === FriendListStatusEnum.ACCEPTED) {
             await this.friendListRepository.insertFriend(friendRequest);
         }
     }
 
-    async getFriendList(userId: string): Promise<User[]> {
-        const friendList = await this.friendListRepository.getFriendList(userId);
-        const friends = friendList.getFriends();
-        if (friends.length === 0) {
-            return [];
-        }
-
-        const parsedFriends = friends.map(friend => {
-            if (friend.friendId === userId) {
-                return friend.ownerId;
-            }
-            return friend.friendId;
-        }
-        );
-        return await this.userService.getUsersByIds(parsedFriends);
+    async getFriendList(userId: string) {
+        const friendList = await this.friendRequestRepository.getFriendList(userId);
+        return friendList
     }
 
     async getReceivedFriendRequests(userId: string) {
@@ -65,25 +53,19 @@ export class FriendListService {
     }
 
     private async checkIfIsAValidFriendRequest(userId: string, friendId: string, isHandlingFriendRequest: boolean = false) {
-       
-        try {
-            const [sender, receiver] = await Promise.all([
-                this.userService.getUserById(userId),
-                this.userService.getUserById(friendId)
-            ]);
-            if (!sender || !receiver) {
-                throw new BadRequestException("Invalid sender or receiver");
-            }
             return await this.checkIfFriendRequestExists(userId, friendId, isHandlingFriendRequest);
-        } catch (error) {
-            throw new BadRequestException("Invalid sender or receiver");
-        }
     }
 
     private async checkIfFriendRequestExists(userId: string, friendId: string, isHandlingFriendRequest: boolean) {
         const [persistedFriendRequestAsSender, persistedFriendRequestAsReceiver] = await Promise.all([
-            this.friendRequestRepository.findOne({ senderId: userId, receiverId: friendId }),
-            this.friendRequestRepository.findOne({ senderId: friendId, receiverId: userId }),
+            this.friendRequestRepository.findOne({
+                where: { sender: { id: userId }, receiver: { id: friendId } },
+            }),
+            this.friendRequestRepository.findOne(
+                {
+                    where: { sender: { id: friendId }, receiver: { id: userId }}
+                }
+            ),
         ]);
         if (persistedFriendRequestAsSender) {
             this.checkIfFriendRequestStatus(persistedFriendRequestAsSender);
@@ -110,10 +92,10 @@ export class FriendListService {
     }
 
     private checkIfUserCanHandleFriendRequest(friendRequest: FriendRequest, userId: string) {
-        if (friendRequest.senderId === userId) {
+        if (friendRequest.sender.id === userId) {
             throw new BadRequestException("User is the sender of this friend request");
         }
-        if (friendRequest.senderId !== userId && friendRequest.receiverId !== userId) {
+        if (friendRequest.sender.id !== userId && friendRequest.receiver.id !== userId) {
             throw new BadRequestException("User can't handle this friend request");
         }
     }

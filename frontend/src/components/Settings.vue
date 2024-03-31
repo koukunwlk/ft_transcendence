@@ -14,6 +14,8 @@ export default {
     data() {
         return {
             isChecked: false,
+            errorNickname: '',
+            nickNameSaved: '',
             nickname: '',
             picture: useProfilePictureStore(),
             validationCode: '',
@@ -54,10 +56,23 @@ export default {
                     console.log('Error generating 2fa secret: ', error.message);
                 });
         },
+        handleImput(event) {
+            const inputCopy = event.target.value;
+            const noSpaceValue = inputCopy.replace(/ /g, '');
+            const limitedValue = noSpaceValue.slice(0, 15);
+            const lowercaseValue = limitedValue.toLowerCase();
+            event.target.value = lowercaseValue;
+        },
         updateNickname() {
             userService
                 .updateNickname(this.nickname)
+                .then(() => {
+                    this.errorNickname = '';
+                    this.nickNameSaved = 'Nickname updated.';
+                })
                 .catch((error) => {
+                    this.nickNameSaved = '';
+                    this.errorNickname = 'Invalid nickname. Please try again.'
                     console.log('Error updating nickname: ', error.message);
                 });
         },
@@ -90,13 +105,27 @@ export default {
                         Nickname
                     </label>
                     <div class="flex items-center">
-                        <input placeholder="Enter new nickname" required v-model="nickname" type="text" id="nickname"
-                            class="bg-gray-500 w-4/6 p-2.5 border border-gray-300 text-gray-900 text-sm rounded-l-sm focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500" />
+                        <input v-if="errorNickname" @input="handleImput" placeholder="Enter new nickname" required v-model="nickname" type="text" id="nickname"
+                        class="bg-gray-500 w-4/6 p-2.5 border border-red-300 text-gray-900 text-sm rounded-l-sm focus:border-blue-500 block dark:bg-gray-700 dark:border-red-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500" />
+                        <input v-else @input="handleImput" placeholder="Enter new nickname" required v-model="nickname" type="text" id="nickname"
+                        class="bg-gray-500 w-4/6 p-2.5 border border-gray-300 text-gray-900 text-sm rounded-l-sm focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500" />
                         <button type="button" @click="updateNickname"
-                            class="bg-gray-500 hover:bg-green-500 text-sm text-gray-100 p-2.5 border border-gray-400 hover:border-green-400 rounded-r-sm block placeholder-gray-400 focus:ring-blue-500">
-                            save
-                        </button>
-                    </div>
+                        class="bg-gray-500 hover:bg-green-500 text-sm text-gray-100 p-2.5 border border-gray-400 hover:border-green-400 rounded-r-sm block placeholder-gray-400 focus:ring-blue-500">
+                        save
+                    </button>
+                </div>
+                <div
+                    v-if="nickNameSaved"
+                    class="text-green-500 -mb-6"
+                >
+                    {{ nickNameSaved }}
+                </div>
+                <div
+                    v-else-if="errorNickname"
+                    class="text-sm lg:text-base text-red-500 -mb-6"
+                >
+                    {{ errorNickname }}
+                </div>
                 </div>
                 <div for="2f" class="flex flex-row justify-start">
                     <label class="inline-flex items-center cursor-pointer">

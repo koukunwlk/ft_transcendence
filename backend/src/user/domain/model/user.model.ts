@@ -116,11 +116,19 @@ export class User extends Model<UserProps> {
     this.props.avatar = avatar;
   }
 
-  toMatchHistory() {
+  toSimpleEntity() {
     return {
       id: this.id,
       username: this.props.username,
       nickname: this.props.nickname,
+    };
+  }
+  toFriendList() {
+    return {
+      id: this.id,
+      username: this.props.username,
+      nickname: this.props.nickname,
+      status: this.props.status
     };
   }
 }

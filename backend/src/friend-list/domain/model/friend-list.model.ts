@@ -13,8 +13,8 @@ export enum FriendListStatusEnum {
 export type FriendRequest = {
     id: string;
     status: FriendListStatusEnum;
-    senderId: string;
-    receiverId: string;
+    sender: User;
+    receiver: User;
 };
 
 export type FriendRow = {

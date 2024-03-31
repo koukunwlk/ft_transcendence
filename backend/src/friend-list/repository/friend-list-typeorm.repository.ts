@@ -15,33 +15,19 @@ export class FriendListTypeormRepository implements FriendListRepository {
     ) { }
 
     async getFriendList(userId: string): Promise<FriendListModel> {
-        const friendList = await this.typeormRepository.findOne({
-            where: { userId: userId },
-        });
+        const friendList = await this.typeormRepository.find({
+            where: [
+                { user: { id: userId } },
+                { friend: { id: userId } }
+            ]
+        })
 
-        const friendRow = friendList.friendsId.map(friendId => {
-            return { friendId: friendId, ownerId: userId };
-        }
-        );
+        console.log(friendList);
 
-        const friendListResult = new FriendListModel({
-            userId: friendList.userId,
-            friends: friendRow,
-        }, friendList.id);
-
-        return friendListResult;
+        return Promise.resolve(null);
     }
 
-    async insertFriend(friendRequest: FriendRequest) {
-        const friendList = await this.typeormRepository.findOne({
-            where: { userId: friendRequest.senderId },
-        });
-
-        if (friendList) {
-            friendList.friendsId.push(friendRequest.receiverId);
-            await this.typeormRepository.save(friendList);
-        } else {
-            await this.typeormRepository.insert({ userId: friendRequest.senderId, friendsId: [friendRequest.receiverId] });
-        }
+    async insertFriend(friendRequest: FriendRequest): Promise<void> {
+        await this.typeormRepository.insert({ user: { id: friendRequest.sender.id }, friend: { id: friendRequest.receiver.id }, status: "ACCEPTED" });
     }
 }
