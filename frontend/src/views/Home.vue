@@ -60,7 +60,7 @@
           </div>
         </div>
       </div>
-      <div class="row-span-2 sm:col-span-1 lg:col-span-2 overflow-x-hidden max-h-full max-w-full mt-36 sm:mt-0">
+      <div class="row-span-2 h-full sm:col-span-1 lg:col-span-2 overflow-x-hidden max-h-full max-w-full mt-36 sm:mt-0">
         <FriendList @actual-friend="getFriendOnClick" />
       </div>
     </div>
