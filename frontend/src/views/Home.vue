@@ -1,9 +1,15 @@
 <template>
+  <div class="w-screen h-screen overflow-hidden margin-0">
+    <div class="flex image-animation">
+        <img class="flex h-screen object-cover justify-center items-center" src="../assets/images/kai-pilger.jpg" alt="background">
+        <img class="flex h-screen object-cover justify-center items-center" src="../assets/images/kai-pilger.jpg" alt="background">
+    </div>
+  </div>
   <div v-if="showSettingsModal">
     <Settings @clickedButton="closeModal" />
   </div>
   <div
-    class="grid grid-rows-2 sm:grid-cols-4 lg:grid-cols-8 h-full w-full justify-center items-center border-4 overflow-hidden">
+    class="absolute inset-0 margin-0 grid grid-rows-2 sm:grid-cols-4 lg:grid-cols-8 h-full w-full justify-center items-center overflow-hidden">
     <div class="row-span-1 sm:col-span-3 lg:col-span-6 justify-center items-center mt-28 lg:mt-12 xl:mt-0">
       <div class="grid sm:grid-rows-3 justify-center content-center">
         <!-- Play and Profile Buttons -->
@@ -172,4 +178,18 @@ export default {
 ::-webkit-scrollbar-thumb:hover {
   background: #060e24;
 }
+
+.image-animation {
+	animation: moveImages 150s infinite linear;
+}
+
+@keyframes moveImages {
+	0% {
+		transform: translate(0);
+	}
+	100% {
+		transform: translate(-50%);
+	}
+}
+
 </style>

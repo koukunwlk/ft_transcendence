@@ -86,7 +86,7 @@ export default {
 <style>
 
 .image-animation {
-	animation: moveImages 300s infinite linear;
+	animation: moveImages 150s infinite linear;
 }
 
 @keyframes moveImages {
