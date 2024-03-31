@@ -1,6 +1,7 @@
 <template>
   <div class="fixed top-0 left-0 w-screen h-screen flex justify-center items-center bg-black">
     <div class="relative flex flex-col justify-center items-center w-64 h-96 md:w-80 md:h-2/5 md:min-h-[32rem] lg:w-1/4 lg:min-w-96 lg:h-2/4 bg-gray-900 rounded-xl">
+      <img class="mb-10 lg:mb-12 2xl:mb-16 h-12 md:h-16 lg:h-20 xl:h-24 2xl:h-32 mt-4 xl:mt-0 mb-5" src="../assets/logo/logo.png" alt="logo image">
       <button class="absolute z-10 top-2 left-2 flex w-6 h-6" @click="homeRedirect">
         <img class="h-6 w-6 lg:h-7 lg:w-7 xl:w-8 xl:h-8 2xl:w-9 2xl:h-9" src="../assets/svgs/home.svg" alt="home icon">
       </button>
