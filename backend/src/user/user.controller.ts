@@ -65,6 +65,22 @@ export class UserController {
     return await this.userService.updateNickname(req.user.id, body.nickname);
   }
 
+  @Get(':id')
+  async getUserById(@Param('id') id: string) {
+    console.log(id)
+    try {
+      const user = await this.userService.getUserById(id);
+      console.log(user.getStatus())
+      if(user.getStatus() === UserStatusEnum.INVISIBLE) {
+        user.setStatus(UserStatusEnum.OFFLINE);
+        console.log(user.getStatus())
+      }
+      return user.toFriendList();
+    } catch (error) {
+      throw new HttpException(error.response, error.status);
+    }
+  }
+
   @Get(':nickname')
   async getUser(@Param('nickname') nickname: string) {
     try {

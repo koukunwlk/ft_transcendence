@@ -57,4 +57,15 @@ export default {
       }
     );
   },
+
+  getUser(id: string) {
+    const token = authStore.getToken;
+
+    return axios.get(`http://localhost:3000/user/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        token: token,
+      },
+    });
+  }
 };
