@@ -77,7 +77,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     @Inject(MatchHistoryService)
     private readonly matchHistoryService: MatchHistoryService,
-  ) {}
+  ) { }
 
   handleConnection(client: Socket) {
     console.log(`Client connected + ${client.id}`);
@@ -94,7 +94,6 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
         continue;
       }
     }
-    console.log('id: i listOfPlayers.get(id)', id, i, listOfPlayers)
     this.server.emit('PlayerDisconnected', client.id);
     if (
       listOfPlayers.get(id) &&
