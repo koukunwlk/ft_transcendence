@@ -6,4 +6,5 @@ export abstract class UserRepository {
   abstract findAllByIds(ids: string[]): Promise<User[]>;
   abstract insert(user: User): Promise<string>;
   abstract update(user: User): Promise<void>;
+  abstract getRanking(): Promise<User[]>;
 }

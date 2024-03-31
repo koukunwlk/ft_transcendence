@@ -4,7 +4,7 @@ import { config } from 'dotenv';
 config({ path: '../.env' });
 
 export const typeOrmConfig: DataSourceOptions = {
-  entities: [__dirname + '/**/*entity.{js,ts}'],
+  entities: ['dist/**/*.entity{.ts,.js}'],
   type: 'postgres',
   host: process.env.DB_HOST,
   port: Number(process.env.DB_PORT),

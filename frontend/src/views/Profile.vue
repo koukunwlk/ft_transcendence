@@ -60,9 +60,7 @@ export default {
 	},
 	methods: {
 		getMatches() {
-			console.log("profileUser outside", this.profileUser);
 			if (this.profileUser) {
-				console.log("profileUser", this.profileUser);
 				this.matchService.getMyMatches().then((matches) => {
 					this.matches = matches;
 					this.$forceUpdate();
@@ -94,10 +92,8 @@ export default {
 
 		calculateStats() {
 			const userId = this.profileUser.id;
-			console.log("userId", userId);
 			if (this.matches) {
 				this.matches.forEach(match => {
-					console.log("match", match);
 					if (match.playerOne.id === userId) {
 						this.userStats.totalGames++;
 						if (match.playerOneGoalsCount > match.playerTwoGoalsCount) {
@@ -114,6 +110,7 @@ export default {
 						}
 					}
 				});
+				this.userStats.rank = this.profileUser.ranking;
 				this.userStats.winRate = Math.round((this.userStats.wins / this.userStats.totalGames) * 100);
 			}
 		},
@@ -127,7 +124,6 @@ export default {
 		openCloseSettings() {
 			this.showSettingsModal = !this.showSettingsModal;
 			this.getLoggedUser();
-			console.log(this.showSettingsModal);
 		},
 		// toggleDropdown() {
 		// 	console.log(this.showDropdown);
@@ -136,7 +132,6 @@ export default {
 		updateStatus() {
 			const oldStatus = this.profileUser.status;
 			userService.updateStatus(Number(this.selectedStatus)).then((response) => {
-				console.log(response);
 				this.profileUser.status = Number(this.selectedStatus);
 			})
 				.catch(e => {
@@ -151,7 +146,6 @@ export default {
 		getProfileUser() {
 			const id = this.$route.params.id;
 			userService.getUser(id).then(({ data }) => {
-				console.log(data);
 				this.profileUser = data;
 				this.saveAvatar();
 				this.isLoading = false;
@@ -168,7 +162,6 @@ export default {
 			userService.me().then(({ data }) => {
 				this.profileUser = data;
 				authStore.setUser(data);
-				console.log("data", data);
 				if (
 					data.tfaEnabled != null &&
 					!data.tfaAuthenticated
@@ -178,7 +171,7 @@ export default {
 				this.saveAvatar();
 				this.isLoading = false;
 			}).then(() => {
-				console.log("getting matches");
+				("getting matches");
 				this.getMatches();
 			})
 				.catch((error) => {
@@ -196,7 +189,6 @@ export default {
 
 		showUpdateStatus() {
 			id = this.$router.params.id;
-			console.log("id in update status", id);
 			if (id) {
 				return false;
 			}

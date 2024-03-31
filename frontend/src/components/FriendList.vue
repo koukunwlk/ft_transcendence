@@ -37,7 +37,6 @@ export default {
         friendService.getFriendList().then((response) => {
             this.friends = response.data;
         }).finally(() => {
-            console.log(this.friends)
         })
     },
 
