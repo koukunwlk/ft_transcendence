@@ -21,6 +21,8 @@ export type UserProps = {
   tfaSecret?: string;
   tfaAuthenticated?: boolean;
   avatar?: Buffer;
+  score?: number;
+  ranking?: number;
 };
 
 export class User extends Model<UserProps> {
@@ -36,7 +38,9 @@ export class User extends Model<UserProps> {
       tfaEnabled,
       tfaSecret,
       tfaAuthenticated,
-      avatar
+      avatar,
+      score,
+      ranking
     }: UserProps,
     id?: string,
   ) {
@@ -50,6 +54,8 @@ export class User extends Model<UserProps> {
     this.props.tfaSecret = tfaSecret;
     this.props.tfaAuthenticated = tfaAuthenticated;
     this.props.avatar = avatar;
+    this.props.score = score;
+    this.props.ranking = ranking;
   }
 
   getUsername(): string {
@@ -116,6 +122,31 @@ export class User extends Model<UserProps> {
     this.props.avatar = avatar;
   }
 
+  getScore(): number {
+    return this.props.score;
+  }
+
+  setScore(score: number) {
+    this.props.score = score;
+  }
+
+  getRanking(): number {
+    return this.props.ranking;
+  }
+
+  setRanking(ranking: number) {
+    this.props.ranking = ranking;
+  }
+
+  toScore() {
+    return {
+      id: this.id,
+      username: this.props.username,
+      nickname: this.props.nickname,
+      score: this.props.score
+    };
+  }
+
   toSimpleEntity() {
     return {
       id: this.id,
@@ -128,7 +159,8 @@ export class User extends Model<UserProps> {
       id: this.id,
       username: this.props.username,
       nickname: this.props.nickname,
-      status: this.props.status
+      status: this.props.status,
+      ranking: this.props.ranking
     };
   }
 }

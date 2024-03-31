@@ -23,7 +23,7 @@ import paddle from "./paddle";
 import { useAuthStore } from "../stores/authStore";
 import userService from "../services/UserService";
 
-export const socket = io("http://localhost:3000");
+export const socket = io("http://10.0.0.173:3000");
 
 const authStore = useAuthStore();
 
@@ -83,7 +83,6 @@ export default {
   },
   methods: {
     getLoggedUser() {
-      console.log('aoba')
       this.loading = true;
       userService
         .me()

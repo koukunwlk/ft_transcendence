@@ -28,6 +28,11 @@ export class UserController {
     return await this.userService.insertUser(createUser);
   }
 
+  @Get('rankings')
+  async getRanking() {
+      console.log("controller ranking")
+      return await this.userService.getRanking();
+  }
 
   @Get('list')
   async getUsers() {
@@ -43,6 +48,8 @@ export class UserController {
   async me(@Req() req: any): Promise<string> {
     try {
       const user = await this.userService.getUserById(req.user.id);
+      const ranking = await this.userService.getRanking();
+      user.setRanking(ranking.findIndex((u) => u.id === user.id) + 1);
       return user.toJson();
     } catch (error) {
       throw new HttpException(error.response, error.status);
@@ -65,6 +72,24 @@ export class UserController {
     return await this.userService.updateNickname(req.user.id, body.nickname);
   }
 
+  @Get(':id')
+  async getUserById(@Param('id') id: string) {
+    console.log(id)
+    try {
+      const user = await this.userService.getUserById(id);
+      const ranking = await this.userService.getRanking();
+      console.log(user.getStatus())
+      if(user.getStatus() === UserStatusEnum.INVISIBLE) {
+        user.setStatus(UserStatusEnum.OFFLINE);
+        console.log(user.getStatus())
+      }
+      user.setRanking(ranking.findIndex((u) => u.id === user.id) + 1);
+      return user.toFriendList();
+    } catch (error) {
+      throw new HttpException(error.response, error.status);
+    }
+  }
+
   @Get(':nickname')
   async getUser(@Param('nickname') nickname: string) {
     try {
@@ -73,5 +98,6 @@ export class UserController {
       throw new HttpException(error.response, error.status);
     }
   }
+
 
 }

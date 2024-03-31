@@ -99,9 +99,6 @@ export default {
     this.getTokenFromCookie();
     this.getLoggedUser();
   },
-  components: {
-    FriendList,
-  },
   methods: {
     getLoggedUser() {
       this.loading = true;

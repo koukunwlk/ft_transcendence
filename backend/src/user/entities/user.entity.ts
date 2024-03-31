@@ -40,6 +40,9 @@ export class UserEntity {
   @Column({ nullable: true })
   tfaAuthenticated: boolean;
 
+  @Column({ nullable: true })
+  score: number;
+
   @Column({
     type: 'bytea',
     nullable: true,

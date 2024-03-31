@@ -94,17 +94,19 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
         continue;
       }
     }
-    // this.server.emit('PlayerDisconnected', client.id);
-    // if (
-    //   listOfPlayers.get(i) &&
-    //   listOfPlayers.get(i).room &&
-    //   ballOfRoom.get(listOfPlayers.get(i)?.room)?.intervalid
-    // ) {
-    //   client.leave(listOfPlayers.get(i).room);
-    //   clearInterval(ballOfRoom.get(listOfPlayers.get(i).room).intervalid);
-    // }
-    // listOfPlayers.delete(id);
-    // i--;
+    console.log('id: i listOfPlayers.get(id)', id, i, listOfPlayers)
+    this.server.emit('PlayerDisconnected', client.id);
+    if (
+      listOfPlayers.get(id) &&
+      listOfPlayers.get(id).room &&
+      ballOfRoom.get(listOfPlayers.get(id)?.room)?.intervalid
+    ) {
+      clearInterval(ballOfRoom.get(listOfPlayers.get(id).room).intervalid);
+      client.leave(listOfPlayers.get(id).room);
+      ballOfRoom.delete(listOfPlayers.get(id).room);
+    }
+    listOfPlayers.delete(id);
+    //    i--;
   }
 
   @SubscribeMessage('handle_reconnect')
@@ -222,8 +224,10 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
   @SubscribeMessage('cancelQueue')
-  handleCancelQueue(client: Socket) {
+  handleCancelQueue(client: Socket, otherPlayer: any) {
     let id: number;
+    console.log(otherPlayer);
+    console.log(client.id);
     for (id of listOfPlayers.keys()) {
       if (listOfPlayers.get(id).id === client.id) {
         break;
@@ -242,8 +246,13 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
       }
     }
     listOfPlayers.delete(id);
-    i--;
+    if (otherPlayer) {
+      j--;
+    } else {
+      i--;
+    }
   }
+
   @SubscribeMessage('increase_speed')
   handleSpeed(client: Socket) {
     fastSpeed = !fastSpeed;
@@ -257,7 +266,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
       }
     }
     if (
-      listOfPlayers.get(id).room &&
+      listOfPlayers.get(id)?.room &&
       ballOfRoom.get(listOfPlayers.get(id).room)
     ) {
       ballOfRoom.get(listOfPlayers.get(id).room).speed = 10;

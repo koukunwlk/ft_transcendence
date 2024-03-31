@@ -52,9 +52,11 @@ export default {
 		}
 	},
 	mounted() {
-		this.isLoading = true;
-		this.getLoggedUser();
-		this.getMatches();
+		if (this.$route.params.id) {
+			this.getProfileUser();
+		} else {
+			this.getLoggedUser();
+		}
 	},
 	methods: {
 		getMatches() {
@@ -71,6 +73,23 @@ export default {
 				});
 			}
 		},
+
+		getProfileMatches() {
+			const id = this.$route.params.id;
+			this.matchService.getMatchesByUserId(id).then((matches) => {
+				this.matches = matches;
+
+			}).then(() => {
+				this.$forceUpdate();
+				this.calculateStats();
+			}).catch((error) => {
+				console.error("Error fetching matches:", error);
+				this.matches = [];
+			}).finally(() => {
+				this.isLoading = false;
+			});
+		},
+
 		calculateStats() {
 			const userId = this.profileUser.id;
 			if (this.matches) {
@@ -91,9 +110,9 @@ export default {
 						}
 					}
 				});
+				this.userStats.rank = this.profileUser.ranking;
 				this.userStats.winRate = Math.round((this.userStats.wins / this.userStats.totalGames) * 100);
 			}
-			console.log(this.userStats);
 		},
 
 		homeRedirect() {
@@ -105,7 +124,6 @@ export default {
 		openCloseSettings() {
 			this.showSettingsModal = !this.showSettingsModal;
 			this.getLoggedUser();
-			console.log(this.showSettingsModal);
 		},
 		// toggleDropdown() {
 		// 	console.log(this.showDropdown);
@@ -114,7 +132,6 @@ export default {
 		updateStatus() {
 			const oldStatus = this.profileUser.status;
 			userService.updateStatus(Number(this.selectedStatus)).then((response) => {
-				console.log(response);
 				this.profileUser.status = Number(this.selectedStatus);
 			})
 				.catch(e => {
@@ -125,29 +142,58 @@ export default {
 			// 	this.showDropdown = false;
 			// });
 		},
+
+		getProfileUser() {
+			const id = this.$route.params.id;
+			userService.getUser(id).then(({ data }) => {
+				this.profileUser = data;
+				this.saveAvatar();
+				this.isLoading = false;
+			}).then(() => {
+				this.getProfileMatches();
+			})
+				.catch((error) => {
+					console.error("Error fetching user:", error);
+					this.$router.push({ name: "Home" });
+				});
+		},
+
 		getLoggedUser() {
 			userService.me().then(({ data }) => {
 				this.profileUser = data;
 				authStore.setUser(data);
-
 				if (
-            this.profileUser.tfaEnabled &&
-            !this.profileUser.tfaAuthenticated
-          ) {
-            this.$router.push({ name: "TFA" });
-          }
+					data.tfaEnabled != null &&
+					!data.tfaAuthenticated
+				) {
+					this.$router.push({ name: "TFA" });
+				}
 				this.saveAvatar();
 				this.isLoading = false;
+			}).then(() => {
+				("getting matches");
+				this.getMatches();
 			})
 				.catch((error) => {
 					this.$router.push({ name: "Login" });
 				});
 		},
 		saveAvatar() {
+			if (!this.profileUser.avatar) {
+				return;
+			}
 			const buffs = Buffer.from(this.profileUser.avatar.data);
 			const objectURL = URL.createObjectURL(new Blob([buffs]));
 			profilePictureStore.setPicture(objectURL);
 		},
+
+		showUpdateStatus() {
+			id = this.$router.params.id;
+			if (id) {
+				return false;
+			}
+			return true;
+		}
 	}
 }
 </script>
@@ -155,7 +201,8 @@ export default {
 <template>
 	<div v-if="!isLoading" class="flex h-full md:h-6/6 justify-center">
 		<div class="relative h-max w-full md:w-3/5 bg-opacity-30 rounded-lg border border-zinc-600 text-white">
-			<button class="absolute z-10 top-2 right-2 flex w-6 h-6" @click="openCloseSettings">
+			<button v-show="this.$route.params.id == null" class="absolute z-10 top-2 right-2 flex w-6 h-6"
+				@click="openCloseSettings">
 				<img class="h-6 w-6 lg:h-7 lg:w-7 xl:w-8 xl:h-8 2xl:w-9 2xl:h-9" src="../assets/svgs/settings.svg"
 					alt="settings icon">
 			</button>
@@ -163,7 +210,8 @@ export default {
 				<Settings @clickedButton="openCloseSettings" />
 			</div>
 			<button class="absolute z-10 top-2 left-2 flex w-6 h-6" @click="homeRedirect">
-				<img class="h-6 w-6 lg:h-7 lg:w-7 xl:w-8 xl:h-8 2xl:w-9 2xl:h-9" src="../assets/svgs/home.svg" alt="home icon">
+				<img class="h-6 w-6 lg:h-7 lg:w-7 xl:w-8 xl:h-8 2xl:w-9 2xl:h-9" src="../assets/svgs/home.svg"
+					alt="home icon">
 			</button>
 			<div class="relative flex flex-row h-52 md:h-56 lg:h-60 xl:h-64 2xl:h-72 grow">
 				<div class="flex items-end mb-6 ml-3 md:ml-4 lg:ml-5 xl:ml-6 2xl:ml-7">
@@ -187,7 +235,8 @@ export default {
 					<p
 						class="relative flex flex-row mt-14 lg:mt-16 xl:mt-24 text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-xl ml-1">
 						<UserStatus :status="profileUser ? profileUser.status : 0" />
-						<select v-model="selectedStatus" @change="updateStatus"
+						<select v-show="this.$route.params.id == undefined" v-model="selectedStatus"
+							@change="updateStatus"
 							class="w-1 h-1 p-2 ml-1 md:mt-1 lg:mt-1.5 z-10 cursor-pointer bg-transparent text-sm rounded-lg text-white">
 							<option class="bg-gray-700" value="0">Offline</option>
 							<option class="bg-gray-700" value="1">Online</option>
@@ -202,7 +251,8 @@ export default {
 			<div class="absolute right-0 xl:right-10 2xl:right-14 top-24 md:top-28 xl:top-20 px-2 md:px-4">
 				<table>
 					<tbody>
-						<tr v-for="(stat, index) in stats" :key="index" class="text-xs md:text-sm 2xl:text-xl text-yellow-500">
+						<tr v-for="(stat, index) in stats" :key="index"
+							class="text-xs md:text-sm 2xl:text-xl text-yellow-500">
 							<th scope="row"
 								class="bg-transparent pr-2 lg:pr-4 xl:pr-6 3xl:pr-8 text-left text-gray-500 uppercase md:tracking-wider">
 								{{ stat }}

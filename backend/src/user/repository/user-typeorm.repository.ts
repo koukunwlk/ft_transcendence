@@ -162,4 +162,34 @@ export class UserTypeOrmRepository implements UserRepository {
 
     return userModelList;
   }
+
+  async getRanking(): Promise<User[]> {
+    const userEntityList = await this.userRepository.find({
+      order: {
+        score: 'DESC',
+      },
+    });
+
+    let userModelList = [];
+    if (userEntityList) {
+      userEntityList.forEach((user) => {
+        userModelList.push(
+          new User(
+            {
+              username: user.username,
+              email: user.email,
+              nickname: user.nickname,
+              token: user.token,
+              status: user.status,
+              avatar: user.avatar,
+              score: user.score,
+            },
+            user.id,
+          )
+        );
+      });
+    }
+
+    return userModelList;
+  }
 }

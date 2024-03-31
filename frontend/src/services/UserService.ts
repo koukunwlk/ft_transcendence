@@ -57,4 +57,26 @@ export default {
       }
     );
   },
+
+  getUser(id: string) {
+    const token = authStore.getToken;
+
+    return axios.get(`http://localhost:3000/user/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        token: token,
+      },
+    });
+  },
+
+  getRanking() {
+    const token = authStore.getToken;
+    console.log("getRanking");
+    return axios.get("http://localhost:3000/user/rankings", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        token: token,
+      },
+    });
+  }
 };

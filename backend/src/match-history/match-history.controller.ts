@@ -21,7 +21,8 @@ export class MatchHistoryController {
 
     @Get("matches/:playerId")
     async getPlayerMatches(@Param('playerId') playerId: string) {
-        return await this.matchHistoryService.findAllByPlayerId(playerId);
+        const matches = await this.matchHistoryService.findAllByPlayerId(playerId);
+        return matches.map(match => match.toJson());
     }
 
 

@@ -28,6 +28,11 @@ var routes = [
     component: () => import("../views/Pong.vue"),
   },
   {
+    path: "/profile/:id",
+    name: "FriendProfile",
+    component: () => import("../views/Profile.vue"),
+  },
+  {
 	path: '/profile',
 	name: 'Profile',
 	component: () => import('../views/Profile.vue')
