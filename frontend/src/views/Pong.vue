@@ -1,26 +1,12 @@
 <template>
-  <div>
-    <button
-      id="background-button"
-      class="background-button"
-      @click="changeBackground"
-    >
+  <div v-if="!loading">
+    <button id="background-button" class="background-button" @click="changeBackground">
       Change Background
     </button>
     <JoinRoom class="joinroom-button" v-if="!gameOn" />
-    <div
-      class="Background"
-      :style="{ backgroundImage: `url('${backgroundImage}')` }"
-    >
+    <div class="Background" :style="{ backgroundImage: `url('${backgroundImage}')` }">
       <div class="Container">
-        <canvas
-          id="pong"
-          ref="canvasRef"
-          tabindex="0"
-          v-on:keydown="movePlayer"
-          width="1280"
-          height="720"
-        ></canvas>
+        <canvas id="pong" ref="canvasRef" tabindex="0" v-on:keydown="movePlayer" width="1280" height="720"></canvas>
         <div class="p1-score">Player 1 : {{ p1_points }}</div>
         <div class="p2-score">Player 2 : {{ p2_points }}</div>
       </div>
@@ -35,15 +21,19 @@ import { io, Socket } from "socket.io-client";
 import JoinRoom from "./JoinRoom.vue";
 import paddle from "./paddle";
 import { useAuthStore } from "../stores/authStore";
+import userService from "../services/UserService";
 
-export const socket = io("http://localhost:3000");
+export const socket = io("http://10.0.0.173:3000");
 
 const authStore = useAuthStore();
+
 export default {
   components: { JoinRoom },
   name: "Pong",
   data() {
     return {
+      loading: true,
+      user: {},
       leftPaddle: {},
       rightPaddle: {},
       gameOn: false,
@@ -56,7 +46,75 @@ export default {
       backgroundImage: "background.jpeg",
     };
   },
+  mounted() {
+    this.getTokenFromCookie();
+    this.getLoggedUser();
+    try {
+      this.canvasRef = this.$refs.canvasRef;
+      socket.off("START_GAME").on("START_GAME", this.startGame);
+      document.addEventListener("keydown", this.movePlayer);
+      document.addEventListener("keyup", this.handleKeyup);
+      socket.off("player_moved").on("player_moved", (data) => {
+        if (data.side === "left") {
+          this.leftPaddle = data;
+        } else if (data.side === "right") {
+          this.rightPaddle = data;
+        }
+      });
+      socket
+        .off("PlayerDisconnected")
+        .on("PlayerDisconnected", this.handlePlayerDisconnected);
+      socket
+        .off("player1_scored")
+        .on("player1_scored", this.handlePlayer1Scored);
+      socket
+        .off("player2_scored")
+        .on("player2_scored", this.handlePlayer2Scored);
+      socket.off("player1_won").on("player1_won", this.handlePlayer1Won);
+      socket.off("player2_won").on("player2_won", this.handlePlayer2Won);
+      this.renderGame();
+    } catch (error) {
+      console.error("Error in mounted hook:", error);
+    }
+  },
+  beforeUnmount() {
+    document.removeEventListener("keydown", this.movePlayer);
+    document.removeEventListener("keyup", this.handleKeyup);
+  },
   methods: {
+    getLoggedUser() {
+      console.log('aoba')
+      this.loading = true;
+      userService
+        .me()
+        .then(({ data }) => {
+          authStore.setUser(data);
+          this.user = authStore.getUser;
+          if (
+            this.user.tfaEnabled &&
+            !this.user.tfaAuthenticated
+          ) {
+            this.$router.push({ name: "TFA" });
+          }
+          this.loading = false;
+        })
+        .catch((error) => {
+          this.$router.push({ name: "Login" });
+        });
+    },
+    getTokenFromCookie() {
+      const cookies = document.cookie.split(";");
+
+      cookies.forEach((cookie) => {
+        if (cookie.trimStart().startsWith("token=")) {
+          this.saveToken(cookie.trimStart());
+        }
+      });
+    },
+    saveToken(tokenCookie) {
+      const token = tokenCookie.substring(6);
+      authStore.setToken(token);
+    },
     renderPaddle() {
       const paddleC = this.canvasRef;
       const ctx = paddleC?.getContext("2d");
@@ -157,39 +215,6 @@ export default {
       }, 4000);
     },
   },
-  mounted() {
-    try {
-      this.canvasRef = this.$refs.canvasRef;
-      socket.off("START_GAME").on("START_GAME", this.startGame);
-      document.addEventListener("keydown", this.movePlayer);
-      document.addEventListener("keyup", this.handleKeyup);
-      socket.off("player_moved").on("player_moved", (data) => {
-        if (data.side === "left") {
-          this.leftPaddle = data;
-        } else if (data.side === "right") {
-          this.rightPaddle = data;
-        }
-      });
-      socket
-        .off("PlayerDisconnected")
-        .on("PlayerDisconnected", this.handlePlayerDisconnected);
-      socket
-        .off("player1_scored")
-        .on("player1_scored", this.handlePlayer1Scored);
-      socket
-        .off("player2_scored")
-        .on("player2_scored", this.handlePlayer2Scored);
-      socket.off("player1_won").on("player1_won", this.handlePlayer1Won);
-      socket.off("player2_won").on("player2_won", this.handlePlayer2Won);
-      this.renderGame();
-    } catch (error) {
-      console.error("Error in mounted hook:", error);
-    }
-  },
-  beforeUnmount() {
-    document.removeEventListener("keydown", this.movePlayer);
-    document.removeEventListener("keyup", this.handleKeyup);
-  },
 };
 </script>
 
@@ -209,6 +234,7 @@ export default {
   bottom: 7px;
   transform: translate(-50%, 50%);
 }
+
 .joinroom-button {
   text-align: center;
   display: inline-block;
@@ -235,6 +261,7 @@ export default {
   padding: 10px;
   border-radius: 5px;
 }
+
 .Container {
   display: flex;
   height: 100vh;
@@ -242,7 +269,7 @@ export default {
   justify-content: center;
 }
 
-.Container > canvas {
+.Container>canvas {
   width: 100%;
   height: 100%;
 }
@@ -259,6 +286,7 @@ export default {
     height: calc(100vh - 40px);
   }
 }
+
 .Game-container {
   outline: 1px solid #ffd300;
   align-content: center;
@@ -296,6 +324,7 @@ export default {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.6);
 }
+
 .result-message {
   position: fixed;
   top: 50%;
