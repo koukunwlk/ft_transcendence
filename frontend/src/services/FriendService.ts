@@ -23,7 +23,7 @@ export class FriendService {
 		});
 		this.token = this.authStore.token;
 		this.friendListClient = axios.create({
-			baseURL: "http://10.0.0.173:3000/friend-controller/",
+			baseURL: "http://localhost:3000/friend-controller/",
 			headers: {
 				Authorization: `Bearer ${this.token}`,
 				token: this.token,
