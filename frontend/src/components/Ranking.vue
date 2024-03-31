@@ -48,8 +48,7 @@ export default {
     },
     beforeMount() {
         userService.getRanking().then((response) => {
-            this.users = response.data;
-            console.log("response", response.data);
+            this.users = response.data
         });
     }
 }

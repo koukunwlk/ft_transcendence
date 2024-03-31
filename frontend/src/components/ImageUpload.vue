@@ -38,7 +38,6 @@ export default {
 	},
 	methods: {
 		onFileSelected(event) {
-			console.log("teste");
 			this.selectedFile = event.target.files[0]
 			if (this.selectedFile)
 				this.hideUploadButton = true;
@@ -52,7 +51,6 @@ export default {
 					this.imageBlob = blob;
 
 					// post
-					console.log(blob);
 					this.handleRender();
 				} else {
 					return;
@@ -63,9 +61,6 @@ export default {
 		async handleRender() {
 			const myImage = document.querySelector('img');
 			const user = await UserService.me();
-			console.log(this.imageBlob);
-			console.log(user.data.avatar.data);
-			// console.log(user.data.avatar);
 			const buffs = Buffer.from(user.data.avatar.data);
 			const objectURL = URL.createObjectURL(new Blob([buffs]));
 			myImage.src = objectURL;

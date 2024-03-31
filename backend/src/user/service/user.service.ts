@@ -209,7 +209,6 @@ export class UserService {
   async getRanking() {
     const ranking = await this.userRepository.getRanking();
     const mappedRanking = ranking.map((user) => user.toScore());
-    console.log(mappedRanking);
     return mappedRanking;
   }
 

@@ -22,8 +22,6 @@ export class FriendListTypeormRepository implements FriendListRepository {
             ]
         })
 
-        console.log(friendList);
-
         return Promise.resolve(null);
     }
 

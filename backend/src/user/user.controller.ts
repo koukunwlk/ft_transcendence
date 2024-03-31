@@ -30,7 +30,6 @@ export class UserController {
 
   @Get('rankings')
   async getRanking() {
-      console.log("controller ranking")
       return await this.userService.getRanking();
   }
 
@@ -74,14 +73,11 @@ export class UserController {
 
   @Get(':id')
   async getUserById(@Param('id') id: string) {
-    console.log(id)
     try {
       const user = await this.userService.getUserById(id);
       const ranking = await this.userService.getRanking();
-      console.log(user.getStatus())
       if(user.getStatus() === UserStatusEnum.INVISIBLE) {
         user.setStatus(UserStatusEnum.OFFLINE);
-        console.log(user.getStatus())
       }
       user.setRanking(ranking.findIndex((u) => u.id === user.id) + 1);
       return user.toFriendList();

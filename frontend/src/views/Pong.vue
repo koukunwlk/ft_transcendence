@@ -137,7 +137,6 @@ export default {
     changeBackground() {
       this.backgroundImage = "earth.jpg";
       document.getElementById("background-button").style.display = "none";
-      console.log("changed");
     },
     renderGame() {
       this.renderPaddle();

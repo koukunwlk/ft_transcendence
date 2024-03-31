@@ -38,7 +38,6 @@ export class MatchService {
   }
   async getMyMatches(): Promise<MatchResponse[]> {
     const token = this.authStore.token;
-    console.log("token", token);
     const response = await axios.get("http://localhost:3000/match-history/me", {
       headers: {
         Authorization: `Bearer ${token}`,

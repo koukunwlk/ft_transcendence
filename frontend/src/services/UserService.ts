@@ -71,7 +71,6 @@ export default {
 
   getRanking() {
     const token = authStore.getToken;
-    console.log("getRanking");
     return axios.get("http://localhost:3000/user/rankings", {
       headers: {
         Authorization: `Bearer ${token}`,

@@ -43,7 +43,6 @@ export class AuthService {
   }
 
   private generateJwtToken(user: User): string {
-    // console.log(user, `${process.env.NEST_API_JWT_SECRET}`);
     return this.jwtService.sign(
       {
         id: user.id,
