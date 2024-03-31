@@ -5,14 +5,17 @@ import router from '../Router/index.ts';
 import UserStatus from "../components/UserStatus.vue";
 import { useAuthStore } from "../stores/authStore.ts";
 import { useProfilePictureStore } from '../stores/profilePictureStore.ts';
-import { ProfileService } from '../services/ProfileService.ts';
 import LastMatches from "../components/LastMatches.vue";
 import Ranking from '../components/Ranking.vue';
 import Achievements from '../components/Achievements.vue'
 import Settings from '../components/Settings.vue'
 import { onBeforeMount, ref } from 'vue';
 import { MatchService } from '../services/MatchService';
+import userService from "../services/UserService";
+import { Buffer } from 'buffer';
 
+const authStore = useAuthStore();
+const profilePictureStore = useProfilePictureStore();
 
 export default {
 	components: {
@@ -41,7 +44,6 @@ export default {
 			},
 			matchService: new MatchService(),
 			picture: useProfilePictureStore(),
-			profileService: new ProfileService(),
 			showDropdown: false,
 			isLoading: true,
 			matches: [],
@@ -50,24 +52,27 @@ export default {
 		}
 	},
 	beforeMount() {
+		this.getLoggedUser();
+	},
+	mounted() {
 		this.isLoading = true;
-
-		this.profileService.me().then((profile) => {
-			this.profileUser = profile.data;
-		});
-		this.matchService.getMyMatches().then((matches) => {
-			this.matches = matches;
-		}).catch((error) => {
-			console.error("Error fetching matches:", error);
-			this.matches = [];
-		}).finally(() => {
-			this.isLoading = false;
-			this.$forceUpdate();
-			this.calculateStats();
-		});
-
+		this.getMatches();
 	},
 	methods: {
+		getMatches() {
+			if (this.profileUser) {
+				this.matchService.getMyMatches().then((matches) => {
+					this.matches = matches;
+					this.$forceUpdate();
+					this.calculateStats();
+				}).catch((error) => {
+					console.error("Error fetching matches:", error);
+					this.matches = [];
+				}).finally(() => {
+					this.isLoading = false;
+				});
+			}
+		},
 		calculateStats() {
 			const userId = this.profileUser.id;
 			if (this.matches) {
@@ -93,14 +98,15 @@ export default {
 			console.log(this.userStats);
 		},
 
-		goHome() {
-			router.push('/');
+		homeRedirect() {
+			this.$router.push({ name: "Home" });
 		},
 		activateTab(index) {
 			this.activeTab = index;
 		},
 		openCloseSettings() {
 			this.showSettingsModal = !this.showSettingsModal;
+			this.getLoggedUser();
 			console.log(this.showSettingsModal);
 		},
 		// toggleDropdown() {
@@ -109,7 +115,7 @@ export default {
 		// },
 		updateStatus() {
 			const oldStatus = this.profileUser.status;
-			this.profileService.updateStatus(Number(this.selectedStatus)).then((response) => {
+			userService.updateStatus(Number(this.selectedStatus)).then((response) => {
 				console.log(response);
 				this.profileUser.status = Number(this.selectedStatus);
 			})
@@ -121,6 +127,18 @@ export default {
 			// 	this.showDropdown = false;
 			// });
 		},
+		getLoggedUser() {
+			userService.me().then(({ data }) => {
+				this.profileUser = data;
+				authStore.setUser(data);
+				this.saveAvatar();
+			});
+		},
+		saveAvatar() {
+			const buffs = Buffer.from(this.profileUser.avatar.data);
+			const objectURL = URL.createObjectURL(new Blob([buffs]));
+			profilePictureStore.setPicture(objectURL);
+		},
 	}
 }
 </script>
@@ -129,14 +147,14 @@ export default {
 	<div class="flex h-full md:h-6/6 justify-center">
 		<div class="relative h-max w-full md:w-3/5 bg-opacity-30 rounded-lg border border-zinc-600 text-white">
 			<button class="absolute z-10 top-2 right-2 flex w-6 h-6" @click="openCloseSettings">
-				<img class="h-6 w-6 lg:h-7 lg:w-7 xl:w-8 xl:h-8 2xl:w-9 2xl:h-9" src="../assets/svgs/settings.svg" alt="settings icon">
+				<img class="h-6 w-6 lg:h-7 lg:w-7 xl:w-8 xl:h-8 2xl:w-9 2xl:h-9" src="../assets/svgs/settings.svg"
+					alt="settings icon">
 			</button>
 			<div v-if="showSettingsModal">
-				<Settings @clickedButton="openCloseSettings"/>
+				<Settings @clickedButton="openCloseSettings" />
 			</div>
-			<button class="absolute z-10 top-2 left-2 flex w-6 h-6" @click="goHome">
-				<img class="h-6 w-6 lg:h-7 lg:w-7 xl:w-8 xl:h-8 2xl:w-9 2xl:h-9" src="../assets/svgs/home.svg"
-					alt="home icon">
+			<button class="absolute z-10 top-2 left-2 flex w-6 h-6" @click="homeRedirect">
+				<img class="h-6 w-6 lg:h-7 lg:w-7 xl:w-8 xl:h-8 2xl:w-9 2xl:h-9" src="../assets/svgs/home.svg" alt="home icon">
 			</button>
 			<div class="relative flex flex-row h-52 md:h-56 lg:h-60 xl:h-64 2xl:h-72 grow">
 				<div class="flex items-end mb-6 ml-3 md:ml-4 lg:ml-5 xl:ml-6 2xl:ml-7">
@@ -151,7 +169,8 @@ export default {
 					<h3 class="md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl" title="nickname">
 						The {{ profileUser && profileUser.nickname ? profileUser.nickname : 'Unknown' }}
 					</h3>
-					<h4 class="flex justify-end text-xs md:text-base lg:text-lg xl:text-xl 2xl:text-2xl italic text-slate-300" title="intra nickname">
+					<h4 class="flex justify-end text-xs md:text-base lg:text-lg xl:text-xl 2xl:text-2xl italic text-slate-300"
+						title="intra nickname">
 						{{ profileUser ? profileUser.username : '' }}
 					</h4>
 				</div>
@@ -174,8 +193,7 @@ export default {
 			<div class="absolute right-0 xl:right-10 2xl:right-14 top-24 md:top-28 xl:top-20 px-2 md:px-4">
 				<table>
 					<tbody>
-						<tr v-for="(stat, index) in stats" :key="index"
-							class="text-xs md:text-sm 2xl:text-xl text-yellow-500">
+						<tr v-for="(stat, index) in stats" :key="index" class="text-xs md:text-sm 2xl:text-xl text-yellow-500">
 							<th scope="row"
 								class="bg-transparent pr-2 lg:pr-4 xl:pr-6 3xl:pr-8 text-left text-gray-500 uppercase md:tracking-wider">
 								{{ stat }}

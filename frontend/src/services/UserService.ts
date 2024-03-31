@@ -30,6 +30,7 @@ export default {
   },
   setAvatarPicture(bodyFormData: FormData) {
     const token = authStore.getToken;
+
     return axios.patch(
       "http://localhost:3000/user/avatar", bodyFormData,
       {
@@ -41,5 +42,19 @@ export default {
           "Content-Type": "multipart/form-data",
         },
       })
-  }
+  },
+  updateStatus(status: number) {
+    const token = authStore.getToken;
+
+    return axios.patch(
+      "http://localhost:3000/user/status",
+      { status },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          token: token,
+        },
+      }
+    );
+  },
 };
