@@ -1,16 +1,17 @@
 import { FriendListStatusEnum } from "@/friend-list/domain/model/friend-list.model";
-import { Column, Entity } from "typeorm";
+import { UserEntity } from "@/user/entities/user.entity";
+import { Column, Entity, ManyToMany } from "typeorm";
 
 @Entity("friend_list")
 export class FriendListTypeormEntity {
     @Column({ primary: true, generated: "uuid" })
     id: string;
 
-    @Column()
-    userId: string;
+    @ManyToMany(() => UserEntity)
+    user: UserEntity;
 
-    @Column("text", { array: true })
-    friendsId: string[];
+    @ManyToMany(() => UserEntity)
+    friend: UserEntity
 
     @Column({
         enum: FriendListStatusEnum,

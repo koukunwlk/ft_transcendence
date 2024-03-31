@@ -36,10 +36,10 @@ export default {
 			profileUser: null,
 			userStats: {
 				totalGames: 0,
-				wins: 1,
-				loses: 2,
+				wins: 0,
+				loses: 0,
 				winRate: 0,
-				rank: 4,
+				rank: 0,
 			},
 			matchService: new MatchService(),
 			picture: useProfilePictureStore(),
@@ -131,10 +131,11 @@ export default {
 	<div class="flex h-full md:h-6/6 justify-center">
 		<div class="relative h-max w-full md:w-3/5 bg-opacity-30 rounded-lg border border-zinc-600 text-white">
 			<button class="absolute z-10 top-2 right-2 flex w-6 h-6" @click="openCloseSettings">
-				<img class="h-6 w-6 lg:h-7 lg:w-7 xl:w-8 xl:h-8 2xl:w-9 2xl:h-9" src="../assets/svgs/settings.svg" alt="settings icon">
+				<img class="h-6 w-6 lg:h-7 lg:w-7 xl:w-8 xl:h-8 2xl:w-9 2xl:h-9" src="../assets/svgs/settings.svg"
+					alt="settings icon">
 			</button>
 			<div v-if="showSettingsModal">
-				<Settings @clickedButton="openCloseSettings"/>
+				<Settings @clickedButton="openCloseSettings" />
 			</div>
 			<button class="absolute z-10 top-2 left-2 flex w-6 h-6" @click="goHome">
 				<img class="h-6 w-6 lg:h-7 lg:w-7 xl:w-8 xl:h-8 2xl:w-9 2xl:h-9" src="../assets/svgs/home.svg"

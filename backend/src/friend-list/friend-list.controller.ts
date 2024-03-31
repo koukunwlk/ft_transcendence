@@ -30,7 +30,7 @@ export class FriendListController {
 
     @Get("friend-list")
     async getFriendList(@Req() req: any) {
-        return this.friendListService.getFriendList(req.user.id);   
+        return this.friendListService.getFriendList(req.user.id);
     }
 
     @Post("handle-friend-request")

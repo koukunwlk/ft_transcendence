@@ -1,18 +1,20 @@
 import { useAuthStore } from "../stores/authStore";
 import axios, { AxiosInstance } from "axios";
 
+export enum FriendListStatusEnum {
+    PENDING = "PENDING",
+    ACCEPTED = "ACCEPTED",
+    REJECTED = "REJECTED",
+    BLOCKED = "BLOCKED",
+    CANCELLED = "CANCELLED",
+}
+
+
 export class FriendService {
 	private authStore = useAuthStore();
 	private token: string;
 	private friendListClient: AxiosInstance
 	constructor() {
-		this.friendListClient = axios.create({
-			baseURL: "http://localhost:3000/friend-controller/",
-			headers: {
-				Authorization: `Bearer ${this.authStore.token}`,
-				token: this.authStore.token,
-			},
-		});
 		const cookies = document.cookie.split(";");
 		cookies.forEach((cookie) => {
 			if (cookie.startsWith("token=")) {
@@ -20,6 +22,13 @@ export class FriendService {
 			}
 		});
 		this.token = this.authStore.token;
+		this.friendListClient = axios.create({
+			baseURL: "http://localhost:3000/friend-controller/",
+			headers: {
+				Authorization: `Bearer ${this.token}`,
+				token: this.token,
+			},
+		});
 	}
 
 	getReceivedFriendRequests() {

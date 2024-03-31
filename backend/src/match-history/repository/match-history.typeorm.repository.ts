@@ -25,9 +25,9 @@ export class MatchHistoryTypeormRepository {
             const playerOne = new User(match.playerOne, match.playerOne.id);
             const playerTwo = new User(match.playerTwo, match.playerTwo.id);
             return new MatchHistory({
-                playerOne: playerOne.toMatchHistory(),
+                playerOne: playerOne.toSimpleEntity(),
                 playerOneGoalsCount: match.playerOneGoalsCount,
-                playerTwo: playerTwo.toMatchHistory(),
+                playerTwo: playerTwo.toSimpleEntity(),
                 playerTwoGoalsCount: match.playerTwoGoalsCount,
                 winnerId: match?.winner?.id,
                 matchType: match.matchType,
@@ -49,9 +49,9 @@ export class MatchHistoryTypeormRepository {
         //     const playerOne = new User(match.playerOne);
         //     const playerTwo = new User(match.playerTwo);
         //     return new MatchHistory({
-        //         playerOne: playerOne.toMatchHistory(),
+        //         playerOne: playerOne.toSimpleEntity(),
         //         playerOneGoalsCount: match.playerOneGoalsCount,
-        //         playerTwo: playerTwo.toMatchHistory(),
+        //         playerTwo: playerTwo.toSimpleEntity(),
         //         playerTwoGoalsCount: match.playerTwoGoalsCount,
         //         winnerId: match.winner.id,
         //         matchType: match.matchType,
@@ -69,9 +69,9 @@ export class MatchHistoryTypeormRepository {
         //     const playerOne = new User(match.playerOne);
         //     const playerTwo = new User(match.playerTwo);
         //     return new MatchHistory({
-        //         playerOne: playerOne.toMatchHistory(),
+        //         playerOne: playerOne.toSimpleEntity(),
         //         playerOneGoalsCount: match.playerOneGoalsCount,
-        //         playerTwo: playerTwo.toMatchHistory(),
+        //         playerTwo: playerTwo.toSimpleEntity(),
         //         playerTwoGoalsCount: match.playerTwoGoalsCount,
         //         winnerId: match.winner.id,
         //         matchType: match.matchType,
@@ -90,9 +90,9 @@ export class MatchHistoryTypeormRepository {
     //     const playerOne = new User(persistenceMatches.playerOne);
     //     const playerTwo = new User(persistenceMatches.playerTwo);
     //     return new MatchHistory({
-    //         playerOne: playerOne.toMatchHistory(),
+    //         playerOne: playerOne.toSimpleEntity(),
     //         playerOneGoalsCount: persistenceMatches.playerOneGoalsCount,
-    //         playerTwo: playerTwo.toMatchHistory(),
+    //         playerTwo: playerTwo.toSimpleEntity(),
     //         playerTwoGoalsCount: persistenceMatches.playerTwoGoalsCount,
     //         winnerId: persistenceMatches.winner.id,
     //         matchType: persistenceMatches.matchType,
