@@ -88,6 +88,7 @@ export class UserTypeOrmRepository implements UserRepository {
       tfaSecret: user.getTfaSecret(),
       tfaAuthenticated: user.getTfaAuthenticated(),
       avatar: user.getAvatar(),
+      status: user.getStatus(),
     };
 
     await this.userRepository.update(user.id, updateUser);
