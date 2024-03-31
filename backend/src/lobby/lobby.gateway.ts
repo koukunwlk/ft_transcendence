@@ -64,7 +64,7 @@ let i = 0;
 let j = 5000;
 let lastRoom = 'empty';
 let lastRoomJ = 'empty';
-let fastSpeed;
+let fastSpeed = false;
 const ballOfRoom: Map<string, any> = new Map();
 let queue = Array<string>();
 
@@ -246,7 +246,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
   @SubscribeMessage('increase_speed')
   handleSpeed(client: Socket) {
-    fastSpeed = true;
+    fastSpeed = !fastSpeed;
     let id: number;
 
     for (id of listOfPlayers.keys()) {
