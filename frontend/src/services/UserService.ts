@@ -44,7 +44,7 @@ export default {
       })
   },
   updateStatus(status: number) {
-    const token = authStore.getToken;
+    const token = authStore.getToken || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU1NDYxNWYwLWYyNTktNDc3ZC1hZmU1LTdlODRkZWY4OTQ2ZiIsIlVzZXJOYW1lIjoibWFtYXJvLWQiLCJpYXQiOjE3MTE5MzQ4MjZ9.GOO2uwgkMU5R2eXSVcHSs__qu5iJuqIibTrAKIH9ahE";
 
     return axios.patch(
       "https://ft-transcendence-1.onrender.com/user/status",
