@@ -210,9 +210,7 @@ export class UserService {
     let user = await this.userRepository.findOne({
       id: userid,
     });
-    console.log(user.toJson())
     user.setScore(user.getScore() + newScore)
-    console.log(user.getScore())
     this.userRepository.update(user)
   }
   async getRanking() {
