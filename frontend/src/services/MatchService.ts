@@ -28,9 +28,9 @@ export interface MatchResponse {
 
 export class MatchService {
   private authStore;
-  private token: string;
+  private token: string | undefined;
   constructor() {
-    this.token = "";
+    this.token = document.cookie.split(";").find((cookie) => cookie.startsWith("token="))?.substring(6);
     this.authStore = useAuthStore();
     const cookies = document.cookie.split(";");
     cookies.forEach((cookie) => {

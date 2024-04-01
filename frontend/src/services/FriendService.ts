@@ -12,18 +12,11 @@ export enum FriendListStatusEnum {
 
 export class FriendService {
 	private authStore;
-	private token: string;
+	private token: string | undefined;
 	private friendListClient: AxiosInstance
 	constructor() {
 		this.authStore = useAuthStore();
-		console.log("authStore", this.authStore.token);
-		const cookies = document.cookie.split(";");
-		cookies.forEach((cookie) => {
-			if (cookie.startsWith("token=")) {
-				this.saveToken(cookie);
-			}
-		});
-		this.token = this.authStore.token;
+		this.token = document.cookie.split(";").find((cookie) => cookie.startsWith("token="))?.substring(6);
 		this.friendListClient = axios.create({
 			baseURL: "https://ft-transcendence-1.onrender.com/friend-controller/",
 			headers: {
