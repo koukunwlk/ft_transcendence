@@ -95,12 +95,12 @@ export default {
       user: {}
     };
   },
+  beforeMount() {
+    this.getTokenFromCookie();
+  },
+
   mounted() {
-    Promise.resolve(setTimeout(() => {
-      this.getTokenFromCookie();
-    }, 1000)).then(() => {
-      this.getLoggedUser();
-    });
+    this.getLoggedUser();
   },
   components: {
     FriendList,
