@@ -39,7 +39,7 @@ export class MatchService {
   async getMyMatches(): Promise<MatchResponse[]> {
     const token = this.authStore.token;
     console.log("token", token);
-    const response = await axios.get("http://localhost:3000/match-history/me", {
+    const response = await axios.get("https://ft-transcendence-1.onrender.com/match-history/me", {
       headers: {
         Authorization: `Bearer ${token}`,
         token: token,
@@ -50,7 +50,7 @@ export class MatchService {
 
   async getMatchesByUserId(userId: string): Promise<MatchResponse> {
     const token = this.authStore.token;
-    const response = await axios.get(`http://localhost:3000/match-history/matches/${userId}`, {
+    const response = await axios.get(`https://ft-transcendence-1.onrender.com/match-history/matches/${userId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         token: token,

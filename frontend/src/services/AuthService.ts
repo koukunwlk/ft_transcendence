@@ -5,13 +5,13 @@ const authStore = useAuthStore();
 
 export default {
   login() {
-    window.location.href = "http://localhost:3000/auth/42/callback";
-    // return axios.get("http://localhost:3000/auth/42/callback");
+    window.location.href = "https://ft-transcendence-1.onrender.com/auth/42/callback";
+    // return axios.get("https://ft-transcendence-1.onrender.com/auth/42/callback");
   },
   logout() {
     const token = authStore.getToken;
 
-    return axios.get("http://localhost:3000/auth/logout", {
+    return axios.get("https://ft-transcendence-1.onrender.com/auth/logout", {
       headers: {
         Authorization: `Bearer ${token}`,
         token: token,
@@ -21,7 +21,7 @@ export default {
   generateTfa() {
     const token = authStore.getToken;
 
-    return axios.post("http://localhost:3000/auth/generate-2fa", null, {
+    return axios.post("https://ft-transcendence-1.onrender.com/auth/generate-2fa", null, {
       headers: {
         Authorization: `Bearer ${token}`,
         token: token,
@@ -31,7 +31,7 @@ export default {
   disableTfa() {
     const token = authStore.getToken;
 
-    return axios.post("http://localhost:3000/auth/disable-2fa", null, {
+    return axios.post("https://ft-transcendence-1.onrender.com/auth/disable-2fa", null, {
       headers: {
         Authorization: `Bearer ${token}`,
         token: token,
@@ -45,7 +45,7 @@ export default {
       code,
     };
 
-    return axios.post("http://localhost:3000/auth/verify-2fa", data, {
+    return axios.post("https://ft-transcendence-1.onrender.com/auth/verify-2fa", data, {
       headers: {
         Authorization: `Bearer ${token}`,
         token: token,

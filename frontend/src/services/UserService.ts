@@ -7,7 +7,7 @@ export default {
   me() {
     const token = authStore.getToken;
 
-    return axios.get("http://localhost:3000/user/me", {
+    return axios.get("https://ft-transcendence-1.onrender.com/user/me", {
       headers: {
         Authorization: `Bearer ${token}`,
         token: token,
@@ -21,7 +21,7 @@ export default {
       nickname,
     };
 
-    return axios.patch("http://localhost:3000/user/nickname", data, {
+    return axios.patch("https://ft-transcendence-1.onrender.com/user/nickname", data, {
       headers: {
         Authorization: `Bearer ${token}`,
         token: token,
@@ -32,7 +32,7 @@ export default {
     const token = authStore.getToken;
 
     return axios.patch(
-      "http://localhost:3000/user/avatar", bodyFormData,
+      "https://ft-transcendence-1.onrender.com/user/avatar", bodyFormData,
       {
         url: "myurl",
         data: bodyFormData,
@@ -47,7 +47,7 @@ export default {
     const token = authStore.getToken;
 
     return axios.patch(
-      "http://localhost:3000/user/status",
+      "https://ft-transcendence-1.onrender.com/user/status",
       { status },
       {
         headers: {
@@ -61,7 +61,7 @@ export default {
   getUser(id: string) {
     const token = authStore.getToken;
 
-    return axios.get(`http://localhost:3000/user/${id}`, {
+    return axios.get(`https://ft-transcendence-1.onrender.com/user/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         token: token,
@@ -72,7 +72,7 @@ export default {
   getRanking() {
     const token = authStore.getToken;
     console.log("getRanking");
-    return axios.get("http://localhost:3000/user/rankings", {
+    return axios.get("https://ft-transcendence-1.onrender.com/user/rankings", {
       headers: {
         Authorization: `Bearer ${token}`,
         token: token,
