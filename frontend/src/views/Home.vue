@@ -95,9 +95,6 @@ export default {
       user: {}
     };
   },
-  beforeMount() {
-    this.getTokenFromCookie();
-  },
 
   mounted() {
     this.getLoggedUser();
@@ -108,6 +105,7 @@ export default {
   methods: {
     getLoggedUser() {
       this.loading = true;
+      this.getTokenFromCookie();
       userService
         .me()
         .then(({ data }) => {

@@ -28,7 +28,9 @@ export interface MatchResponse {
 
 export class MatchService {
   private authStore;
+  private token: string;
   constructor() {
+    this.token = "";
     this.authStore = useAuthStore();
     const cookies = document.cookie.split(";");
     cookies.forEach((cookie) => {
@@ -42,8 +44,8 @@ export class MatchService {
     console.log("token", token);
     const response = await axios.get("https://ft-transcendence-1.onrender.com/match-history/me", {
       headers: {
-        Authorization: `Bearer ${token}`,
-        token: token,
+        Authorization: `Bearer ${this.token}`,
+        token: this.token,
       },
     });
     return response.data;
@@ -53,8 +55,8 @@ export class MatchService {
     const token = this.authStore.token;
     const response = await axios.get(`https://ft-transcendence-1.onrender.com/match-history/matches/${userId}`, {
       headers: {
-        Authorization: `Bearer ${token}`,
-        token: token,
+        Authorization: `Bearer ${this.token}`,
+        token: this.token,
       },
     });
     return response.data;
@@ -62,6 +64,7 @@ export class MatchService {
 
   private saveToken(tokenCookie: string) {
     const token = tokenCookie.substring(6);
+    this.token = token;
     this.authStore.setToken(token);
   }
 }

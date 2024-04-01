@@ -16,6 +16,7 @@ export class FriendService {
 	private friendListClient: AxiosInstance
 	constructor() {
 		this.authStore = useAuthStore();
+		console.log("authStore", this.authStore.token);
 		const cookies = document.cookie.split(";");
 		cookies.forEach((cookie) => {
 			if (cookie.startsWith("token=")) {
