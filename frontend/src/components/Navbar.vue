@@ -8,7 +8,8 @@
 </template>
 
 <script>
-const Avatar = require("vue3-avatar")
+//@ts-ignore
+import Avatar from 'vue3-avatar';
 
 export default {
 	name: "Navbar",
