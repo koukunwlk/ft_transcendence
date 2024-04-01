@@ -13,7 +13,7 @@ services:
       - DB_PASSWORD
       - DB_DATABASE
       - NEST_API_CLIENT_ID
-      - NEST_API_CLIENT_SECRET=
+      - NEST_API_CLIENT_SECRET
       - NEST_API_CLIENT_URL
       - HOST_FRONT
       - FRONTEND_MFA
