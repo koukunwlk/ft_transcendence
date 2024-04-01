@@ -206,6 +206,13 @@ export class UserService {
     return await this.userRepository.update(user);
   }
 
+  async updateScore(userid: string, newScore: number): Promise<void> {
+    let user = await this.userRepository.findOne({
+      id: userid,
+    });
+    user.setScore(user.getScore() + newScore)
+    this.userRepository.update(user)
+  }
   async getRanking() {
     const ranking = await this.userRepository.getRanking();
     const mappedRanking = ranking.map((user) => user.toScore());
