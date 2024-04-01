@@ -1,6 +1,6 @@
 <script>
 import Navbar from "../components/Navbar.vue";
-import Avatar from "vue3-avatar";
+const Avatar = require("vue3-avatar");
 import router from '../Router/index.ts';
 import UserStatus from "../components/UserStatus.vue";
 import { useAuthStore } from "../stores/authStore.ts";

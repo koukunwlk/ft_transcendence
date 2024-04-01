@@ -28,11 +28,6 @@ var routes = [
     component: () => import("../views/Pong.vue"),
   },
   {
-    path: "/profile/:id",
-    name: "FriendProfile",
-    component: () => import("../views/Profile.vue"),
-  },
-  {
 	path: '/profile',
 	name: 'Profile',
 	component: () => import('../views/Profile.vue')
@@ -40,8 +35,8 @@ var routes = [
 ];
 
 const router = createRouter({
+  routes: routes as any,
   history: createWebHistory(),
-  routes,
 });
 
 export default router;
