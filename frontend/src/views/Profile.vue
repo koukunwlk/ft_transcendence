@@ -7,7 +7,6 @@ import { useAuthStore } from "../stores/authStore.ts";
 import { useProfilePictureStore } from '../stores/profilePictureStore.ts';
 import LastMatches from "../components/LastMatches.vue";
 import Ranking from '../components/Ranking.vue';
-import Achievements from '../components/Achievements.vue'
 import Settings from '../components/Settings.vue'
 import { onBeforeMount, ref } from 'vue';
 import { MatchService } from '../services/MatchService';
@@ -24,7 +23,6 @@ export default {
 		LastMatches,
 		UserStatus,
 		Ranking,
-		Achievements,
 		Settings
 	},
 	data() {
@@ -246,7 +244,6 @@ export default {
 						</select>
 					</p>
 				</div>
-				<Achievements />
 			</div>
 			<div class="absolute right-0 xl:right-10 2xl:right-14 top-24 md:top-28 xl:top-20 px-2 md:px-4">
 				<table>
