@@ -1,13 +1,33 @@
 version: "3.7"
 services:
-  # backend:
-  #   build: ./backend
-  #   ports:
-  #     - "3000:3000"
-  # frontend:
-  #   build: ./frontend
-  #   ports:
-      # - "5137:5137"
+  backend:
+    build: ./backend
+    container_name: transcendence-backend
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST
+      - DB_PORT
+      - DB_CONNECTION
+      - DB_USERNAME
+      - DB_PASSWORD
+      - DB_DATABASE
+      - NEST_API_CLIENT_ID
+      - NEST_API_CLIENT_SECRET=
+      - NEST_API_CLIENT_URL
+      - HOST_FRONT
+      - FRONTEND_MFA
+      - NEST_API_JWT_SECRET
+      - FRONTEND_REDIRECT_MFA
+    networks:
+      - transcendence
+  frontend:
+    build: ./frontend
+    container_name: transcendence-frontend
+    ports:
+      - "5173:5173"
+    networks:
+      - transcendence
   db:
     image: postgres
     container_name: transcendence-db
