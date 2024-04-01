@@ -41,7 +41,6 @@ export default {
     },
 
     methods: {
-
         getFriendOnClick(id) {
             this.$emit('actual-friend', this.friends[id - 1])
         }

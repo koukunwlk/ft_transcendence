@@ -96,8 +96,11 @@ export default {
     };
   },
   mounted() {
-    this.getTokenFromCookie();
-    this.getLoggedUser();
+    Promise.resolve(setTimeout(() => {
+      this.getTokenFromCookie();
+    }, 1000)).then(() => {
+      this.getLoggedUser();
+    });
   },
   components: {
     FriendList,

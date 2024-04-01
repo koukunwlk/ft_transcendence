@@ -5,7 +5,7 @@ const authStore = useAuthStore();
 
 export default {
   me() {
-    const token = authStore.getToken || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU1NDYxNWYwLWYyNTktNDc3ZC1hZmU1LTdlODRkZWY4OTQ2ZiIsIlVzZXJOYW1lIjoibWFtYXJvLWQiLCJpYXQiOjE3MTE5MzQ4MjZ9.GOO2uwgkMU5R2eXSVcHSs__qu5iJuqIibTrAKIH9ahE"
+    const token = authStore.getToken
 
     return axios.get("https://ft-transcendence-1.onrender.com/user/me", {
       headers: {
@@ -15,7 +15,7 @@ export default {
     });
   },
   updateNickname(nickname: string) {
-    const token = authStore.getToken || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU1NDYxNWYwLWYyNTktNDc3ZC1hZmU1LTdlODRkZWY4OTQ2ZiIsIlVzZXJOYW1lIjoibWFtYXJvLWQiLCJpYXQiOjE3MTE5MzQ4MjZ9.GOO2uwgkMU5R2eXSVcHSs__qu5iJuqIibTrAKIH9ahE"
+    const token = authStore.getToken
 
     const data = {
       nickname,
@@ -29,7 +29,7 @@ export default {
     });
   },
   setAvatarPicture(bodyFormData: FormData) {
-    const token = authStore.getToken || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU1NDYxNWYwLWYyNTktNDc3ZC1hZmU1LTdlODRkZWY4OTQ2ZiIsIlVzZXJOYW1lIjoibWFtYXJvLWQiLCJpYXQiOjE3MTE5MzQ4MjZ9.GOO2uwgkMU5R2eXSVcHSs__qu5iJuqIibTrAKIH9ahE"
+    const token = authStore.getToken
 
     return axios.patch(
       "https://ft-transcendence-1.onrender.com/user/avatar", bodyFormData,
@@ -44,7 +44,7 @@ export default {
       })
   },
   updateStatus(status: number) {
-    const token = authStore.getToken || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU1NDYxNWYwLWYyNTktNDc3ZC1hZmU1LTdlODRkZWY4OTQ2ZiIsIlVzZXJOYW1lIjoibWFtYXJvLWQiLCJpYXQiOjE3MTE5MzQ4MjZ9.GOO2uwgkMU5R2eXSVcHSs__qu5iJuqIibTrAKIH9ahE";
+    const token = authStore.getToken;
 
     return axios.patch(
       "https://ft-transcendence-1.onrender.com/user/status",
