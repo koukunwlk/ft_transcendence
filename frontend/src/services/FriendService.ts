@@ -11,10 +11,11 @@ export enum FriendListStatusEnum {
 
 
 export class FriendService {
-	private authStore = useAuthStore();
+	private authStore;
 	private token: string;
 	private friendListClient: AxiosInstance
 	constructor() {
+		this.authStore = useAuthStore();
 		const cookies = document.cookie.split(";");
 		cookies.forEach((cookie) => {
 			if (cookie.startsWith("token=")) {
@@ -58,6 +59,7 @@ export class FriendService {
 
 	private saveToken(tokenCookie: string) {
 		const token = tokenCookie.substring(6);
+		this.token = token;
 		this.authStore.setToken(token);
 	}
 }
