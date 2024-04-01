@@ -11,6 +11,7 @@ import { v4 as uuidV4 } from 'uuid';
 import { Inject } from '@nestjs/common';
 import { MatchHistoryService } from '@/match-history/service/match-history.service';
 import { MatchHistory } from '@/match-history/model/match-history.model';
+import { UserService } from '@/user/service/user.service';
 
 class P1 {
   id = 0;
@@ -77,6 +78,8 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     @Inject(MatchHistoryService)
     private readonly matchHistoryService: MatchHistoryService,
+    @Inject(UserService)
+    private readonly userService: UserService,
   ) { }
 
   handleConnection(client: Socket) {
@@ -352,6 +355,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
                   winnerId: player2.uiid,
                 });
                 this.matchHistoryService.persistMatch(endedMatch);
+                this.userService.updateScore(player2.uiid, 3);
                 clearInterval(ball_ins.intervalid);
                 client.leave(player2.room);
 
@@ -398,6 +402,7 @@ export class LobbyGateway implements OnGatewayConnection, OnGatewayDisconnect {
                 });
                 console.log(endedMatch);
                 this.matchHistoryService.persistMatch(endedMatch);
+                this.userService.updateScore(player1.uiid, 3);
                 clearInterval(ball_ins.intervalid);
                 client.leave(player1.room);
                 player1.points = 0;
